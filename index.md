@@ -6,7 +6,7 @@ Welcome to the support page for our apps. Find support and leave feedback for an
 
 ### Call to Meet
 
-![Call to Meet Icon](/call-to-meet-icon.png)
+![Call to Meet Icon](/call-to-meet-icon.png =56)
 
 **Call to Meet** is a personal project designed to help Apple Watch users access Google Meet meetings with a phone number using their cellular plan.
 
@@ -20,7 +20,7 @@ Thank you for downloading this app. We welcome any feedback or suggestions throu
 
 ### Puente Travel Guide
 
-![Puente Travel Guide Icon](/puente-travel-guide-icon.png)
+![Puente Travel Guide Icon](/puente-travel-guide-icon.png =56)
 
 **Puente Travel Guide** is your passport to exploring the world’s most fascinating cities. This app provides detailed offline accessible guides and maps to major destinations worldwide.
 
