@@ -14,7 +14,7 @@ Thank you for downloading this app. We welcome any feedback or suggestions throu
 
 "Call to Meet" does not collect or make any copies of the data. The authorized calendar owner on your iOS device is fully responsible for the data displayed in the app.
 
-[More about Call to Meet](#) *(Link to a detailed page or section)*
+[More about Call to Meet](https://www.google.com/url?sa=t&source=web&rct=j&opi=89978449&url=https://apps.apple.com/ve/app/call-to-meet/id1625101444&ved=2ahUKEwjU2paIifGFAxXu6wIHHea2CtgQFnoECBUQAQ&usg=AOvVaw19wVonpj4mT7SedFtbLZsx)
 
 ---
 
@@ -34,5 +34,5 @@ Thank you for downloading "Puente Travel Guide". Your feedback through the App S
 
 ### Contact Us
 
-For any support queries or feedback, please contact us at [support@email.com](mailto:support@email.com).
+For any support queries or feedback, please contact us at [help@florit.es](mailto:help@florit.es).
 
