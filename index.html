@@ -1,0 +1,759 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Call to Meet — Never miss a meeting again</title>
+  <meta name="description" content="Live Activities, Dynamic Island countdowns, and smart alarms that make sure you never miss a call.">
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="icon" type="image/png" href="app-icon.png">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Call to Meet">
+  <meta property="og:description" content="Never miss a meeting again. Live Activities, Dynamic Island, and AlarmKit alarms.">
+  <meta property="og:image" content="app-icon.png">
+  <meta property="og:type" content="website">
+
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #141420;
+      --bg-card-hover: #1a1a2e;
+      --text: #e8e8f0;
+      --text-muted: #8888a0;
+      --accent: #7c5cfc;
+      --accent-light: #9d83ff;
+      --accent-glow: rgba(124, 92, 252, 0.15);
+      --pro-gradient: linear-gradient(135deg, #7c5cfc, #c084fc);
+      --border: rgba(255, 255, 255, 0.06);
+      --radius: 16px;
+      --radius-sm: 10px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    /* ===== Layout ===== */
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+    section {
+      padding: 80px 0;
+    }
+
+    /* ===== Nav ===== */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      padding: 16px 0;
+      background: rgba(10, 10, 15, 0.85);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    nav .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: var(--text);
+    }
+
+    .nav-brand img {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+    }
+
+    .nav-brand span {
+      font-size: 18px;
+      font-weight: 600;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      padding: 6px 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .lang-btn:hover, .lang-btn.active {
+      background: var(--accent-glow);
+      border-color: var(--accent);
+      color: var(--accent-light);
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      padding-top: 140px;
+      padding-bottom: 60px;
+      text-align: center;
+      position: relative;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-icon {
+      width: 100px;
+      height: 100px;
+      border-radius: 22px;
+      margin-bottom: 28px;
+      box-shadow: 0 8px 40px rgba(124, 92, 252, 0.25);
+    }
+
+    .hero h1 {
+      font-size: clamp(36px, 6vw, 56px);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .gradient {
+      background: var(--pro-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 18px;
+      color: var(--text-muted);
+      max-width: 520px;
+      margin: 0 auto 36px;
+    }
+
+    .app-store-badge {
+      display: inline-block;
+      transition: transform 0.2s;
+    }
+
+    .app-store-badge:hover { transform: scale(1.05); }
+
+    .app-store-badge img { height: 52px; }
+
+    /* ===== Screenshots ===== */
+    .screenshots {
+      padding: 40px 0 80px;
+    }
+
+    .screenshots-scroll {
+      display: flex;
+      gap: 20px;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      padding: 20px 24px;
+      scrollbar-width: none;
+    }
+
+    .screenshots-scroll::-webkit-scrollbar { display: none; }
+
+    .screenshot-item {
+      flex: 0 0 auto;
+      scroll-snap-align: center;
+      width: 220px;
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      transition: transform 0.3s;
+    }
+
+    .screenshot-item:hover { transform: translateY(-4px); }
+
+    .screenshot-item img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* ===== Features ===== */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      transition: all 0.3s;
+    }
+
+    .feature-card:hover {
+      background: var(--bg-card-hover);
+      border-color: rgba(124, 92, 252, 0.2);
+      transform: translateY(-2px);
+    }
+
+    .feature-icon {
+      font-size: 28px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 17px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-size: clamp(28px, 4vw, 40px);
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-subtitle {
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 16px;
+      margin-bottom: 48px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ===== Pro Section ===== */
+    .pro-section {
+      background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 252, 0.04) 50%, transparent 100%);
+    }
+
+    .pro-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(124, 92, 252, 0.25);
+      border-radius: 24px;
+      padding: 48px 40px;
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .pro-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: var(--pro-gradient);
+    }
+
+    .pro-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--pro-gradient);
+      color: #fff;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .pro-card h2 {
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .pro-card .pro-desc {
+      color: var(--text-muted);
+      margin-bottom: 32px;
+      font-size: 15px;
+    }
+
+    .pro-features-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .pro-features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      font-size: 15px;
+    }
+
+    .pro-features-list .check {
+      color: var(--accent-light);
+      font-size: 18px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .pro-features-list .label { font-weight: 600; }
+    .pro-features-list .desc { color: var(--text-muted); }
+
+    .pro-free-note {
+      background: rgba(255, 255, 255, 0.04);
+      border-radius: var(--radius-sm);
+      padding: 14px 18px;
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    .pro-free-note strong { color: var(--text); }
+
+    /* ===== Footer ===== */
+    footer {
+      padding: 40px 0;
+      border-top: 1px solid var(--border);
+    }
+
+    .footer-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--accent-light); }
+
+    .footer-copy {
+      font-size: 13px;
+      color: var(--text-muted);
+    }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 640px) {
+      section { padding: 60px 0; }
+      .hero { padding-top: 120px; }
+      .pro-card { padding: 32px 24px; }
+      .screenshot-item { width: 180px; }
+      .footer-inner { flex-direction: column; text-align: center; }
+    }
+
+    /* ===== i18n hide/show ===== */
+    [data-i18n] { display: none; }
+    [data-lang="en"] [data-i18n="en"],
+    [data-lang="es"] [data-i18n="es"],
+    [data-lang="ja"] [data-i18n="ja"] {
+      display: revert;
+    }
+
+    /* Fix for inline elements */
+    h1 [data-i18n], p [data-i18n], span [data-i18n], li [data-i18n],
+    h2 [data-i18n], h3 [data-i18n], a [data-i18n], div [data-i18n] {
+      /* handled by parent display */
+    }
+
+    [data-lang="en"] [data-i18n="en"] { display: inline; }
+    [data-lang="es"] [data-i18n="es"] { display: inline; }
+    [data-lang="ja"] [data-i18n="ja"] { display: inline; }
+
+    /* Block-level i18n */
+    .feature-card[data-i18n],
+    .pro-features-list li[data-i18n],
+    p[data-i18n],
+    div[data-i18n] {
+      /* override inline */
+    }
+    [data-lang="en"] .feature-card[data-i18n="en"],
+    [data-lang="en"] p[data-i18n="en"],
+    [data-lang="en"] div[data-i18n="en"],
+    [data-lang="en"] li[data-i18n="en"] { display: flex; }
+
+    [data-lang="es"] .feature-card[data-i18n="es"],
+    [data-lang="es"] p[data-i18n="es"],
+    [data-lang="es"] div[data-i18n="es"],
+    [data-lang="es"] li[data-i18n="es"] { display: flex; }
+
+    [data-lang="ja"] .feature-card[data-i18n="ja"],
+    [data-lang="ja"] p[data-i18n="ja"],
+    [data-lang="ja"] div[data-i18n="ja"],
+    [data-lang="ja"] li[data-i18n="ja"] { display: flex; }
+
+    /* Grid items need block display */
+    [data-lang="en"] .features-grid .feature-card[data-i18n="en"],
+    [data-lang="es"] .features-grid .feature-card[data-i18n="es"],
+    [data-lang="ja"] .features-grid .feature-card[data-i18n="ja"] { display: block; }
+
+    /* Screenshots lang-aware */
+    .screenshots-lang { display: none; }
+    [data-lang="en"] .screenshots-lang[data-i18n="en"],
+    [data-lang="es"] .screenshots-lang[data-i18n="es"],
+    [data-lang="ja"] .screenshots-lang[data-i18n="ja"] { display: flex; }
+
+    /* Pro note block display */
+    [data-lang="en"] .pro-free-note[data-i18n="en"],
+    [data-lang="es"] .pro-free-note[data-i18n="es"],
+    [data-lang="ja"] .pro-free-note[data-i18n="ja"] { display: block; }
+  </style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <nav>
+    <div class="container">
+      <a href="#" class="nav-brand">
+        <img src="app-icon.png" alt="Call to Meet" width="36" height="36">
+        <span>Call to Meet</span>
+      </a>
+      <div class="nav-links">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" onclick="setLang('ja')">JA</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <img src="app-icon.png" alt="Call to Meet" class="hero-icon" width="100" height="100">
+
+      <h1>
+        <span data-i18n="en">Never miss a<br><span class="gradient">meeting</span> again</span>
+        <span data-i18n="es">No te pierdas<br>ninguna <span class="gradient">reunion</span></span>
+        <span data-i18n="ja"><span class="gradient">ミーティング</span>を<br>もう逃しません</span>
+      </h1>
+
+      <p data-i18n="en">Live Activities, Dynamic Island countdowns, and smart alarms that make sure you're always on time.</p>
+      <p data-i18n="es">Live Activities, cuenta atras en Dynamic Island y alarmas inteligentes para que siempre llegues a tiempo.</p>
+      <p data-i18n="ja">Live Activities、Dynamic Islandのカウントダウン、スマートアラームで常に時間通りに。</p>
+
+      <a href="https://apps.apple.com/app/call-to-meet/id6504754512" class="app-store-badge" target="_blank" rel="noopener">
+        <img data-i18n="en" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="52">
+        <img data-i18n="es" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Descargar en el App Store" height="52">
+        <img data-i18n="ja" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Storeからダウンロード" height="52">
+      </a>
+    </div>
+  </section>
+
+  <!-- Screenshots -->
+  <section class="screenshots">
+    <div class="screenshots-scroll screenshots-lang" data-i18n="en">
+      <div class="screenshot-item"><img src="screenshots/en/01_timeline.png" alt="Timeline" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/03_event_detail.png" alt="Event Detail" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/02_settings.png" alt="Settings" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/04_scrolled.png" alt="Scrolled Timeline" loading="lazy"></div>
+    </div>
+    <div class="screenshots-scroll screenshots-lang" data-i18n="es">
+      <div class="screenshot-item"><img src="screenshots/es/01_timeline.png" alt="Linea de tiempo" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/es/03_event_detail.png" alt="Detalle de evento" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/es/02_settings.png" alt="Ajustes" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/es/04_scrolled.png" alt="Timeline con scroll" loading="lazy"></div>
+    </div>
+    <div class="screenshots-scroll screenshots-lang" data-i18n="ja">
+      <div class="screenshot-item"><img src="screenshots/en/01_timeline.png" alt="タイムライン" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/03_event_detail.png" alt="イベント詳細" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/02_settings.png" alt="設定" loading="lazy"></div>
+      <div class="screenshot-item"><img src="screenshots/en/04_scrolled.png" alt="スクロール" loading="lazy"></div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features">
+    <div class="container">
+      <h2 class="section-title">
+        <span data-i18n="en">Key Features</span>
+        <span data-i18n="es">Funciones principales</span>
+        <span data-i18n="ja">主な機能</span>
+      </h2>
+      <p class="section-subtitle">
+        <span data-i18n="en">Everything you need to stay on top of your meetings</span>
+        <span data-i18n="es">Todo lo que necesitas para no perder tus reuniones</span>
+        <span data-i18n="ja">ミーティングを見逃さないために必要な全て</span>
+      </p>
+
+      <div class="features-grid">
+        <!-- EN features -->
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#9899;</span>
+          <h3>Live Activities &amp; Dynamic Island</h3>
+          <p>See your next meeting countdown right on your Lock Screen and Dynamic Island. Always visible, always ready.</p>
+        </div>
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#128276;</span>
+          <h3>Smart Alarms</h3>
+          <p>AlarmKit-powered alarms that work even in Do Not Disturb and silent mode. Never oversleep a meeting.</p>
+        </div>
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#128197;</span>
+          <h3>Calendar Sync</h3>
+          <p>Automatically detects meetings with call links from Zoom, Teams, Google Meet, and more.</p>
+        </div>
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#9889;</span>
+          <h3>One-Tap Join</h3>
+          <p>Jump into your meeting with a single tap from the notification, Lock Screen, or Dynamic Island.</p>
+        </div>
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#127760;</span>
+          <h3>Focus Mode Support</h3>
+          <p>Filters meetings based on your active Focus mode. Stay focused, stay informed.</p>
+        </div>
+        <div class="feature-card" data-i18n="en">
+          <span class="feature-icon">&#9201;</span>
+          <h3>Apple Watch</h3>
+          <p>See your upcoming meetings and join calls right from your wrist.</p>
+        </div>
+
+        <!-- ES features -->
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#9899;</span>
+          <h3>Live Activities y Dynamic Island</h3>
+          <p>Ve la cuenta atras de tu proxima reunion en la pantalla de bloqueo y Dynamic Island. Siempre visible.</p>
+        </div>
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#128276;</span>
+          <h3>Alarmas inteligentes</h3>
+          <p>Alarmas con AlarmKit que funcionan incluso en modo silencio y No Molestar. No te duermas antes de una reunion.</p>
+        </div>
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#128197;</span>
+          <h3>Sincronizacion de calendario</h3>
+          <p>Detecta automaticamente reuniones con enlaces de Zoom, Teams, Google Meet y mas.</p>
+        </div>
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#9889;</span>
+          <h3>Unirse con un toque</h3>
+          <p>Entra a tu reunion con un solo toque desde la notificacion, pantalla de bloqueo o Dynamic Island.</p>
+        </div>
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#127760;</span>
+          <h3>Modos de concentracion</h3>
+          <p>Filtra reuniones segun tu modo de concentracion activo. Concentrado e informado.</p>
+        </div>
+        <div class="feature-card" data-i18n="es">
+          <span class="feature-icon">&#9201;</span>
+          <h3>Apple Watch</h3>
+          <p>Ve tus proximas reuniones y unete a llamadas desde tu muneca.</p>
+        </div>
+
+        <!-- JA features -->
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#9899;</span>
+          <h3>Live Activities & Dynamic Island</h3>
+          <p>ロック画面とDynamic Islandで次のミーティングのカウントダウンを常に確認。</p>
+        </div>
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#128276;</span>
+          <h3>スマートアラーム</h3>
+          <p>AlarmKit搭載。マナーモードやおやすみモードでも鳴る確実なアラーム。</p>
+        </div>
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#128197;</span>
+          <h3>カレンダー同期</h3>
+          <p>Zoom、Teams、Google Meetなどのリンクを自動検出。</p>
+        </div>
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#9889;</span>
+          <h3>ワンタップで参加</h3>
+          <p>通知、ロック画面、Dynamic Islandからワンタップでミーティングに参加。</p>
+        </div>
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#127760;</span>
+          <h3>集中モード対応</h3>
+          <p>アクティブな集中モードに基づいてミーティングをフィルタリング。</p>
+        </div>
+        <div class="feature-card" data-i18n="ja">
+          <span class="feature-icon">&#9201;</span>
+          <h3>Apple Watch</h3>
+          <p>手首から次のミーティングを確認し、通話に参加。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pro Section -->
+  <section class="pro-section" id="pro">
+    <div class="container">
+      <h2 class="section-title">
+        <span data-i18n="en">Call to Meet <span class="gradient">Pro</span></span>
+        <span data-i18n="es">Call to Meet <span class="gradient">Pro</span></span>
+        <span data-i18n="ja">Call to Meet <span class="gradient">Pro</span></span>
+      </h2>
+      <p class="section-subtitle">
+        <span data-i18n="en">Unlock the full power of your meeting assistant</span>
+        <span data-i18n="es">Desbloquea todo el potencial de tu asistente de reuniones</span>
+        <span data-i18n="ja">ミーティングアシスタントの全機能を解放</span>
+      </p>
+
+      <div class="pro-card">
+        <div class="pro-badge">
+          <span data-i18n="en">Pro</span>
+          <span data-i18n="es">Pro</span>
+          <span data-i18n="ja">Pro</span>
+        </div>
+
+        <h2>
+          <span data-i18n="en">Never miss a meeting again</span>
+          <span data-i18n="es">No vuelvas a perderte una reunion</span>
+          <span data-i18n="ja">もうミーティングを逃しません</span>
+        </h2>
+        <p class="pro-desc">
+          <span data-i18n="en">Get unlimited alarm notifications that wake you up before important meetings.</span>
+          <span data-i18n="es">Recibe alarmas ilimitadas que te despiertan antes de reuniones importantes.</span>
+          <span data-i18n="ja">重要なミーティング前に起こしてくれる無制限のアラーム通知。</span>
+        </p>
+
+        <ul class="pro-features-list">
+          <!-- EN -->
+          <li data-i18n="en">
+            <span class="check">&#10003;</span>
+            <div><span class="label">Unlimited Alarms</span><br><span class="desc">No limit on simultaneous alarm notifications</span></div>
+          </li>
+          <li data-i18n="en">
+            <span class="check">&#10003;</span>
+            <div><span class="label">AlarmKit Alerts</span><br><span class="desc">Loud alarms that work even on silent mode</span></div>
+          </li>
+          <li data-i18n="en">
+            <span class="check">&#10003;</span>
+            <div><span class="label">Auto-Alarm</span><br><span class="desc">Automatically enable alarms for all your events</span></div>
+          </li>
+          <!-- ES -->
+          <li data-i18n="es">
+            <span class="check">&#10003;</span>
+            <div><span class="label">Alarmas ilimitadas</span><br><span class="desc">Sin limite de alarmas simultaneas</span></div>
+          </li>
+          <li data-i18n="es">
+            <span class="check">&#10003;</span>
+            <div><span class="label">Alertas AlarmKit</span><br><span class="desc">Alarmas fuertes que funcionan en modo silencio</span></div>
+          </li>
+          <li data-i18n="es">
+            <span class="check">&#10003;</span>
+            <div><span class="label">Alarma automatica</span><br><span class="desc">Activa alarmas automaticamente para todos tus eventos</span></div>
+          </li>
+          <!-- JA -->
+          <li data-i18n="ja">
+            <span class="check">&#10003;</span>
+            <div><span class="label">無制限アラーム</span><br><span class="desc">同時アラーム数の制限なし</span></div>
+          </li>
+          <li data-i18n="ja">
+            <span class="check">&#10003;</span>
+            <div><span class="label">AlarmKitアラート</span><br><span class="desc">マナーモードでも鳴る大音量アラーム</span></div>
+          </li>
+          <li data-i18n="ja">
+            <span class="check">&#10003;</span>
+            <div><span class="label">自動アラーム</span><br><span class="desc">全イベントに自動でアラームを設定</span></div>
+          </li>
+        </ul>
+
+        <div class="pro-free-note" data-i18n="en">
+          <strong>Free users</strong> get 2 simultaneous alarms. Live Activity and Dynamic Island are always free.
+        </div>
+        <div class="pro-free-note" data-i18n="es">
+          <strong>Usuarios gratis</strong> tienen 2 alarmas simultaneas. Live Activity y Dynamic Island son siempre gratis.
+        </div>
+        <div class="pro-free-note" data-i18n="ja">
+          <strong>無料ユーザー</strong>は同時に2つのアラームを利用可能。Live ActivityとDynamic Islandは常に無料です。
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container footer-inner">
+      <div class="footer-links">
+        <a href="privacy.html">
+          <span data-i18n="en">Privacy Policy</span>
+          <span data-i18n="es">Politica de Privacidad</span>
+          <span data-i18n="ja">プライバシーポリシー</span>
+        </a>
+        <a href="support.html">
+          <span data-i18n="en">Support</span>
+          <span data-i18n="es">Soporte</span>
+          <span data-i18n="ja">サポート</span>
+        </a>
+      </div>
+      <span class="footer-copy">&copy; 2025 Ismael Florit. All rights reserved.</span>
+    </div>
+  </footer>
+
+  <script>
+    function setLang(lang) {
+      document.documentElement.setAttribute('data-lang', lang);
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
+      });
+      localStorage.setItem('ctm-lang', lang);
+    }
+
+    // Auto-detect language
+    (function() {
+      const saved = localStorage.getItem('ctm-lang');
+      if (saved && ['en', 'es', 'ja'].includes(saved)) {
+        setLang(saved);
+        return;
+      }
+      const browserLang = (navigator.language || '').toLowerCase();
+      if (browserLang.startsWith('es')) setLang('es');
+      else if (browserLang.startsWith('ja')) setLang('ja');
+      else setLang('en');
+    })();
+  </script>
+
+</body>
+</html>

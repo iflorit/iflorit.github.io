@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy — Call to Meet</title>
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="icon" type="image/png" href="app-icon.png">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #141420;
+      --text: #e8e8f0;
+      --text-muted: #8888a0;
+      --accent: #7c5cfc;
+      --accent-light: #9d83ff;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    nav {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--text);
+    }
+    .nav-brand img { width: 32px; height: 32px; border-radius: 8px; }
+    .nav-brand span { font-size: 16px; font-weight: 600; }
+    .nav-links { display: flex; gap: 8px; }
+    .lang-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 4px 10px; border-radius: 6px;
+      cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;
+    }
+    .lang-btn:hover, .lang-btn.active {
+      background: rgba(124,92,252,0.1); border-color: var(--accent); color: var(--accent-light);
+    }
+    .content { padding-bottom: 80px; }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .updated { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+    h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; color: var(--accent-light); }
+    p, li { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; }
+    ul { padding-left: 20px; }
+    a { color: var(--accent-light); }
+    [data-i18n] { display: none; }
+    [data-lang="en"] [data-i18n="en"] { display: block; }
+    [data-lang="es"] [data-i18n="es"] { display: block; }
+    [data-lang="ja"] [data-i18n="ja"] { display: block; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-brand">
+        <img src="app-icon.png" alt="Call to Meet" width="32" height="32">
+        <span>Call to Meet</span>
+      </a>
+      <div class="nav-links">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" onclick="setLang('ja')">JA</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content">
+    <!-- English -->
+    <div data-i18n="en">
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: February 2026</p>
+
+      <h2>Overview</h2>
+      <p>Call to Meet is designed with your privacy in mind. We do not collect, store, or share any personal data.</p>
+
+      <h2>Data We Access</h2>
+      <p>Call to Meet accesses the following data <strong>locally on your device only</strong>:</p>
+      <ul>
+        <li><strong>Calendar Events</strong> — Read-only access to detect meetings with video call links. Your calendar data never leaves your device.</li>
+        <li><strong>Notification Preferences</strong> — To send you meeting reminders and alarm notifications.</li>
+        <li><strong>Focus Mode Status</strong> — To filter meetings based on your active Focus mode.</li>
+      </ul>
+
+      <h2>Data We Do Not Collect</h2>
+      <ul>
+        <li>No personal information</li>
+        <li>No analytics or tracking</li>
+        <li>No meeting content or call recordings</li>
+        <li>No location data</li>
+        <li>No data shared with third parties</li>
+      </ul>
+
+      <h2>Subscriptions</h2>
+      <p>Call to Meet Pro subscriptions are managed entirely through Apple's App Store. We do not process or store any payment information.</p>
+
+      <h2>Contact</h2>
+      <p>If you have questions about this privacy policy, contact us at <a href="mailto:demenorca@gmail.com">demenorca@gmail.com</a>.</p>
+    </div>
+
+    <!-- Spanish -->
+    <div data-i18n="es">
+      <h1>Politica de Privacidad</h1>
+      <p class="updated">Ultima actualizacion: febrero 2026</p>
+
+      <h2>Resumen</h2>
+      <p>Call to Meet esta disenado pensando en tu privacidad. No recopilamos, almacenamos ni compartimos ningun dato personal.</p>
+
+      <h2>Datos a los que accedemos</h2>
+      <p>Call to Meet accede a los siguientes datos <strong>solo localmente en tu dispositivo</strong>:</p>
+      <ul>
+        <li><strong>Eventos del calendario</strong> — Acceso de solo lectura para detectar reuniones con enlaces de videollamada. Tus datos de calendario nunca salen de tu dispositivo.</li>
+        <li><strong>Preferencias de notificacion</strong> — Para enviarte recordatorios de reuniones y alarmas.</li>
+        <li><strong>Estado del modo de concentracion</strong> — Para filtrar reuniones segun tu modo activo.</li>
+      </ul>
+
+      <h2>Datos que no recopilamos</h2>
+      <ul>
+        <li>Sin informacion personal</li>
+        <li>Sin analiticas ni seguimiento</li>
+        <li>Sin contenido de reuniones ni grabaciones</li>
+        <li>Sin datos de ubicacion</li>
+        <li>Sin datos compartidos con terceros</li>
+      </ul>
+
+      <h2>Suscripciones</h2>
+      <p>Las suscripciones de Call to Meet Pro se gestionan completamente a traves del App Store de Apple. No procesamos ni almacenamos informacion de pago.</p>
+
+      <h2>Contacto</h2>
+      <p>Si tienes preguntas sobre esta politica de privacidad, contactanos en <a href="mailto:demenorca@gmail.com">demenorca@gmail.com</a>.</p>
+    </div>
+
+    <!-- Japanese -->
+    <div data-i18n="ja">
+      <h1>プライバシーポリシー</h1>
+      <p class="updated">最終更新: 2026年2月</p>
+
+      <h2>概要</h2>
+      <p>Call to Meetはプライバシーを重視して設計されています。個人データの収集、保存、共有は一切行いません。</p>
+
+      <h2>アクセスするデータ</h2>
+      <p>Call to Meetは以下のデータに<strong>デバイス上でのみ</strong>アクセスします：</p>
+      <ul>
+        <li><strong>カレンダーイベント</strong> — ビデオ通話リンクのあるミーティングを検出するための読み取り専用アクセス。カレンダーデータはデバイスから外に出ることはありません。</li>
+        <li><strong>通知設定</strong> — ミーティングリマインダーとアラーム通知の送信用。</li>
+        <li><strong>集中モードの状態</strong> — アクティブな集中モードに基づいてミーティングをフィルタリング。</li>
+      </ul>
+
+      <h2>収集しないデータ</h2>
+      <ul>
+        <li>個人情報の収集なし</li>
+        <li>分析やトラッキングなし</li>
+        <li>ミーティング内容や通話録音なし</li>
+        <li>位置情報の収集なし</li>
+        <li>第三者へのデータ共有なし</li>
+      </ul>
+
+      <h2>サブスクリプション</h2>
+      <p>Call to Meet Proのサブスクリプションは、AppleのApp Storeを通じて完全に管理されます。決済情報の処理や保存は行いません。</p>
+
+      <h2>お問い合わせ</h2>
+      <p>このプライバシーポリシーについてご質問がある場合は、<a href="mailto:demenorca@gmail.com">demenorca@gmail.com</a>までご連絡ください。</p>
+    </div>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.documentElement.setAttribute('data-lang', lang);
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase()));
+      localStorage.setItem('ctm-lang', lang);
+    }
+    (function() {
+      const s = localStorage.getItem('ctm-lang');
+      if (s && ['en','es','ja'].includes(s)) { setLang(s); return; }
+      const b = (navigator.language||'').toLowerCase();
+      if (b.startsWith('es')) setLang('es');
+      else if (b.startsWith('ja')) setLang('ja');
+      else setLang('en');
+    })();
+  </script>
+</body>
+</html>
