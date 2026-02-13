@@ -267,89 +267,200 @@
       background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 252, 0.04) 50%, transparent 100%);
     }
 
-    .pro-card {
-      background: var(--bg-card);
-      border: 1px solid rgba(124, 92, 252, 0.25);
-      border-radius: 24px;
-      padding: 48px 40px;
-      max-width: 680px;
-      margin: 0 auto;
-      position: relative;
-      overflow: hidden;
+    /* Comparison table */
+    .pro-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      max-width: 740px;
+      margin: 0 auto 56px;
     }
 
-    .pro-card::before {
+    .plan-col {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 32px 28px;
+      position: relative;
+    }
+
+    .plan-col.pro {
+      border-color: rgba(124, 92, 252, 0.4);
+      box-shadow: 0 0 40px rgba(124, 92, 252, 0.08);
+    }
+
+    .plan-col.pro::before {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
+      top: 0; left: 0; right: 0;
       height: 3px;
       background: var(--pro-gradient);
+      border-radius: 20px 20px 0 0;
     }
 
-    .pro-badge {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--pro-gradient);
-      color: #fff;
+    .plan-label {
       font-size: 13px;
       font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 20px;
-      margin-bottom: 20px;
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-
-    .pro-card h2 {
-      font-size: 28px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-
-    .pro-card .pro-desc {
+      letter-spacing: 0.06em;
       color: var(--text-muted);
-      margin-bottom: 32px;
-      font-size: 15px;
+      margin-bottom: 4px;
     }
 
-    .pro-features-list {
+    .plan-col.pro .plan-label {
+      background: var(--pro-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .plan-name {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 20px;
+    }
+
+    .plan-features {
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      margin-bottom: 32px;
+      gap: 14px;
     }
 
-    .pro-features-list li {
+    .plan-features li {
       display: flex;
-      align-items: flex-start;
-      gap: 12px;
-      font-size: 15px;
+      align-items: center;
+      gap: 10px;
+      font-size: 14px;
+      line-height: 1.4;
     }
 
-    .pro-features-list .check {
-      color: var(--accent-light);
-      font-size: 18px;
+    .plan-features .icon {
       flex-shrink: 0;
-      margin-top: 1px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
     }
 
-    .pro-features-list .label { font-weight: 600; }
-    .pro-features-list .desc { color: var(--text-muted); }
+    .plan-features .icon.yes {
+      background: rgba(124, 92, 252, 0.15);
+      color: var(--accent-light);
+    }
 
-    .pro-free-note {
+    .plan-features .icon.no {
       background: rgba(255, 255, 255, 0.04);
-      border-radius: var(--radius-sm);
-      padding: 14px 18px;
+      color: var(--text-muted);
+    }
+
+    .plan-features .icon.free {
+      background: rgba(52, 199, 89, 0.12);
+      color: #34c759;
+    }
+
+    .plan-features .muted { color: var(--text-muted); }
+
+    /* Pricing cards */
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      max-width: 740px;
+      margin: 0 auto 32px;
+    }
+
+    .price-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px 20px;
+      text-align: center;
+      position: relative;
+      transition: all 0.25s;
+    }
+
+    .price-card:hover {
+      border-color: rgba(124, 92, 252, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .price-card.featured {
+      border-color: rgba(124, 92, 252, 0.5);
+      box-shadow: 0 4px 24px rgba(124, 92, 252, 0.12);
+    }
+
+    .price-badge {
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--pro-gradient);
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 12px;
+      border-radius: 10px;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+    }
+
+    .price-period {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    .price-amount {
+      font-size: 32px;
+      font-weight: 700;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .price-unit {
       font-size: 13px;
       color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .price-savings {
+      font-size: 12px;
+      font-weight: 600;
+      color: #34c759;
+      background: rgba(52, 199, 89, 0.1);
+      padding: 3px 10px;
+      border-radius: 8px;
+      display: inline-block;
+    }
+
+    .price-trial {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 10px;
+    }
+
+    .pro-footer-note {
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 500px;
+      margin: 0 auto;
       line-height: 1.5;
     }
 
-    .pro-free-note strong { color: var(--text); }
+    @media (max-width: 640px) {
+      .pro-comparison { grid-template-columns: 1fr; gap: 16px; }
+      .pricing-grid { grid-template-columns: 1fr; max-width: 320px; }
+    }
+
+    @media (min-width: 641px) and (max-width: 800px) {
+      .pricing-grid { grid-template-columns: 1fr 1fr; }
+    }
 
     /* ===== Footer ===== */
     footer {
@@ -444,10 +555,23 @@
     [data-lang="es"] .screenshots-lang[data-i18n="es"],
     [data-lang="ja"] .screenshots-lang[data-i18n="ja"] { display: flex; }
 
-    /* Pro note block display */
-    [data-lang="en"] .pro-free-note[data-i18n="en"],
-    [data-lang="es"] .pro-free-note[data-i18n="es"],
-    [data-lang="ja"] .pro-free-note[data-i18n="ja"] { display: block; }
+    /* Pro footer note */
+    .pro-footer-note[data-i18n] { display: none; }
+    [data-lang="en"] .pro-footer-note span[data-i18n="en"],
+    [data-lang="es"] .pro-footer-note span[data-i18n="es"],
+    [data-lang="ja"] .pro-footer-note span[data-i18n="ja"] { display: inline; }
+
+    /* Price badges */
+    .price-badge[data-i18n] { display: none; }
+    [data-lang="en"] .price-badge[data-i18n="en"],
+    [data-lang="es"] .price-badge[data-i18n="es"],
+    [data-lang="ja"] .price-badge[data-i18n="ja"] { display: block; }
+
+    /* Plan features li */
+    .plan-features li[data-i18n] { display: none; }
+    [data-lang="en"] .plan-features li[data-i18n="en"],
+    [data-lang="es"] .plan-features li[data-i18n="es"],
+    [data-lang="ja"] .plan-features li[data-i18n="ja"] { display: flex; }
   </style>
 </head>
 <body>
@@ -630,86 +754,167 @@
   <section class="pro-section" id="pro">
     <div class="container">
       <h2 class="section-title">
-        <span data-i18n="en">Call to Meet <span class="gradient">Pro</span></span>
-        <span data-i18n="es">Call to Meet <span class="gradient">Pro</span></span>
-        <span data-i18n="ja">Call to Meet <span class="gradient">Pro</span></span>
+        <span data-i18n="en">Free vs <span class="gradient">Pro</span></span>
+        <span data-i18n="es">Gratis vs <span class="gradient">Pro</span></span>
+        <span data-i18n="ja">無料 vs <span class="gradient">Pro</span></span>
       </h2>
       <p class="section-subtitle">
-        <span data-i18n="en">Unlock the full power of your meeting assistant</span>
-        <span data-i18n="es">Desbloquea todo el potencial de tu asistente de reuniones</span>
-        <span data-i18n="ja">ミーティングアシスタントの全機能を解放</span>
+        <span data-i18n="en">Live Activity is always free. Upgrade for unlimited alarms.</span>
+        <span data-i18n="es">Live Activity siempre es gratis. Hazte Pro para alarmas ilimitadas.</span>
+        <span data-i18n="ja">Live Activityは常に無料。Proで無制限アラーム。</span>
       </p>
 
-      <div class="pro-card">
-        <div class="pro-badge">
-          <span data-i18n="en">Pro</span>
-          <span data-i18n="es">Pro</span>
-          <span data-i18n="ja">Pro</span>
+      <!-- Free vs Pro comparison -->
+      <div class="pro-comparison">
+        <!-- Free column -->
+        <div class="plan-col">
+          <div class="plan-label">
+            <span data-i18n="en">Free</span>
+            <span data-i18n="es">Gratis</span>
+            <span data-i18n="ja">無料</span>
+          </div>
+          <div class="plan-name">
+            <span data-i18n="en">Basic</span>
+            <span data-i18n="es">Basico</span>
+            <span data-i18n="ja">ベーシック</span>
+          </div>
+          <ul class="plan-features">
+            <li data-i18n="en"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="en"><span class="icon free">&#10003;</span> Calendar sync & One-Tap Join</li>
+            <li data-i18n="en"><span class="icon free">&#10003;</span> 2 simultaneous alarms</li>
+            <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Auto-alarm for all events</span></li>
+            <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Unlimited alarms</span></li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> Live Activity y Dynamic Island</li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> Sincronizacion y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> 2 alarmas simultaneas</li>
+            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarma automatica</span></li>
+            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarmas ilimitadas</span></li>
+            <li data-i18n="ja"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="ja"><span class="icon free">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
+            <li data-i18n="ja"><span class="icon free">&#10003;</span> 同時に2つのアラーム</li>
+            <li data-i18n="ja"><span class="icon no">&mdash;</span> <span class="muted">自動アラーム</span></li>
+            <li data-i18n="ja"><span class="icon no">&mdash;</span> <span class="muted">無制限アラーム</span></li>
+          </ul>
         </div>
 
-        <h2>
-          <span data-i18n="en">Never miss a meeting again</span>
-          <span data-i18n="es">No vuelvas a perderte una reunion</span>
-          <span data-i18n="ja">もうミーティングを逃しません</span>
-        </h2>
-        <p class="pro-desc">
-          <span data-i18n="en">Get unlimited alarm notifications that wake you up before important meetings.</span>
-          <span data-i18n="es">Recibe alarmas ilimitadas que te despiertan antes de reuniones importantes.</span>
-          <span data-i18n="ja">重要なミーティング前に起こしてくれる無制限のアラーム通知。</span>
-        </p>
-
-        <ul class="pro-features-list">
-          <!-- EN -->
-          <li data-i18n="en">
-            <span class="check">&#10003;</span>
-            <div><span class="label">Unlimited Alarms</span><br><span class="desc">No limit on simultaneous alarm notifications</span></div>
-          </li>
-          <li data-i18n="en">
-            <span class="check">&#10003;</span>
-            <div><span class="label">AlarmKit Alerts</span><br><span class="desc">Loud alarms that work even on silent mode</span></div>
-          </li>
-          <li data-i18n="en">
-            <span class="check">&#10003;</span>
-            <div><span class="label">Auto-Alarm</span><br><span class="desc">Automatically enable alarms for all your events</span></div>
-          </li>
-          <!-- ES -->
-          <li data-i18n="es">
-            <span class="check">&#10003;</span>
-            <div><span class="label">Alarmas ilimitadas</span><br><span class="desc">Sin limite de alarmas simultaneas</span></div>
-          </li>
-          <li data-i18n="es">
-            <span class="check">&#10003;</span>
-            <div><span class="label">Alertas AlarmKit</span><br><span class="desc">Alarmas fuertes que funcionan en modo silencio</span></div>
-          </li>
-          <li data-i18n="es">
-            <span class="check">&#10003;</span>
-            <div><span class="label">Alarma automatica</span><br><span class="desc">Activa alarmas automaticamente para todos tus eventos</span></div>
-          </li>
-          <!-- JA -->
-          <li data-i18n="ja">
-            <span class="check">&#10003;</span>
-            <div><span class="label">無制限アラーム</span><br><span class="desc">同時アラーム数の制限なし</span></div>
-          </li>
-          <li data-i18n="ja">
-            <span class="check">&#10003;</span>
-            <div><span class="label">AlarmKitアラート</span><br><span class="desc">マナーモードでも鳴る大音量アラーム</span></div>
-          </li>
-          <li data-i18n="ja">
-            <span class="check">&#10003;</span>
-            <div><span class="label">自動アラーム</span><br><span class="desc">全イベントに自動でアラームを設定</span></div>
-          </li>
-        </ul>
-
-        <div class="pro-free-note" data-i18n="en">
-          <strong>Free users</strong> get 2 simultaneous alarms. Live Activity and Dynamic Island are always free.
-        </div>
-        <div class="pro-free-note" data-i18n="es">
-          <strong>Usuarios gratis</strong> tienen 2 alarmas simultaneas. Live Activity y Dynamic Island son siempre gratis.
-        </div>
-        <div class="pro-free-note" data-i18n="ja">
-          <strong>無料ユーザー</strong>は同時に2つのアラームを利用可能。Live ActivityとDynamic Islandは常に無料です。
+        <!-- Pro column -->
+        <div class="plan-col pro">
+          <div class="plan-label">Pro</div>
+          <div class="plan-name">
+            <span data-i18n="en">Unlimited</span>
+            <span data-i18n="es">Ilimitado</span>
+            <span data-i18n="ja">アンリミテッド</span>
+          </div>
+          <ul class="plan-features">
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> Calendar sync & One-Tap Join</li>
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> <strong>Unlimited alarms</strong></li>
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> Auto-alarm for all events</li>
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> Live Activity y Dynamic Island</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> Sincronizacion y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> <strong>Alarmas ilimitadas</strong></li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> Alarma automatica para todos los eventos</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> AlarmKit (suena en modo silencio)</li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> <strong>無制限アラーム</strong></li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> 全イベント自動アラーム</li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> AlarmKit（マナーモード対応）</li>
+          </ul>
         </div>
       </div>
+
+      <!-- Pricing -->
+      <h3 class="section-title" style="font-size: 24px; margin-bottom: 32px;">
+        <span data-i18n="en">Choose your plan</span>
+        <span data-i18n="es">Elige tu plan</span>
+        <span data-i18n="ja">プランを選択</span>
+      </h3>
+
+      <div class="pricing-grid">
+        <!-- Monthly -->
+        <div class="price-card">
+          <div class="price-badge" data-i18n="en">Popular</div>
+          <div class="price-badge" data-i18n="es">Popular</div>
+          <div class="price-badge" data-i18n="ja">人気</div>
+          <div class="price-period">
+            <span data-i18n="en">Monthly</span>
+            <span data-i18n="es">Mensual</span>
+            <span data-i18n="ja">月額</span>
+          </div>
+          <div class="price-amount">&euro;4.99</div>
+          <div class="price-unit">
+            <span data-i18n="en">/month</span>
+            <span data-i18n="es">/mes</span>
+            <span data-i18n="ja">/月</span>
+          </div>
+          <div class="price-trial">
+            <span data-i18n="en">7-day free trial</span>
+            <span data-i18n="es">7 dias de prueba gratis</span>
+            <span data-i18n="ja">7日間無料体験</span>
+          </div>
+        </div>
+
+        <!-- Semiannual -->
+        <div class="price-card">
+          <div class="price-period">
+            <span data-i18n="en">Semiannual</span>
+            <span data-i18n="es">Semestral</span>
+            <span data-i18n="ja">半年</span>
+          </div>
+          <div class="price-amount">&euro;19.99</div>
+          <div class="price-unit">
+            <span data-i18n="en">/6 months</span>
+            <span data-i18n="es">/6 meses</span>
+            <span data-i18n="ja">/6ヶ月</span>
+          </div>
+          <div class="price-savings">
+            <span data-i18n="en">Save 33%</span>
+            <span data-i18n="es">Ahorra 33%</span>
+            <span data-i18n="ja">33%お得</span>
+          </div>
+          <div class="price-trial">
+            <span data-i18n="en">14-day free trial</span>
+            <span data-i18n="es">14 dias de prueba gratis</span>
+            <span data-i18n="ja">14日間無料体験</span>
+          </div>
+        </div>
+
+        <!-- Yearly -->
+        <div class="price-card featured">
+          <div class="price-badge" data-i18n="en">Best Value</div>
+          <div class="price-badge" data-i18n="es">Mejor Precio</div>
+          <div class="price-badge" data-i18n="ja">お得</div>
+          <div class="price-period">
+            <span data-i18n="en">Yearly</span>
+            <span data-i18n="es">Anual</span>
+            <span data-i18n="ja">年額</span>
+          </div>
+          <div class="price-amount">&euro;29.99</div>
+          <div class="price-unit">
+            <span data-i18n="en">/year</span>
+            <span data-i18n="es">/ano</span>
+            <span data-i18n="ja">/年</span>
+          </div>
+          <div class="price-savings">
+            <span data-i18n="en">Save 50%</span>
+            <span data-i18n="es">Ahorra 50%</span>
+            <span data-i18n="ja">50%お得</span>
+          </div>
+          <div class="price-trial">
+            <span data-i18n="en">14-day free trial</span>
+            <span data-i18n="es">14 dias de prueba gratis</span>
+            <span data-i18n="ja">14日間無料体験</span>
+          </div>
+        </div>
+      </div>
+
+      <p class="pro-footer-note">
+        <span data-i18n="en">All plans auto-renew. Cancel anytime in your iPhone Settings. Managed entirely through the App Store.</span>
+        <span data-i18n="es">Todos los planes se renuevan automaticamente. Cancela en cualquier momento desde Ajustes de tu iPhone. Gestionado a traves del App Store.</span>
+        <span data-i18n="ja">全プラン自動更新。iPhoneの設定からいつでもキャンセル可能。App Storeで管理。</span>
+      </p>
     </div>
   </section>
 
