@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Terms of Service — Call to Meet</title>
+  <meta name="theme-color" content="#0a0a0f">
+  <link rel="icon" type="image/png" href="app-icon.png">
+  <style>
+    :root {
+      --bg: #0a0a0f;
+      --bg-card: #141420;
+      --text: #e8e8f0;
+      --text-muted: #8888a0;
+      --accent: #7c5cfc;
+      --accent-light: #9d83ff;
+      --border: rgba(255, 255, 255, 0.06);
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 0 24px; }
+    nav {
+      padding: 16px 0;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 48px;
+    }
+    nav .container { display: flex; align-items: center; justify-content: space-between; }
+    .nav-brand {
+      display: flex; align-items: center; gap: 12px;
+      text-decoration: none; color: var(--text);
+    }
+    .nav-brand img { width: 32px; height: 32px; border-radius: 8px; }
+    .nav-brand span { font-size: 16px; font-weight: 600; }
+    .nav-links { display: flex; gap: 8px; }
+    .lang-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); padding: 4px 10px; border-radius: 6px;
+      cursor: pointer; font-size: 12px; font-weight: 500; transition: all 0.2s;
+    }
+    .lang-btn:hover, .lang-btn.active {
+      background: rgba(124,92,252,0.1); border-color: var(--accent); color: var(--accent-light);
+    }
+    .content { padding-bottom: 80px; }
+    h1 { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+    .updated { color: var(--text-muted); font-size: 14px; margin-bottom: 40px; }
+    h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; color: var(--accent-light); }
+    p, li { font-size: 15px; color: var(--text-muted); margin-bottom: 12px; }
+    ul { padding-left: 20px; }
+    a { color: var(--accent-light); }
+    [data-i18n] { display: none; }
+    [data-lang="en"] [data-i18n="en"] { display: block; }
+    [data-lang="es"] [data-i18n="es"] { display: block; }
+    [data-lang="ja"] [data-i18n="ja"] { display: block; }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="container">
+      <a href="index.html" class="nav-brand">
+        <img src="app-icon.png" alt="Call to Meet" width="32" height="32">
+        <span>Call to Meet</span>
+      </a>
+      <div class="nav-links">
+        <button class="lang-btn active" onclick="setLang('en')">EN</button>
+        <button class="lang-btn" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" onclick="setLang('ja')">JA</button>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container content">
+    <!-- English -->
+    <div data-i18n="en">
+      <h1>Terms of Service</h1>
+      <p class="updated">Last updated: February 2026</p>
+
+      <h2>Acceptance of Terms</h2>
+      <p>By downloading, installing, or using Call to Meet, you agree to these Terms of Service. If you do not agree, please do not use the app.</p>
+
+      <h2>Description of Service</h2>
+      <p>Call to Meet is a meeting management app that reads your calendar events to provide meeting reminders, Live Activities, and alarm notifications. The app operates entirely on your device.</p>
+
+      <h2>Subscriptions</h2>
+      <ul>
+        <li>Call to Meet offers optional auto-renewable subscriptions (monthly and yearly) through the App Store.</li>
+        <li>Payment is charged to your Apple ID account at confirmation of purchase.</li>
+        <li>Subscriptions automatically renew unless cancelled at least 24 hours before the end of the current period.</li>
+        <li>You can manage and cancel subscriptions in your App Store account settings.</li>
+        <li>Any unused portion of a free trial period is forfeited when purchasing a subscription.</li>
+      </ul>
+
+      <h2>User Responsibilities</h2>
+      <ul>
+        <li>You are responsible for granting the necessary permissions (calendar, notifications) for the app to function correctly.</li>
+        <li>You agree not to reverse-engineer, decompile, or disassemble the app.</li>
+      </ul>
+
+      <h2>Intellectual Property</h2>
+      <p>All content, design, and code in Call to Meet are the property of the developer and are protected by applicable intellectual property laws.</p>
+
+      <h2>Limitation of Liability</h2>
+      <p>Call to Meet is provided "as is" without warranties of any kind. The developer is not liable for missed meetings, failed alarms, or any damages arising from the use of the app.</p>
+
+      <h2>Changes to Terms</h2>
+      <p>We may update these terms from time to time. Continued use of the app after changes constitutes acceptance of the new terms.</p>
+
+      <h2>Contact</h2>
+      <p>For questions about these terms, contact us at <a href="mailto:help@florit.es">help@florit.es</a>.</p>
+    </div>
+
+    <!-- Spanish -->
+    <div data-i18n="es">
+      <h1>Condiciones del Servicio</h1>
+      <p class="updated">Última actualización: febrero 2026</p>
+
+      <h2>Aceptación de los Términos</h2>
+      <p>Al descargar, instalar o usar Call to Meet, aceptas estas Condiciones del Servicio. Si no estás de acuerdo, por favor no uses la aplicación.</p>
+
+      <h2>Descripción del Servicio</h2>
+      <p>Call to Meet es una aplicación de gestión de reuniones que lee tus eventos de calendario para proporcionar recordatorios, Live Activities y notificaciones de alarma. La aplicación funciona completamente en tu dispositivo.</p>
+
+      <h2>Suscripciones</h2>
+      <ul>
+        <li>Call to Meet ofrece suscripciones opcionales de renovación automática (mensual y anual) a través del App Store.</li>
+        <li>El pago se carga a tu cuenta de Apple ID en el momento de confirmar la compra.</li>
+        <li>Las suscripciones se renuevan automáticamente a menos que se cancelen al menos 24 horas antes del final del período actual.</li>
+        <li>Puedes gestionar y cancelar suscripciones en los ajustes de tu cuenta del App Store.</li>
+        <li>Cualquier parte no utilizada de un período de prueba gratuito se pierde al adquirir una suscripción.</li>
+      </ul>
+
+      <h2>Responsabilidades del Usuario</h2>
+      <ul>
+        <li>Eres responsable de conceder los permisos necesarios (calendario, notificaciones) para que la aplicación funcione correctamente.</li>
+        <li>Aceptas no realizar ingeniería inversa, descompilar ni desensamblar la aplicación.</li>
+      </ul>
+
+      <h2>Propiedad Intelectual</h2>
+      <p>Todo el contenido, diseño y código de Call to Meet son propiedad del desarrollador y están protegidos por las leyes de propiedad intelectual aplicables.</p>
+
+      <h2>Limitación de Responsabilidad</h2>
+      <p>Call to Meet se proporciona "tal cual" sin garantías de ningún tipo. El desarrollador no es responsable de reuniones perdidas, alarmas fallidas ni de ningún daño derivado del uso de la aplicación.</p>
+
+      <h2>Cambios en los Términos</h2>
+      <p>Podemos actualizar estos términos de vez en cuando. El uso continuado de la aplicación tras los cambios constituye la aceptación de los nuevos términos.</p>
+
+      <h2>Contacto</h2>
+      <p>Para preguntas sobre estos términos, contáctanos en <a href="mailto:help@florit.es">help@florit.es</a>.</p>
+    </div>
+
+    <!-- Japanese -->
+    <div data-i18n="ja">
+      <h1>利用規約</h1>
+      <p class="updated">最終更新: 2026年2月</p>
+
+      <h2>利用規約への同意</h2>
+      <p>Call to Meetをダウンロード、インストール、または使用することにより、本利用規約に同意したものとみなされます。同意しない場合は、アプリを使用しないでください。</p>
+
+      <h2>サービスの説明</h2>
+      <p>Call to Meetは、カレンダーイベントを読み取り、ミーティングリマインダー、Live Activities、アラーム通知を提供するミーティング管理アプリです。アプリは完全にデバイス上で動作します。</p>
+
+      <h2>サブスクリプション</h2>
+      <ul>
+        <li>Call to Meetは、App Storeを通じてオプションの自動更新サブスクリプション（月額および年額）を提供しています。</li>
+        <li>支払いは購入確認時にApple IDアカウントに請求されます。</li>
+        <li>現在の期間終了の24時間前までにキャンセルしない限り、サブスクリプションは自動的に更新されます。</li>
+        <li>App Storeのアカウント設定でサブスクリプションの管理とキャンセルができます。</li>
+        <li>サブスクリプション購入時に、無料トライアル期間の未使用分は失効します。</li>
+      </ul>
+
+      <h2>ユーザーの責任</h2>
+      <ul>
+        <li>アプリが正しく機能するために必要な権限（カレンダー、通知）を付与する責任はユーザーにあります。</li>
+        <li>アプリのリバースエンジニアリング、逆コンパイル、逆アセンブルを行わないことに同意します。</li>
+      </ul>
+
+      <h2>知的財産権</h2>
+      <p>Call to Meetのすべてのコンテンツ、デザイン、コードは開発者の所有物であり、適用される知的財産法により保護されています。</p>
+
+      <h2>責任の制限</h2>
+      <p>Call to Meetは「現状のまま」提供され、いかなる種類の保証もありません。開発者は、ミーティングの欠席、アラームの失敗、またはアプリの使用から生じるいかなる損害についても責任を負いません。</p>
+
+      <h2>規約の変更</h2>
+      <p>本規約は随時更新される場合があります。変更後もアプリの使用を継続することで、新しい規約に同意したものとみなされます。</p>
+
+      <h2>お問い合わせ</h2>
+      <p>本規約についてご質問がある場合は、<a href="mailto:help@florit.es">help@florit.es</a>までご連絡ください。</p>
+    </div>
+  </div>
+
+  <script>
+    function setLang(lang) {
+      document.documentElement.setAttribute('data-lang', lang);
+      document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase()));
+      localStorage.setItem('ctm-lang', lang);
+    }
+    (function() {
+      const supported = ['en', 'es', 'ja'];
+      const s = localStorage.getItem('ctm-lang');
+      if (s && supported.includes(s)) { setLang(s); return; }
+      const langs = navigator.languages || [navigator.language || ''];
+      for (const l of langs) {
+        const code = l.toLowerCase().split('-')[0];
+        if (supported.includes(code)) { setLang(code); return; }
+      }
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const esZones = ['Europe/Madrid', 'Atlantic/Canary', 'Africa/Ceuta',
+          'America/Mexico_City', 'America/Bogota', 'America/Lima', 'America/Santiago',
+          'America/Buenos_Aires', 'America/Argentina', 'America/Montevideo',
+          'America/Caracas', 'America/Guayaquil', 'America/Asuncion',
+          'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
+          'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
+          'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
+        const jaZones = ['Asia/Tokyo'];
+        if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
+        if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
+      } catch(e) {}
+      setLang('en');
+    })();
+  </script>
+</body>
+</html>
