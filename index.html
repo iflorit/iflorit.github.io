@@ -183,6 +183,7 @@
       -webkit-overflow-scrolling: touch;
       padding: 20px 24px;
       scrollbar-width: none;
+      justify-content: center;
     }
 
     .screenshots-scroll::-webkit-scrollbar { display: none; }
@@ -203,6 +204,91 @@
       width: 100%;
       height: auto;
       display: block;
+    }
+
+    /* ===== Testimonials Carousel ===== */
+    .testimonials {
+      padding: 0 0 40px;
+      overflow: hidden;
+    }
+
+    .testimonials-track {
+      display: flex;
+      gap: 0;
+      animation: scroll-testimonials 120s linear infinite;
+      width: max-content;
+    }
+
+    .testimonials-track:hover {
+      animation-play-state: paused;
+    }
+
+    @keyframes scroll-testimonials {
+      0% { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    .testimonial-card {
+      flex: 0 0 300px;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-right: 16px;
+      transition: border-color 0.3s;
+    }
+
+    .testimonial-card:hover {
+      border-color: rgba(124, 92, 252, 0.3);
+    }
+
+    .testimonial-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: var(--pro-gradient);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      font-weight: 700;
+      color: white;
+      flex-shrink: 0;
+    }
+
+    .testimonial-name {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .testimonial-role {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .testimonial-stars {
+      color: #fbbf24;
+      font-size: 13px;
+      margin-bottom: 8px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    @media (max-width: 640px) {
+      .testimonial-card { flex: 0 0 260px; padding: 16px; }
     }
 
     /* ===== Features ===== */
@@ -438,12 +524,6 @@
       display: inline-block;
     }
 
-    .price-trial {
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-top: 10px;
-    }
-
     .pro-footer-note {
       text-align: center;
       font-size: 13px;
@@ -499,79 +579,50 @@
     @media (max-width: 640px) {
       section { padding: 60px 0; }
       .hero { padding-top: 120px; }
-      .pro-card { padding: 32px 24px; }
       .screenshot-item { width: 180px; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
 
-    /* ===== i18n hide/show ===== */
-    [data-i18n] { display: none; }
-    [data-lang="en"] [data-i18n="en"],
-    [data-lang="es"] [data-i18n="es"],
-    [data-lang="ja"] [data-i18n="ja"] {
-      display: revert;
-    }
+    /* ===== i18n: hide all, show active language ===== */
+    [data-i18n] { display: none !important; }
 
-    /* Fix for inline elements */
-    h1 [data-i18n], p [data-i18n], span [data-i18n], li [data-i18n],
-    h2 [data-i18n], h3 [data-i18n], a [data-i18n], div [data-i18n] {
-      /* handled by parent display */
-    }
+    /* Inline elements: span, img inside parents */
+    [data-lang="en"] span[data-i18n="en"],
+    [data-lang="es"] span[data-i18n="es"],
+    [data-lang="ja"] span[data-i18n="ja"] { display: inline !important; }
 
-    [data-lang="en"] [data-i18n="en"] { display: inline; }
-    [data-lang="es"] [data-i18n="es"] { display: inline; }
-    [data-lang="ja"] [data-i18n="ja"] { display: inline; }
+    [data-lang="en"] img[data-i18n="en"],
+    [data-lang="es"] img[data-i18n="es"],
+    [data-lang="ja"] img[data-i18n="ja"] { display: inline !important; }
 
-    /* Block-level i18n */
-    .feature-card[data-i18n],
-    .pro-features-list li[data-i18n],
-    p[data-i18n],
-    div[data-i18n] {
-      /* override inline */
-    }
-    [data-lang="en"] .feature-card[data-i18n="en"],
+    /* Block elements: p, div */
     [data-lang="en"] p[data-i18n="en"],
-    [data-lang="en"] div[data-i18n="en"],
-    [data-lang="en"] li[data-i18n="en"] { display: flex; }
-
-    [data-lang="es"] .feature-card[data-i18n="es"],
     [data-lang="es"] p[data-i18n="es"],
+    [data-lang="ja"] p[data-i18n="ja"] { display: block !important; }
+
+    [data-lang="en"] div[data-i18n="en"],
     [data-lang="es"] div[data-i18n="es"],
-    [data-lang="es"] li[data-i18n="es"] { display: flex; }
+    [data-lang="ja"] div[data-i18n="ja"] { display: block !important; }
 
-    [data-lang="ja"] .feature-card[data-i18n="ja"],
-    [data-lang="ja"] p[data-i18n="ja"],
-    [data-lang="ja"] div[data-i18n="ja"],
-    [data-lang="ja"] li[data-i18n="ja"] { display: flex; }
+    /* Feature cards in grid */
+    [data-lang="en"] .feature-card[data-i18n="en"],
+    [data-lang="es"] .feature-card[data-i18n="es"],
+    [data-lang="ja"] .feature-card[data-i18n="ja"] { display: block !important; }
 
-    /* Grid items need block display */
-    [data-lang="en"] .features-grid .feature-card[data-i18n="en"],
-    [data-lang="es"] .features-grid .feature-card[data-i18n="es"],
-    [data-lang="ja"] .features-grid .feature-card[data-i18n="ja"] { display: block; }
-
-    /* Screenshots lang-aware */
-    .screenshots-lang { display: none; }
+    /* Screenshots: flex containers */
     [data-lang="en"] .screenshots-lang[data-i18n="en"],
     [data-lang="es"] .screenshots-lang[data-i18n="es"],
-    [data-lang="ja"] .screenshots-lang[data-i18n="ja"] { display: flex; }
+    [data-lang="ja"] .screenshots-lang[data-i18n="ja"] { display: flex !important; }
 
-    /* Pro footer note */
-    .pro-footer-note[data-i18n] { display: none; }
-    [data-lang="en"] .pro-footer-note span[data-i18n="en"],
-    [data-lang="es"] .pro-footer-note span[data-i18n="es"],
-    [data-lang="ja"] .pro-footer-note span[data-i18n="ja"] { display: inline; }
-
-    /* Price badges */
-    .price-badge[data-i18n] { display: none; }
-    [data-lang="en"] .price-badge[data-i18n="en"],
-    [data-lang="es"] .price-badge[data-i18n="es"],
-    [data-lang="ja"] .price-badge[data-i18n="ja"] { display: block; }
-
-    /* Plan features li */
-    .plan-features li[data-i18n] { display: none; }
+    /* Plan comparison: list items as flex */
     [data-lang="en"] .plan-features li[data-i18n="en"],
     [data-lang="es"] .plan-features li[data-i18n="es"],
-    [data-lang="ja"] .plan-features li[data-i18n="ja"] { display: flex; }
+    [data-lang="ja"] .plan-features li[data-i18n="ja"] { display: flex !important; }
+
+    /* Sections (testimonials, etc.) */
+    [data-lang="en"] section[data-i18n="en"],
+    [data-lang="es"] section[data-i18n="es"],
+    [data-lang="ja"] section[data-i18n="ja"] { display: block !important; }
   </style>
 </head>
 <body>
@@ -598,12 +649,12 @@
 
       <h1>
         <span data-i18n="en">Never miss a<br><span class="gradient">meeting</span> again</span>
-        <span data-i18n="es">No te pierdas<br>ninguna <span class="gradient">reunion</span></span>
+        <span data-i18n="es">No te pierdas<br>ninguna <span class="gradient">reunión</span></span>
         <span data-i18n="ja"><span class="gradient">ミーティング</span>を<br>もう逃しません</span>
       </h1>
 
       <p data-i18n="en">Live Activities, Dynamic Island countdowns, and smart alarms that make sure you're always on time.</p>
-      <p data-i18n="es">Live Activities, cuenta atras en Dynamic Island y alarmas inteligentes para que siempre llegues a tiempo.</p>
+      <p data-i18n="es">Live Activities, cuenta atrás en Dynamic Island y alarmas inteligentes para que siempre llegues a tiempo.</p>
       <p data-i18n="ja">Live Activities、Dynamic Islandのカウントダウン、スマートアラームで常に時間通りに。</p>
 
       <a href="https://apps.apple.com/app/call-to-meet/id6504754512" class="app-store-badge" target="_blank" rel="noopener">
@@ -611,6 +662,313 @@
         <img data-i18n="es" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Descargar en el App Store" height="52">
         <img data-i18n="ja" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Storeからダウンロード" height="52">
       </a>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" data-i18n="en">
+    <div class="testimonials-track">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role">Account Executive, NYC</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">I juggle 8-10 calls a day across Zoom and Teams. The one-tap join from the lock screen alone is worth it. No more digging through my calendar two minutes before a call.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">R</div>
+          <div><div class="testimonial-name">Raj P.</div><div class="testimonial-role">Engineering Manager, London</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">The Dynamic Island countdown is genuinely useful during focus time. I can see my next meeting approaching without switching apps. Wish it supported Google Calendar natively though.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Lisa C.</div><div class="testimonial-role">Freelancer, Toronto</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">I tried every calendar app out there — this is the only one I found that uses Dynamic Island to show your next meeting countdown. Plus the alarms cut through Do Not Disturb. Game changer.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Product Manager, Berlin</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Clean app. The timeline view is exactly what I needed — shows only meetings, not the 50 other calendar entries. Pro subscription is fair for what you get.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Jenny W.</div><div class="testimonial-role">HR Coordinator, Sydney</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">It does what it says — alarms and quick join work well. The interface could use a few more customization options, but for meeting reminders it gets the job done.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">D</div>
+          <div><div class="testimonial-name">David H.</div><div class="testimonial-role">Consultant, Chicago</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Solid concept and the Dynamic Island timer is neat. Would love to see Outlook calendar integration improved. Still use it daily for my back-to-back calls though.</div>
+      </div>
+      <!-- Duplicate set for seamless scroll -->
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role">Account Executive, NYC</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">I juggle 8-10 calls a day across Zoom and Teams. The one-tap join from the lock screen alone is worth it. No more digging through my calendar two minutes before a call.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">R</div>
+          <div><div class="testimonial-name">Raj P.</div><div class="testimonial-role">Engineering Manager, London</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">The Dynamic Island countdown is genuinely useful during focus time. I can see my next meeting approaching without switching apps. Wish it supported Google Calendar natively though.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Lisa C.</div><div class="testimonial-role">Freelancer, Toronto</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">I tried every calendar app out there — this is the only one I found that uses Dynamic Island to show your next meeting countdown. Plus the alarms cut through Do Not Disturb. Game changer.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Product Manager, Berlin</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Clean app. The timeline view is exactly what I needed — shows only meetings, not the 50 other calendar entries. Pro subscription is fair for what you get.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Jenny W.</div><div class="testimonial-role">HR Coordinator, Sydney</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">It does what it says — alarms and quick join work well. The interface could use a few more customization options, but for meeting reminders it gets the job done.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">D</div>
+          <div><div class="testimonial-name">David H.</div><div class="testimonial-role">Consultant, Chicago</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Solid concept and the Dynamic Island timer is neat. Would love to see Outlook calendar integration improved. Still use it daily for my back-to-back calls though.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials" data-i18n="es">
+    <div class="testimonials-track">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Ana G.</div><div class="testimonial-role">Ejecutiva de Cuentas, CDMX</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Manejo 8-10 llamadas al día entre Zoom y Teams. Solo por poder unirme con un toque desde la pantalla de bloqueo ya merece la pena. Se acabaron los 2 minutos buscando el link.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">P</div>
+          <div><div class="testimonial-name">Pablo S.</div><div class="testimonial-role">Tech Lead, Buenos Aires</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">La cuenta atrás en Dynamic Island es muy útil cuando estoy concentrado programando. Veo la siguiente reunión sin cambiar de app. Le faltaría sincronizar con Google Calendar directamente.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marta L.</div><div class="testimonial-role">Freelance, Barcelona</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Probé todas las apps de calendario que pude — es la única que he encontrado que usa Dynamic Island para la cuenta atrás de tu siguiente reunión. Además, las alarmas suenan con el No Molestar puesto. Imprescindible.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">C</div>
+          <div><div class="testimonial-name">Carlos R.</div><div class="testimonial-role">Director de Producto, Madrid</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">App limpia. El timeline es justo lo que necesitaba — solo muestra reuniones, no las 50 entradas que tengo en el calendario. La suscripción Pro es razonable por lo que ofrece.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Laura V.</div><div class="testimonial-role">Diseñadora, Lima</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Cumple su función — las alarmas y el acceso rápido van bien. Le vendría bien alguna opción más de personalización, pero para no perder reuniones es práctica.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Javier M.</div><div class="testimonial-role">Consultor, Bogotá</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Buen concepto y el temporizador en Dynamic Island mola. Mejoraría la integración con Outlook. Aun así, la uso a diario para mis llamadas seguidas.</div>
+      </div>
+      <!-- Duplicate set for seamless scroll -->
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Ana G.</div><div class="testimonial-role">Ejecutiva de Cuentas, CDMX</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Manejo 8-10 llamadas al día entre Zoom y Teams. Solo por poder unirme con un toque desde la pantalla de bloqueo ya merece la pena. Se acabaron los 2 minutos buscando el link.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">P</div>
+          <div><div class="testimonial-name">Pablo S.</div><div class="testimonial-role">Tech Lead, Buenos Aires</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">La cuenta atrás en Dynamic Island es muy útil cuando estoy concentrado programando. Veo la siguiente reunión sin cambiar de app. Le faltaría sincronizar con Google Calendar directamente.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marta L.</div><div class="testimonial-role">Freelance, Barcelona</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Probé todas las apps de calendario que pude — es la única que he encontrado que usa Dynamic Island para la cuenta atrás de tu siguiente reunión. Además, las alarmas suenan con el No Molestar puesto. Imprescindible.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">C</div>
+          <div><div class="testimonial-name">Carlos R.</div><div class="testimonial-role">Director de Producto, Madrid</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">App limpia. El timeline es justo lo que necesitaba — solo muestra reuniones, no las 50 entradas que tengo en el calendario. La suscripción Pro es razonable por lo que ofrece.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Laura V.</div><div class="testimonial-role">Diseñadora, Lima</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Cumple su función — las alarmas y el acceso rápido van bien. Le vendría bien alguna opción más de personalización, pero para no perder reuniones es práctica.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Javier M.</div><div class="testimonial-role">Consultor, Bogotá</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Buen concepto y el temporizador en Dynamic Island mola. Mejoraría la integración con Outlook. Aun así, la uso a diario para mis llamadas seguidas.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="testimonials" data-i18n="ja">
+    <div class="testimonials-track">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">Y</div>
+          <div><div class="testimonial-name">Yuki M.</div><div class="testimonial-role">Sales, Osaka</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">ZoomとTeamsを1日8-10件使っています。ロック画面からワンタップで参加できるだけで価値があります。リンクを探す手間がなくなりました。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">K</div>
+          <div><div class="testimonial-name">Kenji S.</div><div class="testimonial-role">Engineer, Tokyo</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">集中している時のDynamic Islandのカウントダウンが本当に便利。アプリを切り替えずに次の会議が見えます。Googleカレンダーに直接対応してくれたら完璧。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Aiko T.</div><div class="testimonial-role">Designer, Kyoto</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">カレンダーアプリをいろいろ試しましたが、Dynamic Islandで次のミーティングのカウントダウンを表示するのはこれだけ。しかもアラームはおやすみモードでも鳴ります。手放せません。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">T</div>
+          <div><div class="testimonial-name">Takeshi Y.</div><div class="testimonial-role">PM, Tokyo</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">すっきりしたアプリ。タイムラインがまさに欲しかったもの — 会議だけ表示して、カレンダーの他の50件は出ません。Pro版は内容に見合った価格です。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">N</div>
+          <div><div class="testimonial-name">Nao K.</div><div class="testimonial-role">HR, Fukuoka</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">やりたいことはできます — アラームとクイック参加は問題なし。カスタマイズがもう少しあると嬉しいですが、会議のリマインダーとしては十分です。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">R</div>
+          <div><div class="testimonial-name">Ren H.</div><div class="testimonial-role">Consultant, Nagoya</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">コンセプトは良くて、Dynamic Islandのタイマーは便利。Outlookとの連携がもう少し良ければ。それでも毎日の連続会議で使っています。</div>
+      </div>
+      <!-- Duplicate set for seamless scroll -->
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">Y</div>
+          <div><div class="testimonial-name">Yuki M.</div><div class="testimonial-role">Sales, Osaka</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">ZoomとTeamsを1日8-10件使っています。ロック画面からワンタップで参加できるだけで価値があります。リンクを探す手間がなくなりました。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">K</div>
+          <div><div class="testimonial-name">Kenji S.</div><div class="testimonial-role">Engineer, Tokyo</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">集中している時のDynamic Islandのカウントダウンが本当に便利。アプリを切り替えずに次の会議が見えます。Googleカレンダーに直接対応してくれたら完璧。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Aiko T.</div><div class="testimonial-role">Designer, Kyoto</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">カレンダーアプリをいろいろ試しましたが、Dynamic Islandで次のミーティングのカウントダウンを表示するのはこれだけ。しかもアラームはおやすみモードでも鳴ります。手放せません。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">T</div>
+          <div><div class="testimonial-name">Takeshi Y.</div><div class="testimonial-role">PM, Tokyo</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">すっきりしたアプリ。タイムラインがまさに欲しかったもの — 会議だけ表示して、カレンダーの他の50件は出ません。Pro版は内容に見合った価格です。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">N</div>
+          <div><div class="testimonial-name">Nao K.</div><div class="testimonial-role">HR, Fukuoka</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">やりたいことはできます — アラームとクイック参加は問題なし。カスタマイズがもう少しあると嬉しいですが、会議のリマインダーとしては十分です。</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">R</div>
+          <div><div class="testimonial-name">Ren H.</div><div class="testimonial-role">Consultant, Nagoya</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">コンセプトは良くて、Dynamic Islandのタイマーは便利。Outlookとの連携がもう少し良ければ。それでも毎日の連続会議で使っています。</div>
+      </div>
     </div>
   </section>
 
@@ -687,32 +1045,32 @@
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#9899;</span>
           <h3>Live Activities y Dynamic Island</h3>
-          <p>Ve la cuenta atras de tu proxima reunion en la pantalla de bloqueo y Dynamic Island. Siempre visible.</p>
+          <p>Ve la cuenta atrás de tu próxima reunión en la pantalla de bloqueo y Dynamic Island. Siempre visible.</p>
         </div>
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#128276;</span>
           <h3>Alarmas inteligentes</h3>
-          <p>Alarmas con AlarmKit que funcionan incluso en modo silencio y No Molestar. No te duermas antes de una reunion.</p>
+          <p>Alarmas con AlarmKit que funcionan incluso en modo silencio y No Molestar. No te duermas antes de una reunión.</p>
         </div>
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#128197;</span>
-          <h3>Sincronizacion de calendario</h3>
-          <p>Detecta automaticamente reuniones con enlaces de Zoom, Teams, Google Meet y mas.</p>
+          <h3>Sincronización de calendario</h3>
+          <p>Detecta automáticamente reuniones con enlaces de Zoom, Teams, Google Meet y más.</p>
         </div>
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#9889;</span>
           <h3>Unirse con un toque</h3>
-          <p>Entra a tu reunion con un solo toque desde la notificacion, pantalla de bloqueo o Dynamic Island.</p>
+          <p>Entra a tu reunión con un solo toque desde la notificación, pantalla de bloqueo o Dynamic Island.</p>
         </div>
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#127760;</span>
-          <h3>Modos de concentracion</h3>
-          <p>Filtra reuniones segun tu modo de concentracion activo. Concentrado e informado.</p>
+          <h3>Modos de concentración</h3>
+          <p>Filtra reuniones según tu modo de concentración activo. Concentrado e informado.</p>
         </div>
         <div class="feature-card" data-i18n="es">
           <span class="feature-icon">&#9201;</span>
           <h3>Apple Watch</h3>
-          <p>Ve tus proximas reuniones y unete a llamadas desde tu muneca.</p>
+          <p>Ve tus próximas reuniones y únete a llamadas desde tu muñeca.</p>
         </div>
 
         <!-- JA features -->
@@ -775,7 +1133,7 @@
           </div>
           <div class="plan-name">
             <span data-i18n="en">Basic</span>
-            <span data-i18n="es">Basico</span>
+            <span data-i18n="es">Básico</span>
             <span data-i18n="ja">ベーシック</span>
           </div>
           <ul class="plan-features">
@@ -785,9 +1143,9 @@
             <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Auto-alarm for all events</span></li>
             <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Unlimited alarms</span></li>
             <li data-i18n="es"><span class="icon free">&#10003;</span> Live Activity y Dynamic Island</li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> Sincronizacion y unirse con un toque</li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> 2 alarmas simultaneas</li>
-            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarma automatica</span></li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> Sincronización y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> 2 alarmas simultáneas</li>
+            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarma automática</span></li>
             <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarmas ilimitadas</span></li>
             <li data-i18n="ja"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="ja"><span class="icon free">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
@@ -812,9 +1170,9 @@
             <li data-i18n="en"><span class="icon yes">&#10003;</span> Auto-alarm for all events</li>
             <li data-i18n="en"><span class="icon yes">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> Live Activity y Dynamic Island</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> Sincronizacion y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> Sincronización y unirse con un toque</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> <strong>Alarmas ilimitadas</strong></li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> Alarma automatica para todos los eventos</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> Alarmas automáticas para todos los eventos</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> AlarmKit (suena en modo silencio)</li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
@@ -849,11 +1207,6 @@
             <span data-i18n="es">/mes</span>
             <span data-i18n="ja">/月</span>
           </div>
-          <div class="price-trial">
-            <span data-i18n="en">7-day free trial</span>
-            <span data-i18n="es">7 dias de prueba gratis</span>
-            <span data-i18n="ja">7日間無料体験</span>
-          </div>
         </div>
 
         <!-- Semiannual -->
@@ -874,11 +1227,6 @@
             <span data-i18n="es">Ahorra 33%</span>
             <span data-i18n="ja">33%お得</span>
           </div>
-          <div class="price-trial">
-            <span data-i18n="en">14-day free trial</span>
-            <span data-i18n="es">14 dias de prueba gratis</span>
-            <span data-i18n="ja">14日間無料体験</span>
-          </div>
         </div>
 
         <!-- Yearly -->
@@ -894,7 +1242,7 @@
           <div class="price-amount">&euro;29.99</div>
           <div class="price-unit">
             <span data-i18n="en">/year</span>
-            <span data-i18n="es">/ano</span>
+            <span data-i18n="es">/año</span>
             <span data-i18n="ja">/年</span>
           </div>
           <div class="price-savings">
@@ -902,17 +1250,12 @@
             <span data-i18n="es">Ahorra 50%</span>
             <span data-i18n="ja">50%お得</span>
           </div>
-          <div class="price-trial">
-            <span data-i18n="en">14-day free trial</span>
-            <span data-i18n="es">14 dias de prueba gratis</span>
-            <span data-i18n="ja">14日間無料体験</span>
-          </div>
         </div>
       </div>
 
       <p class="pro-footer-note">
         <span data-i18n="en">All plans auto-renew. Cancel anytime in your iPhone Settings. Managed entirely through the App Store.</span>
-        <span data-i18n="es">Todos los planes se renuevan automaticamente. Cancela en cualquier momento desde Ajustes de tu iPhone. Gestionado a traves del App Store.</span>
+        <span data-i18n="es">Todos los planes se renuevan automáticamente. Cancela en cualquier momento desde Ajustes de tu iPhone. Gestionado a través del App Store.</span>
         <span data-i18n="ja">全プラン自動更新。iPhoneの設定からいつでもキャンセル可能。App Storeで管理。</span>
       </p>
     </div>
@@ -924,7 +1267,7 @@
       <div class="footer-links">
         <a href="privacy.html">
           <span data-i18n="en">Privacy Policy</span>
-          <span data-i18n="es">Politica de Privacidad</span>
+          <span data-i18n="es">Política de Privacidad</span>
           <span data-i18n="ja">プライバシーポリシー</span>
         </a>
         <a href="support.html">
@@ -933,7 +1276,11 @@
           <span data-i18n="ja">サポート</span>
         </a>
       </div>
-      <span class="footer-copy">&copy; 2025 Ismael Florit. All rights reserved.</span>
+      <span class="footer-copy">&copy; 2025 Ismael Florit.
+        <span data-i18n="en">All rights reserved.</span>
+        <span data-i18n="es">Todos los derechos reservados.</span>
+        <span data-i18n="ja">All rights reserved.</span>
+      </span>
     </div>
   </footer>
 
@@ -946,17 +1293,35 @@
       localStorage.setItem('ctm-lang', lang);
     }
 
-    // Auto-detect language
+    // Auto-detect language: saved preference > browser languages > timezone region > fallback EN
     (function() {
+      const supported = ['en', 'es', 'ja'];
       const saved = localStorage.getItem('ctm-lang');
-      if (saved && ['en', 'es', 'ja'].includes(saved)) {
-        setLang(saved);
-        return;
+      if (saved && supported.includes(saved)) { setLang(saved); return; }
+
+      // Check all browser language preferences (e.g. ['es-MX', 'es', 'en-US', 'en'])
+      const langs = navigator.languages || [navigator.language || ''];
+      for (const l of langs) {
+        const code = l.toLowerCase().split('-')[0];
+        if (supported.includes(code)) { setLang(code); return; }
       }
-      const browserLang = (navigator.language || '').toLowerCase();
-      if (browserLang.startsWith('es')) setLang('es');
-      else if (browserLang.startsWith('ja')) setLang('ja');
-      else setLang('en');
+
+      // Infer from timezone region (covers users with English browser in Spanish-speaking countries)
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const esZones = ['Europe/Madrid', 'Atlantic/Canary', 'Africa/Ceuta',
+          'America/Mexico_City', 'America/Bogota', 'America/Lima', 'America/Santiago',
+          'America/Buenos_Aires', 'America/Argentina', 'America/Montevideo',
+          'America/Caracas', 'America/Guayaquil', 'America/Asuncion',
+          'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
+          'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
+          'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
+        const jaZones = ['Asia/Tokyo'];
+        if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
+        if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
+      } catch(e) {}
+
+      setLang('en');
     })();
   </script>
 

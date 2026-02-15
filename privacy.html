@@ -109,34 +109,34 @@
 
     <!-- Spanish -->
     <div data-i18n="es">
-      <h1>Politica de Privacidad</h1>
-      <p class="updated">Ultima actualizacion: febrero 2026</p>
+      <h1>Política de Privacidad</h1>
+      <p class="updated">Última actualización: febrero 2026</p>
 
       <h2>Resumen</h2>
-      <p>Call to Meet esta disenado pensando en tu privacidad. No recopilamos, almacenamos ni compartimos ningun dato personal.</p>
+      <p>Call to Meet está diseñado pensando en tu privacidad. No recopilamos, almacenamos ni compartimos ningún dato personal.</p>
 
       <h2>Datos a los que accedemos</h2>
       <p>Call to Meet accede a los siguientes datos <strong>solo localmente en tu dispositivo</strong>:</p>
       <ul>
         <li><strong>Eventos del calendario</strong> — Acceso de solo lectura para detectar reuniones con enlaces de videollamada. Tus datos de calendario nunca salen de tu dispositivo.</li>
-        <li><strong>Preferencias de notificacion</strong> — Para enviarte recordatorios de reuniones y alarmas.</li>
-        <li><strong>Estado del modo de concentracion</strong> — Para filtrar reuniones segun tu modo activo.</li>
+        <li><strong>Preferencias de notificación</strong> — Para enviarte recordatorios de reuniones y alarmas.</li>
+        <li><strong>Estado del modo de concentración</strong> — Para filtrar reuniones según tu modo activo.</li>
       </ul>
 
       <h2>Datos que no recopilamos</h2>
       <ul>
-        <li>Sin informacion personal</li>
-        <li>Sin analiticas ni seguimiento</li>
+        <li>Sin información personal</li>
+        <li>Sin analíticas ni seguimiento</li>
         <li>Sin contenido de reuniones ni grabaciones</li>
-        <li>Sin datos de ubicacion</li>
+        <li>Sin datos de ubicación</li>
         <li>Sin datos compartidos con terceros</li>
       </ul>
 
       <h2>Suscripciones</h2>
-      <p>Las suscripciones de Call to Meet Pro se gestionan completamente a traves del App Store de Apple. No procesamos ni almacenamos informacion de pago.</p>
+      <p>Las suscripciones de Call to Meet Pro se gestionan completamente a través del App Store de Apple. No procesamos ni almacenamos información de pago.</p>
 
       <h2>Contacto</h2>
-      <p>Si tienes preguntas sobre esta politica de privacidad, contactanos en <a href="mailto:help@florit.es">help@florit.es</a>.</p>
+      <p>Si tienes preguntas sobre esta política de privacidad, contáctanos en <a href="mailto:help@florit.es">help@florit.es</a>.</p>
     </div>
 
     <!-- Japanese -->
@@ -179,12 +179,28 @@
       localStorage.setItem('ctm-lang', lang);
     }
     (function() {
+      const supported = ['en', 'es', 'ja'];
       const s = localStorage.getItem('ctm-lang');
-      if (s && ['en','es','ja'].includes(s)) { setLang(s); return; }
-      const b = (navigator.language||'').toLowerCase();
-      if (b.startsWith('es')) setLang('es');
-      else if (b.startsWith('ja')) setLang('ja');
-      else setLang('en');
+      if (s && supported.includes(s)) { setLang(s); return; }
+      const langs = navigator.languages || [navigator.language || ''];
+      for (const l of langs) {
+        const code = l.toLowerCase().split('-')[0];
+        if (supported.includes(code)) { setLang(code); return; }
+      }
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const esZones = ['Europe/Madrid', 'Atlantic/Canary', 'Africa/Ceuta',
+          'America/Mexico_City', 'America/Bogota', 'America/Lima', 'America/Santiago',
+          'America/Buenos_Aires', 'America/Argentina', 'America/Montevideo',
+          'America/Caracas', 'America/Guayaquil', 'America/Asuncion',
+          'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
+          'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
+          'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
+        const jaZones = ['Asia/Tokyo'];
+        if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
+        if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
+      } catch(e) {}
+      setLang('en');
     })();
   </script>
 </body>

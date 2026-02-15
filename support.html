@@ -135,36 +135,36 @@
       <h1>Soporte</h1>
 
       <div class="contact-card">
-        <h3>Contactanos</h3>
-        <p>Tienes una pregunta, encontraste un error o quieres sugerir algo? Nos encantaria saber de ti.</p>
+        <h3>Contáctanos</h3>
+        <p>¿Tienes una pregunta, encontraste un error o quieres sugerir algo? Nos encantaría saber de ti.</p>
         <p><a href="mailto:help@florit.es">help@florit.es</a></p>
       </div>
 
       <h2>Preguntas frecuentes</h2>
 
       <div class="faq-item">
-        <h3>Como detecta Call to Meet mis reuniones?</h3>
+        <h3>¿Cómo detecta Call to Meet mis reuniones?</h3>
         <p>Call to Meet lee los eventos de tu calendario localmente y busca enlaces de videollamada (Zoom, Teams, Google Meet, etc.). Tus datos nunca salen de tu dispositivo.</p>
       </div>
 
       <div class="faq-item">
-        <h3>Que son las alarmas AlarmKit?</h3>
-        <p>AlarmKit es una funcion de iOS que permite que las alarmas suenen incluso en modo silencio o No Molestar. Call to Meet usa AlarmKit para asegurar que no te pierdas reuniones importantes.</p>
+        <h3>¿Qué son las alarmas AlarmKit?</h3>
+        <p>AlarmKit es una función de iOS que permite que las alarmas suenen incluso en modo silencio o No Molestar. Call to Meet usa AlarmKit para asegurar que no te pierdas reuniones importantes.</p>
       </div>
 
       <div class="faq-item">
-        <h3>Cuantas alarmas gratis tengo?</h3>
-        <p>Los usuarios gratis pueden tener hasta 2 alarmas activas simultaneamente. Cuando una reunion termina, ese espacio se libera. Los usuarios Pro tienen alarmas ilimitadas.</p>
+        <h3>¿Cuántas alarmas gratis tengo?</h3>
+        <p>Los usuarios gratis pueden tener hasta 2 alarmas activas simultáneamente. Cuando una reunión termina, ese espacio se libera. Los usuarios Pro tienen alarmas ilimitadas.</p>
       </div>
 
       <div class="faq-item">
-        <h3>Como restauro mi suscripcion Pro?</h3>
-        <p>Abre Call to Meet, ve a Ajustes y toca "Restaurar compras". Tu suscripcion se restaurara automaticamente a traves del App Store.</p>
+        <h3>¿Cómo restauro mi suscripción Pro?</h3>
+        <p>Abre Call to Meet, ve a Ajustes y toca «Restaurar compras». Tu suscripción se restaurará automáticamente a través del App Store.</p>
       </div>
 
       <div class="faq-item">
-        <h3>Como cancelo mi suscripcion?</h3>
-        <p>Las suscripciones se gestionan a traves del App Store. Ve a Ajustes > Apple ID > Suscripciones en tu iPhone para gestionar o cancelar.</p>
+        <h3>¿Cómo cancelo mi suscripción?</h3>
+        <p>Las suscripciones se gestionan a través del App Store. Ve a Ajustes > Apple ID > Suscripciones en tu iPhone para gestionar o cancelar.</p>
       </div>
     </div>
 
@@ -214,12 +214,28 @@
       localStorage.setItem('ctm-lang', lang);
     }
     (function() {
+      const supported = ['en', 'es', 'ja'];
       const s = localStorage.getItem('ctm-lang');
-      if (s && ['en','es','ja'].includes(s)) { setLang(s); return; }
-      const b = (navigator.language||'').toLowerCase();
-      if (b.startsWith('es')) setLang('es');
-      else if (b.startsWith('ja')) setLang('ja');
-      else setLang('en');
+      if (s && supported.includes(s)) { setLang(s); return; }
+      const langs = navigator.languages || [navigator.language || ''];
+      for (const l of langs) {
+        const code = l.toLowerCase().split('-')[0];
+        if (supported.includes(code)) { setLang(code); return; }
+      }
+      try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
+        const esZones = ['Europe/Madrid', 'Atlantic/Canary', 'Africa/Ceuta',
+          'America/Mexico_City', 'America/Bogota', 'America/Lima', 'America/Santiago',
+          'America/Buenos_Aires', 'America/Argentina', 'America/Montevideo',
+          'America/Caracas', 'America/Guayaquil', 'America/Asuncion',
+          'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
+          'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
+          'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
+        const jaZones = ['Asia/Tokyo'];
+        if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
+        if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
+      } catch(e) {}
+      setLang('en');
     })();
   </script>
 </body>
