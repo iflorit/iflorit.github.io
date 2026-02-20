@@ -170,41 +170,259 @@
 
     .app-store-badge img { height: 52px; }
 
-    /* ===== Screenshots ===== */
-    .screenshots {
-      padding: 40px 0 80px;
-    }
-
-    .screenshots-scroll {
-      display: flex;
-      gap: 20px;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      padding: 20px 24px;
-      scrollbar-width: none;
-      justify-content: center;
-    }
-
-    .screenshots-scroll::-webkit-scrollbar { display: none; }
-
-    .screenshot-item {
-      flex: 0 0 auto;
-      scroll-snap-align: center;
-      width: 220px;
-      border-radius: var(--radius);
+    /* ===== DI Showcase (replaces screenshots) ===== */
+    .di-showcase {
+      padding: 20px 0 60px;
       overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      transition: transform 0.3s;
     }
 
-    .screenshot-item:hover { transform: translateY(-4px); }
+    .di-scene {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      justify-content: center;
+      gap: 40px;
+      padding: 20px 20px;
+    }
 
-    .screenshot-item img {
+    .di-phone-wrap {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .di-phone {
+      position: relative;
+      width: 393px;
+      height: 852px;
+      transform-origin: top center;
+    }
+
+    /* Column: 1x4 — mobile <600px
+       Scale = (100vw - 40px padding) / 393px phone width, clamped */
+    @media (max-width: 599px) {
+      .di-scene { flex-direction: column; align-items: center; }
+      .di-phone-wrap { width: 100%; }
+      .di-phone {
+        --s: clamp(0.35, calc((100vw - 40px) / 393), 0.65);
+        transform: scale(var(--s));
+        margin: 0 auto;
+      }
+      .di-phone-wrap { height: calc(852px * clamp(0.35, calc((100vw - 40px) / 393), 0.65) + 40px); }
+    }
+
+    /* Grid 2x2 — tablet 600-1099px
+       Scale = (50vw - 60px gap/padding) / 393px, clamped */
+    @media (min-width: 600px) and (max-width: 1099px) {
+      .di-scene { flex-wrap: wrap; }
+      .di-phone-wrap { width: calc(50% - 20px); }
+      .di-phone {
+        --s: clamp(0.3, calc((50vw - 60px) / 393), 0.6);
+        transform: scale(var(--s));
+      }
+      .di-phone-wrap { height: calc(852px * clamp(0.3, calc((50vw - 60px) / 393), 0.6) + 40px); }
+    }
+
+    /* Row 4x1 — desktop ≥1100px
+       Scale = (25vw - 50px gap/padding) / 393px, clamped */
+    @media (min-width: 1100px) {
+      .di-scene { flex-wrap: nowrap; }
+      .di-phone-wrap { flex: 1; }
+      .di-phone {
+        --s: clamp(0.35, calc((25vw - 50px) / 393), 0.7);
+        transform: scale(var(--s));
+      }
+      .di-phone-wrap { height: calc(852px * clamp(0.35, calc((25vw - 50px) / 393), 0.7) + 40px); }
+    }
+
+    .di-phone-body {
+      position: relative;
       width: 100%;
-      height: auto;
-      display: block;
+      height: 100%;
+      border-radius: 55px;
+      overflow: hidden;
+      box-shadow:
+        inset 0 0 0 1px rgba(255,255,255,0.15),
+        0 0 0 3px #1a1a1a,
+        0 0 0 4px rgba(255,255,255,0.06),
+        0 40px 80px -20px rgba(0,0,0,0.8);
     }
+
+    .di-wp { position: absolute; inset: 0; border-radius: 55px; }
+
+    .di-wp-1 {
+      background:
+        radial-gradient(ellipse 120% 80% at 25% 20%, #1b4d6e 0%, transparent 60%),
+        radial-gradient(ellipse 100% 100% at 75% 80%, #0d3b5c 0%, transparent 50%),
+        radial-gradient(ellipse 80% 60% at 50% 50%, #14405a 0%, transparent 70%),
+        radial-gradient(ellipse 140% 100% at 60% 30%, #0a2e47 0%, transparent 60%),
+        linear-gradient(180deg, #0c2233 0%, #091a28 50%, #060f17 100%);
+    }
+
+    .di-wp-2 {
+      background:
+        radial-gradient(ellipse 90% 90% at 70% 70%, #1b4d6e 0%, transparent 55%),
+        radial-gradient(ellipse 110% 60% at 20% 30%, #0d3b5c 0%, transparent 50%),
+        radial-gradient(ellipse 70% 80% at 55% 15%, #17506a 0%, transparent 60%),
+        radial-gradient(ellipse 100% 70% at 40% 85%, #0a2e47 0%, transparent 55%),
+        linear-gradient(200deg, #091a28 0%, #0c2233 50%, #060f17 100%);
+    }
+
+    .di-sbar {
+      position: absolute; top: 0; left: 0; right: 0; height: 54px;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 14px 34px 0; z-index: 5; color: #fff;
+    }
+    .di-sbar-time { font-size: 17px; font-weight: 600; width: 54px; }
+    .di-sbar-right { display: flex; align-items: center; gap: 5px; }
+    .di-sbar-right svg { fill: #fff; }
+
+    .di-hw { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); z-index: 10; }
+
+    .di-idle-pill {
+      width: 126px; height: 37.33px; background: #000;
+      border-radius: 99px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12);
+    }
+
+    .di-exp-pill {
+      width: 371px; background: #000; border-radius: 50px;
+      padding: 6px 20px 18px;
+      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12), 0 4px 40px rgba(0,0,0,0.4);
+    }
+
+    .di-cam { display: flex; align-items: center; justify-content: center; height: 28px; margin-bottom: 6px; }
+    .di-cam-d { width: 12px; height: 12px; background: #050505; border-radius: 50%; border: 1px solid #222; }
+
+    .di-row { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
+    .di-cbar { width: 4px; height: 44px; border-radius: 2px; flex-shrink: 0; background: #0A84FF; }
+    .di-inf { flex: 1; min-width: 0; }
+    .di-ttl { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
+    .di-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 3px; text-align: left; }
+    .di-prov { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .di-prov svg { width: 31px; height: 31px; fill: #fff; opacity: 0.85; }
+    .di-trow { text-align: right; margin-top: 10px; padding: 0 4px; }
+    .di-big-timer { font-size: 32px; font-weight: 800; color: #30D158; font-variant-numeric: tabular-nums; letter-spacing: -1px; font-family: -apple-system, 'SF Pro', monospace; }
+
+    .di-cmp-pill {
+      width: 182px; height: 37.33px; background: #000; border-radius: 99px;
+      display: flex; align-items: center; justify-content: space-between; padding: 0 12px;
+      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12);
+    }
+    .di-cmp-timer { font-size: 14px; font-weight: 700; color: #30D158; font-variant-numeric: tabular-nums; font-family: -apple-system, 'SF Pro', monospace; }
+    .di-cmp-sym svg { width: 19px; height: 19px; fill: #fff; opacity: 0.9; }
+
+    .di-lock-time { position: absolute; width: 100%; text-align: center; z-index: 2; top: 110px; }
+    .di-lock-h { font-size: 86px; font-weight: 700; letter-spacing: -3px; line-height: 1; color: #fff; }
+    .di-lock-d { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.7); margin-top: 4px; }
+
+    .di-la {
+      position: absolute; bottom: 125px; left: 20px; right: 20px; z-index: 2;
+      background: rgba(20,20,24,0.65); border-radius: 22px; padding: 16px;
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    }
+
+    .di-ghost { position: absolute; left: 24px; right: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; z-index: 2; }
+    .di-gb { border-radius: 22px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.03); }
+    .di-gb-sm { height: 170px; }
+    .di-gb-lg { grid-column: span 2; height: 90px; }
+
+    .di-arow { position: absolute; left: 30px; right: 30px; display: flex; justify-content: space-between; z-index: 2; }
+    .di-adot { width: 62px; height: 62px; border-radius: 15px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.03); }
+
+    .di-dock {
+      position: absolute; bottom: 18px; left: 50px; right: 50px; height: 88px;
+      background: rgba(255,255,255,0.04); border-radius: 34px;
+      display: flex; align-items: center; justify-content: space-around; padding: 0 22px;
+      border: 1px solid rgba(255,255,255,0.03); z-index: 2;
+    }
+    .di-ddot { width: 52px; height: 52px; border-radius: 13px; background: rgba(255,255,255,0.06); }
+
+    .di-plabel {
+      margin-top: -20px; font-size: 13px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 2px; color: rgba(255,255,255,0.3);
+      text-align: center;
+    }
+
+    /* Timeline mockup (4th phone) */
+    .di-tl-nav {
+      position: absolute; top: 60px; left: 16px; right: 16px; z-index: 2;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .di-tl-today-btn {
+      background: rgba(255,255,255,0.08); border-radius: 18px; padding: 6px 14px;
+      font-size: 14px; font-weight: 600; color: #fff;
+    }
+    .di-tl-title { font-size: 16px; font-weight: 600; color: #fff; }
+    .di-tl-gear { width: 32px; height: 32px; background: rgba(255,255,255,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .di-tl-gear svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.5); }
+
+    .di-tl-week {
+      position: absolute; top: 104px; left: 16px; right: 16px; z-index: 2;
+      background: rgba(255,255,255,0.06); border-radius: 16px; padding: 10px 6px 8px;
+      display: flex; justify-content: space-around; text-align: center;
+    }
+    .di-tl-day { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 500; line-height: 1; padding: 4px 0; }
+    .di-tl-day-num { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.5); margin-top: 4px; }
+    .di-tl-day.active .di-tl-day-num { color: #0A84FF; }
+    .di-tl-day-dots { display: flex; gap: 3px; justify-content: center; margin-top: 4px; min-height: 6px; }
+    .di-tl-day-dot { width: 5px; height: 5px; border-radius: 50%; }
+    .di-tl-day-dot.orange { background: #FF9F0A; }
+    .di-tl-day-dot.red { background: #FF453A; }
+    .di-tl-day-dot.blue { background: #0A84FF; }
+    .di-tl-day-dot.green { background: #30D158; }
+    .di-tl-day-bell { width: 5px; height: 5px; flex-shrink: 0; }
+
+    .di-tl-events { position: absolute; top: 190px; left: 12px; right: 12px; z-index: 2; text-align: left !important; }
+    .di-tl-events * { text-align: left; }
+    .di-tl-card {
+      background: rgba(255,255,255,0.05); border-radius: 16px;
+      padding: 14px 16px; margin-bottom: 10px; position: relative; text-align: left;
+    }
+    .di-tl-card.highlight {
+      background: rgba(80,120,20,0.2);
+      border: 2px solid rgba(120,180,30,0.5);
+      box-shadow: inset 0 0 20px rgba(120,180,30,0.05);
+    }
+    /* Row 1: color bar + title/time + icons */
+    .di-tl-row1 { display: flex; align-items: flex-start; gap: 8px; }
+    .di-tl-cbar { width: 4px; border-radius: 3px; flex-shrink: 0; align-self: stretch; min-height: 40px; }
+    .di-tl-card.highlight .di-tl-cbar { box-shadow: 0 0 6px currentColor; }
+    .di-tl-cbar.blue { background: #0A84FF; color: #0A84FF; }
+    .di-tl-cbar.green { background: #30D158; color: #30D158; }
+    .di-tl-cbar.yellow { background: #a0c030; color: #a0c030; }
+    .di-tl-cbar.red { background: #FF453A; color: #FF453A; }
+    .di-tl-card-body { flex: 1; min-width: 0; text-align: left; }
+    .di-tl-card-title { font-size: 16px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; text-align: left; }
+    .di-tl-card-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
+    .di-tl-card-sub .repeat { font-size: 11px; font-weight: 500; }
+    .di-tl-card-icons { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 8px; }
+    .di-tl-icon-cam { width: 34px; height: 34px; background: #0A84FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .di-tl-icon-cam svg { width: 16px; height: 16px; fill: #fff; }
+    .di-tl-icon-phone { width: 34px; height: 34px; background: #30D158; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+    .di-tl-icon-phone svg { width: 16px; height: 16px; fill: #fff; }
+    /* Row 2: alarm pills (left) + timer (right) */
+    .di-tl-row2 { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 8px; }
+    .di-tl-pills { display: flex; align-items: center; gap: 6px; }
+    .di-tl-alarm {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: #FF9F0A; border-radius: 14px; padding: 4px 10px;
+      font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .di-tl-alarm.pending {
+      background: transparent; border: 1.5px solid rgba(255,159,10,0.5); color: #FF9F0A;
+    }
+    .di-tl-alarm svg { width: 12px; height: 12px; fill: currentColor; }
+    .di-tl-counter { font-size: 10px; font-weight: 700; color: #FF453A; border: 1.5px solid #FF453A; border-radius: 10px; padding: 1px 6px; }
+    .di-tl-timer { font-variant-numeric: tabular-nums; font-weight: 700; }
+    .di-tl-timer.big { font-size: 19px; font-weight: 800; color: #FF453A; }
+    .di-tl-timer.big.green { color: #30D158; }
+    .di-tl-timer.small { font-size: 16px; color: #30D158; }
+
+    @keyframes diPulse { 0%,100%{opacity:1} 50%{opacity:.85} }
+    .di-pulse { animation: diPulse 2s ease-in-out infinite; }
+
+    /* gap handled per-breakpoint above */
 
     /* ===== Testimonials Carousel ===== */
     .testimonials {
@@ -438,8 +656,8 @@
     }
 
     .plan-features .icon.no {
-      background: rgba(255, 255, 255, 0.04);
-      color: var(--text-muted);
+      background: rgba(255, 59, 48, 0.12);
+      color: #FF453A;
     }
 
     .plan-features .icon.free {
@@ -579,7 +797,6 @@
     @media (max-width: 640px) {
       section { padding: 60px 0; }
       .hero { padding-top: 120px; }
-      .screenshot-item { width: 180px; }
       .footer-inner { flex-direction: column; text-align: center; }
     }
 
@@ -589,40 +806,49 @@
     /* Inline elements: span, img inside parents */
     [data-lang="en"] span[data-i18n="en"],
     [data-lang="es"] span[data-i18n="es"],
-    [data-lang="ja"] span[data-i18n="ja"] { display: inline !important; }
+    [data-lang="ja"] span[data-i18n="ja"],
+    [data-lang="de"] span[data-i18n="de"],
+    [data-lang="fr"] span[data-i18n="fr"] { display: inline !important; }
 
     [data-lang="en"] img[data-i18n="en"],
     [data-lang="es"] img[data-i18n="es"],
-    [data-lang="ja"] img[data-i18n="ja"] { display: inline !important; }
+    [data-lang="ja"] img[data-i18n="ja"],
+    [data-lang="de"] img[data-i18n="de"],
+    [data-lang="fr"] img[data-i18n="fr"] { display: inline !important; }
 
     /* Block elements: p, div */
     [data-lang="en"] p[data-i18n="en"],
     [data-lang="es"] p[data-i18n="es"],
-    [data-lang="ja"] p[data-i18n="ja"] { display: block !important; }
+    [data-lang="ja"] p[data-i18n="ja"],
+    [data-lang="de"] p[data-i18n="de"],
+    [data-lang="fr"] p[data-i18n="fr"] { display: block !important; }
 
     [data-lang="en"] div[data-i18n="en"],
     [data-lang="es"] div[data-i18n="es"],
-    [data-lang="ja"] div[data-i18n="ja"] { display: block !important; }
+    [data-lang="ja"] div[data-i18n="ja"],
+    [data-lang="de"] div[data-i18n="de"],
+    [data-lang="fr"] div[data-i18n="fr"] { display: block !important; }
 
     /* Feature cards in grid */
     [data-lang="en"] .feature-card[data-i18n="en"],
     [data-lang="es"] .feature-card[data-i18n="es"],
-    [data-lang="ja"] .feature-card[data-i18n="ja"] { display: block !important; }
-
-    /* Screenshots: flex containers */
-    [data-lang="en"] .screenshots-lang[data-i18n="en"],
-    [data-lang="es"] .screenshots-lang[data-i18n="es"],
-    [data-lang="ja"] .screenshots-lang[data-i18n="ja"] { display: flex !important; }
+    [data-lang="ja"] .feature-card[data-i18n="ja"],
+    [data-lang="de"] .feature-card[data-i18n="de"],
+    [data-lang="fr"] .feature-card[data-i18n="fr"] { display: block !important; }
 
     /* Plan comparison: list items as flex */
     [data-lang="en"] .plan-features li[data-i18n="en"],
     [data-lang="es"] .plan-features li[data-i18n="es"],
-    [data-lang="ja"] .plan-features li[data-i18n="ja"] { display: flex !important; }
+    [data-lang="ja"] .plan-features li[data-i18n="ja"],
+    [data-lang="de"] .plan-features li[data-i18n="de"],
+    [data-lang="fr"] .plan-features li[data-i18n="fr"] { display: flex !important; }
 
     /* Sections (testimonials, etc.) */
     [data-lang="en"] section[data-i18n="en"],
     [data-lang="es"] section[data-i18n="es"],
-    [data-lang="ja"] section[data-i18n="ja"] { display: block !important; }
+    [data-lang="ja"] section[data-i18n="ja"],
+    [data-lang="de"] section[data-i18n="de"],
+    [data-lang="fr"] section[data-i18n="fr"] { display: block !important; }
   </style>
 </head>
 <body>
@@ -637,6 +863,8 @@
       <div class="nav-links">
         <button class="lang-btn active" onclick="setLang('en')">EN</button>
         <button class="lang-btn" onclick="setLang('es')">ES</button>
+        <button class="lang-btn" onclick="setLang('de')">DE</button>
+        <button class="lang-btn" onclick="setLang('fr')">FR</button>
         <button class="lang-btn" onclick="setLang('ja')">JA</button>
       </div>
     </div>
@@ -650,18 +878,295 @@
       <h1>
         <span data-i18n="en">Never miss a<br><span class="gradient">meeting</span> again</span>
         <span data-i18n="es">No te pierdas<br>ninguna <span class="gradient">reunión</span></span>
+        <span data-i18n="de">Verpasse nie wieder<br>ein <span class="gradient">Meeting</span></span>
+        <span data-i18n="fr">Ne ratez plus<br>aucune <span class="gradient">réunion</span></span>
         <span data-i18n="ja"><span class="gradient">ミーティング</span>を<br>もう逃しません</span>
       </h1>
 
       <p data-i18n="en">Live Activities, Dynamic Island countdowns, and smart alarms that make sure you're always on time.</p>
       <p data-i18n="es">Live Activities, cuenta atrás en Dynamic Island y alarmas inteligentes para que siempre llegues a tiempo.</p>
+      <p data-i18n="de">Live Activities, Dynamic Island Countdowns und smarte Alarme, damit du nie zu spät kommst.</p>
+      <p data-i18n="fr">Live Activities, comptes à rebours Dynamic Island et alarmes intelligentes pour ne jamais être en retard.</p>
       <p data-i18n="ja">Live Activities、Dynamic Islandのカウントダウン、スマートアラームで常に時間通りに。</p>
 
       <a href="https://apps.apple.com/app/call-to-meet/id6504754512" class="app-store-badge" target="_blank" rel="noopener">
         <img data-i18n="en" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="52">
         <img data-i18n="es" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Descargar en el App Store" height="52">
+        <img data-i18n="de" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Im App Store laden" height="52">
+        <img data-i18n="fr" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Télécharger dans l'App Store" height="52">
         <img data-i18n="ja" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Storeからダウンロード" height="52">
       </a>
+    </div>
+  </section>
+
+  <!-- DI Showcase SVG Symbols -->
+  <svg style="display:none">
+    <defs>
+      <symbol id="sf-video" viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></symbol>
+      <symbol id="sf-cellular" viewBox="0 0 20 14"><rect x="0" y="10" width="3.5" height="4" rx="0.75"/><rect x="5.5" y="7" width="3.5" height="7" rx="0.75"/><rect x="11" y="3.5" width="3.5" height="10.5" rx="0.75"/><rect x="16.5" y="0" width="3.5" height="14" rx="0.75"/></symbol>
+      <symbol id="sf-battery" viewBox="0 0 31 14"><rect x="0" y="0.5" width="27" height="13" rx="3.5" fill="none" stroke="#fff" stroke-width="1.3" opacity="0.4"/><rect x="2.5" y="3" width="18" height="8" rx="1.5" fill="#fff"/><path d="M28.5 4.5a2 2 0 010 5" fill="#fff" opacity="0.4"/></symbol>
+      <symbol id="sf-phone" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></symbol>
+      <symbol id="sf-bell" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></symbol>
+      <symbol id="sf-gear" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1012 8.5a3.5 3.5 0 000 7zm7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-.98l2.11-1.65a.5.5 0 00.12-.64l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.23 7.23 0 00-1.69-.98l-.38-2.65A.49.49 0 0014 2h-4a.49.49 0 00-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.49.49 0 00.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65a.5.5 0 00-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.05.24.26.42.49.42h4c.24 0 .44-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46a.5.5 0 00-.12-.64l-2.11-1.65z"/></symbol>
+    </defs>
+  </svg>
+
+  <!-- Dynamic Island Showcase -->
+  <section class="di-showcase">
+    <div class="di-scene">
+
+      <!-- PHONE 0: Lock Screen -->
+      <div class="di-phone-wrap">
+        <div class="di-phone">
+          <div class="di-phone-body">
+            <div class="di-wp di-wp-2"></div>
+            <div class="di-sbar">
+              <span></span><span></span>
+              <div class="di-sbar-right">
+                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
+                <svg width="31" height="14"><use href="#sf-battery"/></svg>
+              </div>
+            </div>
+            <div class="di-hw"><div class="di-idle-pill"></div></div>
+            <div class="di-lock-time">
+              <div class="di-lock-h">9:41</div>
+              <div class="di-lock-d">
+                <span data-i18n="en">Friday, February 18</span>
+                <span data-i18n="es">Viernes, 18 de febrero</span>
+                <span data-i18n="de">Freitag, 18. Februar</span>
+                <span data-i18n="fr">Vendredi 18 février</span>
+                <span data-i18n="ja">2月18日 金曜日</span>
+              </div>
+            </div>
+            <div class="di-la">
+              <div class="di-row">
+                <div class="di-cbar"></div>
+                <div class="di-inf">
+                  <div class="di-ttl">
+                    <span data-i18n="en">Product Review</span>
+                    <span data-i18n="es">Revisión de Producto</span>
+                    <span data-i18n="de">Produktbesprechung</span>
+                    <span data-i18n="fr">Revue de produit</span>
+                    <span data-i18n="ja">製品レビュー</span>
+                  </div>
+                  <div class="di-sub">
+                    <span data-i18n="en">Starts at 10:00</span>
+                    <span data-i18n="es">Empieza a las 10:00</span>
+                    <span data-i18n="de">Beginn um 10:00</span>
+                    <span data-i18n="fr">Début à 10:00</span>
+                    <span data-i18n="ja">10:00に開始</span>
+                  </div>
+                </div>
+                <div class="di-prov"><svg><use href="#sf-video"/></svg></div>
+              </div>
+              <div class="di-trow">
+                <span class="di-big-timer di-pulse" id="di-timer-lock">9:41</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="di-plabel">
+          <span data-i18n="en">Lock Screen</span>
+          <span data-i18n="es">Pantalla de bloqueo</span>
+          <span data-i18n="de">Sperrbildschirm</span>
+          <span data-i18n="fr">Écran de verrouillage</span>
+          <span data-i18n="ja">ロック画面</span>
+        </div>
+      </div>
+
+      <!-- PHONE 1: Expanded DI -->
+      <div class="di-phone-wrap">
+        <div class="di-phone">
+          <div class="di-phone-body">
+            <div class="di-wp di-wp-1"></div>
+            <div class="di-sbar">
+              <span class="di-sbar-time">9:41</span><span></span>
+              <div class="di-sbar-right">
+                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
+                <svg width="31" height="14"><use href="#sf-battery"/></svg>
+              </div>
+            </div>
+            <div class="di-hw">
+              <div class="di-exp-pill">
+                <div class="di-cam"><div class="di-cam-d"></div></div>
+                <div class="di-row">
+                  <div class="di-cbar"></div>
+                  <div class="di-inf">
+                    <div class="di-ttl">
+                      <span data-i18n="en">Product Review</span>
+                      <span data-i18n="es">Revisión de Producto</span>
+                      <span data-i18n="de">Produktbesprechung</span>
+                      <span data-i18n="fr">Revue de produit</span>
+                      <span data-i18n="ja">製品レビュー</span>
+                    </div>
+                    <div class="di-sub">
+                      <span data-i18n="en">Starts at 10:00</span>
+                      <span data-i18n="es">Empieza a las 10:00</span>
+                      <span data-i18n="de">Beginn um 10:00</span>
+                      <span data-i18n="fr">Début à 10:00</span>
+                      <span data-i18n="ja">10:00に開始</span>
+                    </div>
+                  </div>
+                  <div class="di-prov"><svg><use href="#sf-video"/></svg></div>
+                </div>
+                <div class="di-trow">
+                  <span class="di-big-timer di-pulse" id="di-timer-exp">9:41</span>
+                </div>
+              </div>
+            </div>
+            <div class="di-ghost" style="top:120px;">
+              <div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-lg"></div>
+            </div>
+            <div class="di-arow" style="top:460px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
+            <div class="di-arow" style="top:545px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
+            <div class="di-dock"><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div></div>
+          </div>
+        </div>
+        <div class="di-plabel">
+          <span data-i18n="en">Extended Dynamic Island</span>
+          <span data-i18n="es">Dynamic Island extendida</span>
+          <span data-i18n="de">Erweiterte Dynamic Island</span>
+          <span data-i18n="fr">Dynamic Island étendue</span>
+          <span data-i18n="ja">拡張Dynamic Island</span>
+        </div>
+      </div>
+
+      <!-- PHONE 2: Compact DI -->
+      <div class="di-phone-wrap">
+        <div class="di-phone">
+          <div class="di-phone-body">
+            <div class="di-wp di-wp-2"></div>
+            <div class="di-sbar">
+              <span class="di-sbar-time">9:41</span><span></span>
+              <div class="di-sbar-right">
+                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
+                <svg width="31" height="14"><use href="#sf-battery"/></svg>
+              </div>
+            </div>
+            <div class="di-hw">
+              <div class="di-cmp-pill">
+                <span class="di-cmp-timer di-pulse" id="di-timer-cmp">9:41</span>
+                <span class="di-cmp-sym"><svg><use href="#sf-video"/></svg></span>
+              </div>
+            </div>
+            <div class="di-ghost" style="top:120px;">
+              <div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-lg"></div>
+            </div>
+            <div class="di-arow" style="top:460px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
+            <div class="di-arow" style="top:545px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
+            <div class="di-dock"><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div></div>
+          </div>
+        </div>
+        <div class="di-plabel">
+          <span data-i18n="en">Compact Dynamic Island</span>
+          <span data-i18n="es">Dynamic Island compacta</span>
+          <span data-i18n="de">Kompakte Dynamic Island</span>
+          <span data-i18n="fr">Dynamic Island compacte</span>
+          <span data-i18n="ja">コンパクトDynamic Island</span>
+        </div>
+      </div>
+
+      <!-- PHONE 3: Timeline / Event List -->
+      <div class="di-phone-wrap">
+        <div class="di-phone">
+          <div class="di-phone-body">
+            <div class="di-wp" style="background:#000;"></div>
+            <div class="di-sbar">
+              <span class="di-sbar-time">9:41</span><span></span>
+              <div class="di-sbar-right">
+                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
+                <svg width="31" height="14"><use href="#sf-battery"/></svg>
+              </div>
+            </div>
+            <div class="di-hw"><div class="di-idle-pill"></div></div>
+            <!-- nav bar removed for simplicity -->
+            <div class="di-tl-week">
+              <div class="di-tl-day active"><span data-i18n="en">Fri</span><span data-i18n="es">Vie</span><span data-i18n="de">Fr</span><span data-i18n="fr">Ven</span><span data-i18n="ja">金</span><div class="di-tl-day-num">18</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span><span class="di-tl-day-dot green"></span><span class="di-tl-day-dot red"></span></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Sat</span><span data-i18n="es">Sáb</span><span data-i18n="de">Sa</span><span data-i18n="fr">Sam</span><span data-i18n="ja">土</span><div class="di-tl-day-num">19</div><div class="di-tl-day-dots"></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Sun</span><span data-i18n="es">Dom</span><span data-i18n="de">So</span><span data-i18n="fr">Dim</span><span data-i18n="ja">日</span><div class="di-tl-day-num">20</div><div class="di-tl-day-dots"><span class="di-tl-day-dot red"></span></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Mon</span><span data-i18n="es">Lun</span><span data-i18n="de">Mo</span><span data-i18n="fr">Lun</span><span data-i18n="ja">月</span><div class="di-tl-day-num">21</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Tue</span><span data-i18n="es">Mar</span><span data-i18n="de">Di</span><span data-i18n="fr">Mar</span><span data-i18n="ja">火</span><div class="di-tl-day-num">22</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span><span class="di-tl-day-dot orange"></span></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Wed</span><span data-i18n="es">Mié</span><span data-i18n="de">Mi</span><span data-i18n="fr">Mer</span><span data-i18n="ja">水</span><div class="di-tl-day-num">23</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
+              <div class="di-tl-day"><span data-i18n="en">Thu</span><span data-i18n="es">Jue</span><span data-i18n="de">Do</span><span data-i18n="fr">Jeu</span><span data-i18n="ja">木</span><div class="di-tl-day-num">24</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
+            </div>
+            <div class="di-tl-events">
+              <!-- Event 1: Product Review — blue bar, green countdown, camera button, 10:00-11:30 -->
+              <div class="di-tl-card highlight">
+                <div class="di-tl-row1">
+                  <div class="di-tl-cbar blue"></div>
+                  <div class="di-tl-card-body">
+                    <div class="di-tl-card-title">
+                      <span data-i18n="en">Product Review</span>
+                      <span data-i18n="es">Revisión de Producto</span>
+                      <span data-i18n="de">Produktbesprechung</span>
+                      <span data-i18n="fr">Revue de produit</span>
+                      <span data-i18n="ja">製品レビュー</span>
+                    </div>
+                    <div class="di-tl-card-sub">10:00 - 11:30</div>
+                  </div>
+                  <div class="di-tl-card-icons"><div class="di-tl-icon-cam"><svg><use href="#sf-video"/></svg></div></div>
+                </div>
+                <div class="di-tl-row2">
+                  <div class="di-tl-pills">
+                    <span class="di-tl-alarm"><svg><use href="#sf-bell"/></svg> ALARM</span>
+                  </div>
+                  <span class="di-tl-timer big green di-pulse" id="di-timer-tl">18:22</span>
+                </div>
+              </div>
+              <!-- Event 2: Lunch break — green bar, 13:00 -->
+              <div class="di-tl-card">
+                <div class="di-tl-row1">
+                  <div class="di-tl-cbar green"></div>
+                  <div class="di-tl-card-body">
+                    <div class="di-tl-card-title">
+                      <span data-i18n="en">Lunch with Sarah</span>
+                      <span data-i18n="es">Comida con Sara</span>
+                      <span data-i18n="de">Mittagessen mit Sarah</span>
+                      <span data-i18n="fr">Déjeuner avec Sarah</span>
+                      <span data-i18n="ja">サラとランチ</span>
+                    </div>
+                    <div class="di-tl-card-sub">13:00 - 14:00</div>
+                  </div>
+                </div>
+                <div class="di-tl-row2">
+                  <div class="di-tl-pills"></div>
+                  <span></span>
+                </div>
+              </div>
+              <!-- Event 3: Workout — red bar, 16:00-17:30, no call -->
+              <div class="di-tl-card">
+                <div class="di-tl-row1">
+                  <div class="di-tl-cbar red"></div>
+                  <div class="di-tl-card-body">
+                    <div class="di-tl-card-title">
+                      <span data-i18n="en">HIIT Session</span>
+                      <span data-i18n="es">Sesión HIIT</span>
+                      <span data-i18n="de">HIIT-Training</span>
+                      <span data-i18n="fr">Séance HIIT</span>
+                      <span data-i18n="ja">HIITセッション</span>
+                    </div>
+                    <div class="di-tl-card-sub">16:00 - 17:30</div>
+                  </div>
+                </div>
+                <div class="di-tl-row2">
+                  <div class="di-tl-pills">
+                    <span class="di-tl-alarm"><svg><use href="#sf-bell"/></svg> ALARM</span>
+                  </div>
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="di-plabel">
+          <span data-i18n="en">Event List</span>
+          <span data-i18n="es">Lista de eventos</span>
+          <span data-i18n="de">Eventliste</span>
+          <span data-i18n="fr">Liste d'événements</span>
+          <span data-i18n="ja">イベント一覧</span>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -972,25 +1477,207 @@
     </div>
   </section>
 
-  <!-- Screenshots -->
-  <section class="screenshots">
-    <div class="screenshots-scroll screenshots-lang" data-i18n="en">
-      <div class="screenshot-item"><img src="screenshots/en/01_timeline.png" alt="Timeline" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/03_event_detail.png" alt="Event Detail" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/02_settings.png" alt="Settings" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/04_scrolled.png" alt="Scrolled Timeline" loading="lazy"></div>
+  <section class="testimonials" data-i18n="de">
+    <div class="testimonials-track">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Stefan K.</div><div class="testimonial-role">Account Manager, München</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Ich habe täglich 8-10 Calls über Zoom und Teams. Allein das Beitreten per Tipp vom Sperrbildschirm ist es wert. Kein Suchen mehr nach dem Link zwei Minuten vor dem Call.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Produktmanager, Berlin</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Der Dynamic Island Countdown ist wirklich nützlich beim konzentrierten Arbeiten. Ich sehe mein nächstes Meeting ohne die App zu wechseln. Google Kalender direkt wäre noch perfekt.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Lisa M.</div><div class="testimonial-role">Freelancerin, Wien</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Ich habe jede Kalender-App ausprobiert — diese ist die einzige mit Dynamic Island Countdown für das nächste Meeting. Und die Alarme klingen sogar im Nicht-Stören-Modus. Unverzichtbar.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">T</div>
+          <div><div class="testimonial-name">Thomas R.</div><div class="testimonial-role">Berater, Zürich</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Saubere App. Die Timeline zeigt genau das, was ich brauche — nur Meetings, nicht die 50 anderen Kalendereinträge. Pro-Abo ist fair für das Gebotene.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Anna W.</div><div class="testimonial-role">HR, Hamburg</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Macht was es soll — Alarme und Quick Join funktionieren gut. Ein paar mehr Anpassungsmöglichkeiten wären schön, aber für Meeting-Erinnerungen reicht es völlig.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">F</div>
+          <div><div class="testimonial-name">Felix H.</div><div class="testimonial-role">Berater, Frankfurt</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Gutes Konzept und der Dynamic Island Timer ist praktisch. Outlook-Integration könnte besser sein. Trotzdem nutze ich es täglich für meine Calls.</div>
+      </div>
+      <!-- Duplicate set for seamless scroll -->
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Stefan K.</div><div class="testimonial-role">Account Manager, München</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Ich habe täglich 8-10 Calls über Zoom und Teams. Allein das Beitreten per Tipp vom Sperrbildschirm ist es wert. Kein Suchen mehr nach dem Link zwei Minuten vor dem Call.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Produktmanager, Berlin</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Der Dynamic Island Countdown ist wirklich nützlich beim konzentrierten Arbeiten. Ich sehe mein nächstes Meeting ohne die App zu wechseln. Google Kalender direkt wäre noch perfekt.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">L</div>
+          <div><div class="testimonial-name">Lisa M.</div><div class="testimonial-role">Freelancerin, Wien</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Ich habe jede Kalender-App ausprobiert — diese ist die einzige mit Dynamic Island Countdown für das nächste Meeting. Und die Alarme klingen sogar im Nicht-Stören-Modus. Unverzichtbar.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">T</div>
+          <div><div class="testimonial-name">Thomas R.</div><div class="testimonial-role">Berater, Zürich</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Saubere App. Die Timeline zeigt genau das, was ich brauche — nur Meetings, nicht die 50 anderen Kalendereinträge. Pro-Abo ist fair für das Gebotene.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Anna W.</div><div class="testimonial-role">HR, Hamburg</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Macht was es soll — Alarme und Quick Join funktionieren gut. Ein paar mehr Anpassungsmöglichkeiten wären schön, aber für Meeting-Erinnerungen reicht es völlig.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">F</div>
+          <div><div class="testimonial-name">Felix H.</div><div class="testimonial-role">Berater, Frankfurt</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Gutes Konzept und der Dynamic Island Timer ist praktisch. Outlook-Integration könnte besser sein. Trotzdem nutze ich es täglich für meine Calls.</div>
+      </div>
     </div>
-    <div class="screenshots-scroll screenshots-lang" data-i18n="es">
-      <div class="screenshot-item"><img src="screenshots/es/01_timeline.png" alt="Linea de tiempo" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/es/03_event_detail.png" alt="Detalle de evento" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/es/02_settings.png" alt="Ajustes" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/es/04_scrolled.png" alt="Timeline con scroll" loading="lazy"></div>
-    </div>
-    <div class="screenshots-scroll screenshots-lang" data-i18n="ja">
-      <div class="screenshot-item"><img src="screenshots/en/01_timeline.png" alt="タイムライン" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/03_event_detail.png" alt="イベント詳細" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/02_settings.png" alt="設定" loading="lazy"></div>
-      <div class="screenshot-item"><img src="screenshots/en/04_scrolled.png" alt="スクロール" loading="lazy"></div>
+  </section>
+
+  <section class="testimonials" data-i18n="fr">
+    <div class="testimonials-track">
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Sophie L.</div><div class="testimonial-role">Chargée de compte, Paris</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Je gère 8 à 10 appels par jour entre Zoom et Teams. Pouvoir rejoindre d'un seul geste depuis l'écran verrouillé, ça vaut le coup. Fini les deux minutes à chercher le lien.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">P</div>
+          <div><div class="testimonial-name">Pierre D.</div><div class="testimonial-role">Chef de projet, Lyon</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Le compte à rebours Dynamic Island est vraiment utile quand je suis concentré. Je vois ma prochaine réunion sans changer d'app. Il manquerait juste Google Agenda en natif.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marie C.</div><div class="testimonial-role">Freelance, Bruxelles</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">J'ai essayé toutes les apps de calendrier — c'est la seule qui utilise Dynamic Island pour le compte à rebours. En plus, les alarmes sonnent même en mode Ne pas déranger. Indispensable.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Antoine R.</div><div class="testimonial-role">Directeur produit, Genève</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">App épurée. La timeline montre exactement ce qu'il faut — juste les réunions, pas les 50 autres entrées du calendrier. L'abonnement Pro est raisonnable.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">C</div>
+          <div><div class="testimonial-name">Claire V.</div><div class="testimonial-role">RH, Montréal</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Ça fait le travail — les alarmes et l'accès rapide fonctionnent bien. Quelques options de personnalisation en plus seraient bienvenues, mais pour ne rater aucune réunion c'est efficace.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Julien M.</div><div class="testimonial-role">Consultant, Bordeaux</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Bon concept et le minuteur Dynamic Island est pratique. L'intégration Outlook pourrait être améliorée. Je l'utilise quand même tous les jours pour mes appels.</div>
+      </div>
+      <!-- Duplicate set for seamless scroll -->
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">S</div>
+          <div><div class="testimonial-name">Sophie L.</div><div class="testimonial-role">Chargée de compte, Paris</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">Je gère 8 à 10 appels par jour entre Zoom et Teams. Pouvoir rejoindre d'un seul geste depuis l'écran verrouillé, ça vaut le coup. Fini les deux minutes à chercher le lien.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">P</div>
+          <div><div class="testimonial-name">Pierre D.</div><div class="testimonial-role">Chef de projet, Lyon</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">Le compte à rebours Dynamic Island est vraiment utile quand je suis concentré. Je vois ma prochaine réunion sans changer d'app. Il manquerait juste Google Agenda en natif.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">M</div>
+          <div><div class="testimonial-name">Marie C.</div><div class="testimonial-role">Freelance, Bruxelles</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
+        <div class="testimonial-text">J'ai essayé toutes les apps de calendrier — c'est la seule qui utilise Dynamic Island pour le compte à rebours. En plus, les alarmes sonnent même en mode Ne pas déranger. Indispensable.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">A</div>
+          <div><div class="testimonial-name">Antoine R.</div><div class="testimonial-role">Directeur produit, Genève</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
+        <div class="testimonial-text">App épurée. La timeline montre exactement ce qu'il faut — juste les réunions, pas les 50 autres entrées du calendrier. L'abonnement Pro est raisonnable.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">C</div>
+          <div><div class="testimonial-name">Claire V.</div><div class="testimonial-role">RH, Montréal</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Ça fait le travail — les alarmes et l'accès rapide fonctionnent bien. Quelques options de personnalisation en plus seraient bienvenues, mais pour ne rater aucune réunion c'est efficace.</div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-header">
+          <div class="testimonial-avatar">J</div>
+          <div><div class="testimonial-name">Julien M.</div><div class="testimonial-role">Consultant, Bordeaux</div></div>
+        </div>
+        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9734;&#9734;</div>
+        <div class="testimonial-text">Bon concept et le minuteur Dynamic Island est pratique. L'intégration Outlook pourrait être améliorée. Je l'utilise quand même tous les jours pour mes appels.</div>
+      </div>
     </div>
   </section>
 
@@ -1000,11 +1687,15 @@
       <h2 class="section-title">
         <span data-i18n="en">Key Features</span>
         <span data-i18n="es">Funciones principales</span>
+        <span data-i18n="de">Hauptfunktionen</span>
+        <span data-i18n="fr">Fonctionnalités clés</span>
         <span data-i18n="ja">主な機能</span>
       </h2>
       <p class="section-subtitle">
         <span data-i18n="en">Everything you need to stay on top of your meetings</span>
         <span data-i18n="es">Todo lo que necesitas para no perder tus reuniones</span>
+        <span data-i18n="de">Alles, was du brauchst, um kein Meeting zu verpassen</span>
+        <span data-i18n="fr">Tout ce qu'il faut pour ne rater aucune réunion</span>
         <span data-i18n="ja">ミーティングを見逃さないために必要な全て</span>
       </p>
 
@@ -1073,6 +1764,70 @@
           <p>Ve tus próximas reuniones y únete a llamadas desde tu muñeca.</p>
         </div>
 
+        <!-- DE features -->
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#9899;</span>
+          <h3>Live Activities & Dynamic Island</h3>
+          <p>Sieh den Countdown zum nächsten Meeting direkt auf dem Sperrbildschirm und in Dynamic Island.</p>
+        </div>
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#128276;</span>
+          <h3>Smarte Alarme</h3>
+          <p>AlarmKit-Alarme, die auch im Lautlos- und Nicht-Stören-Modus funktionieren.</p>
+        </div>
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#128197;</span>
+          <h3>Kalender-Synchronisation</h3>
+          <p>Erkennt automatisch Meetings mit Links von Zoom, Teams, Google Meet und mehr.</p>
+        </div>
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#9889;</span>
+          <h3>Ein-Tipp-Beitritt</h3>
+          <p>Tritt deinem Meeting mit einem Tipp von der Benachrichtigung, dem Sperrbildschirm oder Dynamic Island bei.</p>
+        </div>
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#127760;</span>
+          <h3>Fokus-Modus</h3>
+          <p>Filtert Meetings basierend auf deinem aktiven Fokus-Modus.</p>
+        </div>
+        <div class="feature-card" data-i18n="de">
+          <span class="feature-icon">&#9201;</span>
+          <h3>Apple Watch</h3>
+          <p>Sieh kommende Meetings und nimm an Calls teil — direkt vom Handgelenk.</p>
+        </div>
+
+        <!-- FR features -->
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#9899;</span>
+          <h3>Live Activities & Dynamic Island</h3>
+          <p>Voyez le compte à rebours de votre prochaine réunion sur l'écran verrouillé et Dynamic Island.</p>
+        </div>
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#128276;</span>
+          <h3>Alarmes intelligentes</h3>
+          <p>Alarmes AlarmKit qui fonctionnent même en mode silencieux et Ne pas déranger.</p>
+        </div>
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#128197;</span>
+          <h3>Synchronisation calendrier</h3>
+          <p>Détecte automatiquement les réunions avec liens Zoom, Teams, Google Meet et plus.</p>
+        </div>
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#9889;</span>
+          <h3>Rejoindre en un geste</h3>
+          <p>Rejoignez votre réunion d'un seul geste depuis la notification, l'écran verrouillé ou Dynamic Island.</p>
+        </div>
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#127760;</span>
+          <h3>Mode Concentration</h3>
+          <p>Filtre les réunions selon votre mode de concentration actif.</p>
+        </div>
+        <div class="feature-card" data-i18n="fr">
+          <span class="feature-icon">&#9201;</span>
+          <h3>Apple Watch</h3>
+          <p>Consultez vos prochaines réunions et rejoignez vos appels depuis votre poignet.</p>
+        </div>
+
         <!-- JA features -->
         <div class="feature-card" data-i18n="ja">
           <span class="feature-icon">&#9899;</span>
@@ -1114,11 +1869,15 @@
       <h2 class="section-title">
         <span data-i18n="en">Free vs <span class="gradient">Pro</span></span>
         <span data-i18n="es">Gratis vs <span class="gradient">Pro</span></span>
+        <span data-i18n="de">Kostenlos vs <span class="gradient">Pro</span></span>
+        <span data-i18n="fr">Gratuit vs <span class="gradient">Pro</span></span>
         <span data-i18n="ja">無料 vs <span class="gradient">Pro</span></span>
       </h2>
       <p class="section-subtitle">
         <span data-i18n="en">Live Activity is always free. Upgrade for unlimited alarms.</span>
         <span data-i18n="es">Live Activity siempre es gratis. Hazte Pro para alarmas ilimitadas.</span>
+        <span data-i18n="de">Live Activity ist immer kostenlos. Upgrade für unbegrenzte Alarme.</span>
+        <span data-i18n="fr">Live Activity est toujours gratuit. Passez au Pro pour des alarmes illimitées.</span>
         <span data-i18n="ja">Live Activityは常に無料。Proで無制限アラーム。</span>
       </p>
 
@@ -1129,29 +1888,48 @@
           <div class="plan-label">
             <span data-i18n="en">Free</span>
             <span data-i18n="es">Gratis</span>
+            <span data-i18n="de">Kostenlos</span>
+            <span data-i18n="fr">Gratuit</span>
             <span data-i18n="ja">無料</span>
           </div>
           <div class="plan-name">
             <span data-i18n="en">Basic</span>
             <span data-i18n="es">Básico</span>
+            <span data-i18n="de">Basis</span>
+            <span data-i18n="fr">Basique</span>
             <span data-i18n="ja">ベーシック</span>
           </div>
           <ul class="plan-features">
             <li data-i18n="en"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="en"><span class="icon free">&#10003;</span> Calendar sync & One-Tap Join</li>
+            <li data-i18n="en"><span class="icon free">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
             <li data-i18n="en"><span class="icon free">&#10003;</span> 2 simultaneous alarms</li>
-            <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Auto-alarm for all events</span></li>
-            <li data-i18n="en"><span class="icon no">&mdash;</span> <span class="muted">Unlimited alarms</span></li>
+            <li data-i18n="en"><span class="icon no">&#10007;</span> <span class="muted">Auto-alarm for all events</span></li>
+            <li data-i18n="en"><span class="icon no">&#10007;</span> <span class="muted">Unlimited alarms</span></li>
             <li data-i18n="es"><span class="icon free">&#10003;</span> Live Activity y Dynamic Island</li>
             <li data-i18n="es"><span class="icon free">&#10003;</span> Sincronización y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon free">&#10003;</span> AlarmKit (suena en modo silencio)</li>
             <li data-i18n="es"><span class="icon free">&#10003;</span> 2 alarmas simultáneas</li>
-            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarma automática</span></li>
-            <li data-i18n="es"><span class="icon no">&mdash;</span> <span class="muted">Alarmas ilimitadas</span></li>
+            <li data-i18n="es"><span class="icon no">&#10007;</span> <span class="muted">Alarma automática</span></li>
+            <li data-i18n="es"><span class="icon no">&#10007;</span> <span class="muted">Alarmas ilimitadas</span></li>
+            <li data-i18n="de"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="de"><span class="icon free">&#10003;</span> Kalender-Sync & Ein-Tipp-Beitritt</li>
+            <li data-i18n="de"><span class="icon free">&#10003;</span> AlarmKit (klingelt im Lautlos-Modus)</li>
+            <li data-i18n="de"><span class="icon free">&#10003;</span> 2 gleichzeitige Alarme</li>
+            <li data-i18n="de"><span class="icon no">&#10007;</span> <span class="muted">Auto-Alarm für alle Events</span></li>
+            <li data-i18n="de"><span class="icon no">&#10007;</span> <span class="muted">Unbegrenzte Alarme</span></li>
+            <li data-i18n="fr"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="fr"><span class="icon free">&#10003;</span> Synchro calendrier & rejoindre en un geste</li>
+            <li data-i18n="fr"><span class="icon free">&#10003;</span> AlarmKit (sonne en mode silencieux)</li>
+            <li data-i18n="fr"><span class="icon free">&#10003;</span> 2 alarmes simultanées</li>
+            <li data-i18n="fr"><span class="icon no">&#10007;</span> <span class="muted">Alarme auto pour tous les événements</span></li>
+            <li data-i18n="fr"><span class="icon no">&#10007;</span> <span class="muted">Alarmes illimitées</span></li>
             <li data-i18n="ja"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="ja"><span class="icon free">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
+            <li data-i18n="ja"><span class="icon free">&#10003;</span> AlarmKit（マナーモード対応）</li>
             <li data-i18n="ja"><span class="icon free">&#10003;</span> 同時に2つのアラーム</li>
-            <li data-i18n="ja"><span class="icon no">&mdash;</span> <span class="muted">自動アラーム</span></li>
-            <li data-i18n="ja"><span class="icon no">&mdash;</span> <span class="muted">無制限アラーム</span></li>
+            <li data-i18n="ja"><span class="icon no">&#10007;</span> <span class="muted">自動アラーム</span></li>
+            <li data-i18n="ja"><span class="icon no">&#10007;</span> <span class="muted">無制限アラーム</span></li>
           </ul>
         </div>
 
@@ -1161,24 +1939,36 @@
           <div class="plan-name">
             <span data-i18n="en">Unlimited</span>
             <span data-i18n="es">Ilimitado</span>
+            <span data-i18n="de">Unbegrenzt</span>
+            <span data-i18n="fr">Illimité</span>
             <span data-i18n="ja">アンリミテッド</span>
           </div>
           <ul class="plan-features">
             <li data-i18n="en"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="en"><span class="icon yes">&#10003;</span> Calendar sync & One-Tap Join</li>
+            <li data-i18n="en"><span class="icon yes">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
             <li data-i18n="en"><span class="icon yes">&#10003;</span> <strong>Unlimited alarms</strong></li>
             <li data-i18n="en"><span class="icon yes">&#10003;</span> Auto-alarm for all events</li>
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> Live Activity y Dynamic Island</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> Sincronización y unirse con un toque</li>
+            <li data-i18n="es"><span class="icon yes">&#10003;</span> AlarmKit (suena en modo silencio)</li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> <strong>Alarmas ilimitadas</strong></li>
             <li data-i18n="es"><span class="icon yes">&#10003;</span> Alarmas automáticas para todos los eventos</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> AlarmKit (suena en modo silencio)</li>
+            <li data-i18n="de"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="de"><span class="icon yes">&#10003;</span> Kalender-Sync & Ein-Tipp-Beitritt</li>
+            <li data-i18n="de"><span class="icon yes">&#10003;</span> AlarmKit (klingelt im Lautlos-Modus)</li>
+            <li data-i18n="de"><span class="icon yes">&#10003;</span> <strong>Unbegrenzte Alarme</strong></li>
+            <li data-i18n="de"><span class="icon yes">&#10003;</span> Auto-Alarm für alle Events</li>
+            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
+            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Synchro calendrier & rejoindre en un geste</li>
+            <li data-i18n="fr"><span class="icon yes">&#10003;</span> AlarmKit (sonne en mode silencieux)</li>
+            <li data-i18n="fr"><span class="icon yes">&#10003;</span> <strong>Alarmes illimitées</strong></li>
+            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Alarme auto pour tous les événements</li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
+            <li data-i18n="ja"><span class="icon yes">&#10003;</span> AlarmKit（マナーモード対応）</li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> <strong>無制限アラーム</strong></li>
             <li data-i18n="ja"><span class="icon yes">&#10003;</span> 全イベント自動アラーム</li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> AlarmKit（マナーモード対応）</li>
           </ul>
         </div>
       </div>
@@ -1187,6 +1977,8 @@
       <h3 class="section-title" style="font-size: 24px; margin-bottom: 32px;">
         <span data-i18n="en">Choose your plan</span>
         <span data-i18n="es">Elige tu plan</span>
+        <span data-i18n="de">Wähle deinen Plan</span>
+        <span data-i18n="fr">Choisissez votre plan</span>
         <span data-i18n="ja">プランを選択</span>
       </h3>
 
@@ -1195,16 +1987,22 @@
         <div class="price-card">
           <div class="price-badge" data-i18n="en">Popular</div>
           <div class="price-badge" data-i18n="es">Popular</div>
+          <div class="price-badge" data-i18n="de">Beliebt</div>
+          <div class="price-badge" data-i18n="fr">Populaire</div>
           <div class="price-badge" data-i18n="ja">人気</div>
           <div class="price-period">
             <span data-i18n="en">Monthly</span>
             <span data-i18n="es">Mensual</span>
+            <span data-i18n="de">Monatlich</span>
+            <span data-i18n="fr">Mensuel</span>
             <span data-i18n="ja">月額</span>
           </div>
           <div class="price-amount">&euro;4.99</div>
           <div class="price-unit">
             <span data-i18n="en">/month</span>
             <span data-i18n="es">/mes</span>
+            <span data-i18n="de">/Monat</span>
+            <span data-i18n="fr">/mois</span>
             <span data-i18n="ja">/月</span>
           </div>
         </div>
@@ -1214,17 +2012,23 @@
           <div class="price-period">
             <span data-i18n="en">Semiannual</span>
             <span data-i18n="es">Semestral</span>
+            <span data-i18n="de">Halbjährlich</span>
+            <span data-i18n="fr">Semestriel</span>
             <span data-i18n="ja">半年</span>
           </div>
           <div class="price-amount">&euro;19.99</div>
           <div class="price-unit">
             <span data-i18n="en">/6 months</span>
             <span data-i18n="es">/6 meses</span>
+            <span data-i18n="de">/6 Monate</span>
+            <span data-i18n="fr">/6 mois</span>
             <span data-i18n="ja">/6ヶ月</span>
           </div>
           <div class="price-savings">
             <span data-i18n="en">Save 33%</span>
             <span data-i18n="es">Ahorra 33%</span>
+            <span data-i18n="de">33% sparen</span>
+            <span data-i18n="fr">Économisez 33%</span>
             <span data-i18n="ja">33%お得</span>
           </div>
         </div>
@@ -1233,21 +2037,29 @@
         <div class="price-card featured">
           <div class="price-badge" data-i18n="en">Best Value</div>
           <div class="price-badge" data-i18n="es">Mejor Precio</div>
+          <div class="price-badge" data-i18n="de">Bestes Angebot</div>
+          <div class="price-badge" data-i18n="fr">Meilleure offre</div>
           <div class="price-badge" data-i18n="ja">お得</div>
           <div class="price-period">
             <span data-i18n="en">Yearly</span>
             <span data-i18n="es">Anual</span>
+            <span data-i18n="de">Jährlich</span>
+            <span data-i18n="fr">Annuel</span>
             <span data-i18n="ja">年額</span>
           </div>
           <div class="price-amount">&euro;29.99</div>
           <div class="price-unit">
             <span data-i18n="en">/year</span>
             <span data-i18n="es">/año</span>
+            <span data-i18n="de">/Jahr</span>
+            <span data-i18n="fr">/an</span>
             <span data-i18n="ja">/年</span>
           </div>
           <div class="price-savings">
             <span data-i18n="en">Save 50%</span>
             <span data-i18n="es">Ahorra 50%</span>
+            <span data-i18n="de">50% sparen</span>
+            <span data-i18n="fr">Économisez 50%</span>
             <span data-i18n="ja">50%お得</span>
           </div>
         </div>
@@ -1256,6 +2068,8 @@
       <p class="pro-footer-note">
         <span data-i18n="en">All plans auto-renew. Cancel anytime in your iPhone Settings. Managed entirely through the App Store.</span>
         <span data-i18n="es">Todos los planes se renuevan automáticamente. Cancela en cualquier momento desde Ajustes de tu iPhone. Gestionado a través del App Store.</span>
+        <span data-i18n="de">Alle Pläne verlängern sich automatisch. Jederzeit in den iPhone-Einstellungen kündbar. Verwaltet über den App Store.</span>
+        <span data-i18n="fr">Tous les plans se renouvellent automatiquement. Annulez à tout moment dans les Réglages de votre iPhone. Géré via l'App Store.</span>
         <span data-i18n="ja">全プラン自動更新。iPhoneの設定からいつでもキャンセル可能。App Storeで管理。</span>
       </p>
     </div>
@@ -1268,22 +2082,30 @@
         <a href="privacy.html">
           <span data-i18n="en">Privacy Policy</span>
           <span data-i18n="es">Política de Privacidad</span>
+          <span data-i18n="de">Datenschutz</span>
+          <span data-i18n="fr">Politique de confidentialité</span>
           <span data-i18n="ja">プライバシーポリシー</span>
         </a>
         <a href="terms.html">
           <span data-i18n="en">Terms of Service</span>
           <span data-i18n="es">Condiciones del Servicio</span>
+          <span data-i18n="de">Nutzungsbedingungen</span>
+          <span data-i18n="fr">Conditions d'utilisation</span>
           <span data-i18n="ja">利用規約</span>
         </a>
         <a href="support.html">
           <span data-i18n="en">Support</span>
           <span data-i18n="es">Soporte</span>
+          <span data-i18n="de">Support</span>
+          <span data-i18n="fr">Assistance</span>
           <span data-i18n="ja">サポート</span>
         </a>
       </div>
       <span class="footer-copy">&copy; 2025 Ismael Florit.
         <span data-i18n="en">All rights reserved.</span>
         <span data-i18n="es">Todos los derechos reservados.</span>
+        <span data-i18n="de">Alle Rechte vorbehalten.</span>
+        <span data-i18n="fr">Tous droits réservés.</span>
         <span data-i18n="ja">All rights reserved.</span>
       </span>
     </div>
@@ -1300,7 +2122,7 @@
 
     // Auto-detect language: saved preference > browser languages > timezone region > fallback EN
     (function() {
-      const supported = ['en', 'es', 'ja'];
+      const supported = ['en', 'es', 'de', 'fr', 'ja'];
       const saved = localStorage.getItem('ctm-lang');
       if (saved && supported.includes(saved)) { setLang(saved); return; }
 
@@ -1321,12 +2143,42 @@
           'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
           'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
           'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
+        const deZones = ['Europe/Berlin', 'Europe/Vienna', 'Europe/Zurich'];
+        const frZones = ['Europe/Paris', 'Europe/Brussels', 'America/Montreal',
+          'Africa/Dakar', 'Africa/Abidjan', 'Indian/Reunion'];
         const jaZones = ['Asia/Tokyo'];
         if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
+        if (deZones.some(z => tz.startsWith(z))) { setLang('de'); return; }
+        if (frZones.some(z => tz.startsWith(z))) { setLang('fr'); return; }
         if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
       } catch(e) {}
 
       setLang('en');
+    })();
+
+    // DI showcase live countdown (9:41 = 581s)
+    (function() {
+      let s = 581;
+      const appStoreUrl = 'https://apps.apple.com/app/call-to-meet/id6504754512';
+      const dlText = {en:'Download now!',es:'Descargar ahora!',de:'Jetzt laden!',fr:'Télécharger!',ja:'ダウンロード!'};
+      const els = ['di-timer-exp','di-timer-cmp','di-timer-lock','di-timer-tl'].map(id => document.getElementById(id)).filter(Boolean);
+      if (!els[0]) return;
+      function fmt(v) {
+        return Math.floor(v/60) + ':' + (v%60).toString().padStart(2,'0');
+      }
+      function showDownload() {
+        const lang = document.documentElement.getAttribute('data-lang') || 'en';
+        const text = dlText[lang] || dlText.en;
+        els.forEach(e => {
+          e.innerHTML = '<a href="'+appStoreUrl+'" target="_blank" rel="noopener" style="color:#FF453A;text-decoration:none">'+text+'</a>';
+        });
+      }
+      setInterval(() => {
+        if (s <= 0) { showDownload(); return; }
+        s--;
+        const t = fmt(s);
+        els.forEach(e => { e.textContent = t; });
+      }, 1000);
     })();
   </script>
 
