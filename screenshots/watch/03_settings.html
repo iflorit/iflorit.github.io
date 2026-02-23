@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Watch - Settings</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #000; }
+:root {
+  --bg: #000;
+  --card-bg: rgba(255,255,255,0.08);
+  --card-border: rgba(255,255,255,0.12);
+  --text: #fff;
+  --text-secondary: rgba(255,255,255,0.5);
+  --text-tertiary: rgba(255,255,255,0.3);
+  --blue: #0A84FF;
+  --green: #30D158;
+  --orange: #FF9F0A;
+  --toggle-on: var(--green);
+  --toggle-off: rgba(255,255,255,0.15);
+}
+body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'SF Pro Display', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg); color: var(--text);
+}
+.screen { width: 100%; height: 100%; position: relative; overflow: hidden; padding: 12% 5% 6%; }
+
+/* Back nav */
+.nav { display: flex; align-items: center; gap: 2vw; margin-bottom: 5%; }
+.nav-back svg { width: 3.5vw; height: 3.5vw; fill: var(--blue); }
+.nav-label { font-size: 3.5vw; color: var(--blue); }
+
+/* Section header */
+.section-header {
+  font-size: 3.2vw; font-weight: 600; color: var(--text-secondary);
+  text-transform: uppercase; letter-spacing: 0.06em;
+  padding: 2vw 2vw 1.5vw;
+}
+
+/* Settings group */
+.group {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 4vw;
+  margin-bottom: 4%;
+  overflow: hidden;
+}
+.row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 3.5vw 4vw;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+.row:last-child { border-bottom: none; }
+.row-label { font-size: 3.5vw; font-weight: 500; }
+.row-desc {
+  font-size: 2.8vw; color: var(--text-tertiary);
+  margin-top: 0.5vw;
+}
+.row-left { flex: 1; min-width: 0; }
+
+/* Toggle switch */
+.toggle {
+  width: 12vw; height: 7vw; border-radius: 3.5vw; position: relative;
+  flex-shrink: 0; margin-left: 3vw;
+}
+.toggle.on { background: var(--toggle-on); }
+.toggle.off { background: var(--toggle-off); }
+.toggle-knob {
+  position: absolute; top: 0.7vw;
+  width: 5.6vw; height: 5.6vw; border-radius: 50%; background: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+}
+.toggle.on .toggle-knob { right: 0.7vw; }
+.toggle.off .toggle-knob { left: 0.7vw; }
+
+/* Premium badge */
+.premium-badge {
+  display: inline-flex; align-items: center; gap: 1.5vw;
+  background: rgba(255,159,10,0.15);
+  border: 1px solid rgba(255,159,10,0.3);
+  border-radius: 2.5vw; padding: 1.5vw 3vw;
+  font-size: 3vw; font-weight: 600; color: var(--orange);
+}
+.premium-badge svg { width: 3.5vw; height: 3.5vw; fill: var(--orange); }
+
+/* Version */
+.version {
+  text-align: center; font-size: 2.8vw; color: var(--text-tertiary);
+  margin-top: 3%;
+}
+
+/* i18n */
+[data-i18n] { display: none; }
+[data-lang="en"] [data-i18n="en"],
+[data-lang="es"] [data-i18n="es"],
+[data-lang="ja"] [data-i18n="ja"],
+[data-lang="de"] [data-i18n="de"],
+[data-lang="fr"] [data-i18n="fr"] { display: initial; }
+</style>
+</head>
+<body data-lang="en">
+<div class="screen">
+  <!-- Nav -->
+  <div class="nav">
+    <span class="nav-back"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></span>
+    <span class="nav-label">
+      <span data-i18n="en">Settings</span>
+      <span data-i18n="es">Ajustes</span>
+      <span data-i18n="ja">設定</span>
+      <span data-i18n="de">Einstellungen</span>
+      <span data-i18n="fr">Réglages</span>
+    </span>
+  </div>
+
+  <!-- Sync section -->
+  <div class="section-header">
+    <span data-i18n="en">Sync</span>
+    <span data-i18n="es">Sincronización</span>
+    <span data-i18n="ja">同期</span>
+    <span data-i18n="de">Synchronisation</span>
+    <span data-i18n="fr">Synchronisation</span>
+  </div>
+  <div class="group">
+    <div class="row">
+      <div class="row-left">
+        <div class="row-label">
+          <span data-i18n="en">Mirror iPhone Settings</span>
+          <span data-i18n="es">Duplicar ajustes iPhone</span>
+          <span data-i18n="ja">iPhoneの設定をミラー</span>
+          <span data-i18n="de">iPhone-Einstellungen spiegeln</span>
+          <span data-i18n="fr">Dupliquer réglages iPhone</span>
+        </div>
+        <div class="row-desc">
+          <span data-i18n="en">Sync filters from iPhone</span>
+          <span data-i18n="es">Sincronizar filtros del iPhone</span>
+          <span data-i18n="ja">iPhoneからフィルターを同期</span>
+          <span data-i18n="de">Filter vom iPhone synchronisieren</span>
+          <span data-i18n="fr">Synchroniser les filtres iPhone</span>
+        </div>
+      </div>
+      <div class="toggle on"><div class="toggle-knob"></div></div>
+    </div>
+  </div>
+
+  <!-- Events section -->
+  <div class="section-header">
+    <span data-i18n="en">Events</span>
+    <span data-i18n="es">Eventos</span>
+    <span data-i18n="ja">イベント</span>
+    <span data-i18n="de">Termine</span>
+    <span data-i18n="fr">Événements</span>
+  </div>
+  <div class="group">
+    <div class="row">
+      <div class="row-left">
+        <div class="row-label">
+          <span data-i18n="en">Hide Past Events</span>
+          <span data-i18n="es">Ocultar eventos pasados</span>
+          <span data-i18n="ja">過去のイベントを非表示</span>
+          <span data-i18n="de">Vergangene ausblenden</span>
+          <span data-i18n="fr">Masquer événements passés</span>
+        </div>
+      </div>
+      <div class="toggle on"><div class="toggle-knob"></div></div>
+    </div>
+    <div class="row">
+      <div class="row-left">
+        <div class="row-label">
+          <span data-i18n="en">Show All-Day Events</span>
+          <span data-i18n="es">Mostrar todo el día</span>
+          <span data-i18n="ja">終日イベントを表示</span>
+          <span data-i18n="de">Ganztägige anzeigen</span>
+          <span data-i18n="fr">Événements journée entière</span>
+        </div>
+      </div>
+      <div class="toggle off"><div class="toggle-knob"></div></div>
+    </div>
+  </div>
+
+  <!-- Calls section -->
+  <div class="section-header">
+    <span data-i18n="en">Calls</span>
+    <span data-i18n="es">Llamadas</span>
+    <span data-i18n="ja">通話</span>
+    <span data-i18n="de">Anrufe</span>
+    <span data-i18n="fr">Appels</span>
+  </div>
+  <div class="group">
+    <div class="row">
+      <div class="row-left">
+        <div class="row-label">
+          <span data-i18n="en">Prioritize Phone</span>
+          <span data-i18n="es">Priorizar teléfono</span>
+          <span data-i18n="ja">電話を優先</span>
+          <span data-i18n="de">Telefon priorisieren</span>
+          <span data-i18n="fr">Prioriser téléphone</span>
+        </div>
+      </div>
+      <div class="toggle on"><div class="toggle-knob"></div></div>
+    </div>
+  </div>
+
+  <!-- About -->
+  <div class="section-header">
+    <span data-i18n="en">About</span>
+    <span data-i18n="es">Acerca de</span>
+    <span data-i18n="ja">アプリについて</span>
+    <span data-i18n="de">Über</span>
+    <span data-i18n="fr">À propos</span>
+  </div>
+  <div class="group">
+    <div class="row">
+      <div class="row-left">
+        <div class="premium-badge">
+          <svg viewBox="0 0 24 24"><path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/></svg>
+          <span>Pro</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="version">v1.5.1 (42)</div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const lang = params.get('lang') || 'en';
+document.body.setAttribute('data-lang', lang);
+</script>
+</body>
+</html>

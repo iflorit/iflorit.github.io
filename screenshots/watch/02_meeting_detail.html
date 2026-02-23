@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Watch - Meeting Detail</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #000; }
+:root {
+  --bg: #000;
+  --card-bg: rgba(255,255,255,0.08);
+  --card-border: rgba(255,255,255,0.12);
+  --text: #fff;
+  --text-secondary: rgba(255,255,255,0.5);
+  --text-tertiary: rgba(255,255,255,0.3);
+  --blue: #0A84FF;
+  --green: #30D158;
+  --red: #FF453A;
+  --orange: #FF9F0A;
+}
+body {
+  width: 100vw; height: 100vh; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Rounded', 'SF Pro Display', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: var(--bg); color: var(--text);
+}
+.screen { width: 100%; height: 100%; position: relative; overflow: hidden; padding: 12% 5% 6%; }
+
+/* Back nav */
+.nav { display: flex; align-items: center; gap: 2vw; margin-bottom: 5%; }
+.nav-back svg { width: 3.5vw; height: 3.5vw; fill: var(--blue); }
+.nav-label { font-size: 3.5vw; color: var(--blue); }
+
+/* Glass cards */
+.glass {
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 4vw; padding: 4vw;
+  margin-bottom: 3.5%;
+}
+
+/* Header card — blue left accent bar */
+.header-card {
+  position: relative;
+  overflow: hidden;
+}
+.header-card::before {
+  content: '';
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 1vw; border-radius: 4vw 0 0 4vw;
+  background: var(--blue);
+}
+.header-title {
+  font-size: 4.8vw; font-weight: 700; line-height: 1.2;
+  margin-bottom: 2vw; padding-left: 2vw;
+}
+.header-meta {
+  display: flex; align-items: center; gap: 2vw;
+  font-size: 3.2vw; color: var(--text-secondary);
+  padding-left: 2vw;
+}
+.header-meta svg { width: 3.2vw; height: 3.2vw; fill: var(--text-secondary); }
+
+/* Call button */
+.btn-call {
+  display: flex; align-items: center; justify-content: center; gap: 2vw;
+  padding: 3.5vw; border-radius: 3.5vw; margin-bottom: 3%;
+  font-size: 4vw; font-weight: 600;
+  border: none; width: 100%;
+  background: var(--green); color: #fff;
+}
+.btn-call svg { width: 4vw; height: 4vw; fill: currentColor; }
+
+/* Notes card */
+.notes-header {
+  display: flex; align-items: center; gap: 2vw;
+  font-size: 3vw; font-weight: 600; color: var(--text-secondary);
+  margin-bottom: 2vw;
+}
+.notes-header svg { width: 3vw; height: 3vw; fill: var(--text-secondary); }
+.notes-text {
+  font-size: 3vw; line-height: 1.4; color: var(--text);
+  opacity: 0.85;
+}
+
+/* Dismiss alarm button */
+.btn-dismiss {
+  display: flex; align-items: center; justify-content: center; gap: 2vw;
+  padding: 2.8vw; border-radius: 3vw; margin-bottom: 2%;
+  font-size: 3.4vw; font-weight: 600;
+  width: 100%;
+  background: transparent; color: var(--orange);
+  border: 1.5px solid rgba(255,159,10,0.4);
+}
+.btn-dismiss svg { width: 3vw; height: 3vw; fill: currentColor; }
+
+/* i18n */
+[data-i18n] { display: none; }
+[data-lang="en"] [data-i18n="en"],
+[data-lang="es"] [data-i18n="es"],
+[data-lang="ja"] [data-i18n="ja"],
+[data-lang="de"] [data-i18n="de"],
+[data-lang="fr"] [data-i18n="fr"] { display: initial; }
+</style>
+</head>
+<body data-lang="en">
+<div class="screen">
+  <!-- Nav -->
+  <div class="nav">
+    <span class="nav-back"><svg viewBox="0 0 24 24"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg></span>
+    <span class="nav-label">
+      <span data-i18n="en">Back</span>
+      <span data-i18n="es">Atrás</span>
+      <span data-i18n="ja">戻る</span>
+      <span data-i18n="de">Zurück</span>
+      <span data-i18n="fr">Retour</span>
+    </span>
+  </div>
+
+  <!-- Header card with color bar -->
+  <div class="glass header-card">
+    <div class="header-title">
+      <span data-i18n="en">Product Review</span>
+      <span data-i18n="es">Revisión de Producto</span>
+      <span data-i18n="ja">プロダクトレビュー</span>
+      <span data-i18n="de">Produktbewertung</span>
+      <span data-i18n="fr">Revue Produit</span>
+    </div>
+    <div class="header-meta">
+      <svg viewBox="0 0 24 24"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+      <span>09:30 → 10:00</span>
+    </div>
+  </div>
+
+  <!-- Call button (phone only) -->
+  <div class="btn-call">
+    <svg viewBox="0 0 24 24"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
+    <span>
+      <span data-i18n="en">Call</span>
+      <span data-i18n="es">Llamar</span>
+      <span data-i18n="ja">通話</span>
+      <span data-i18n="de">Anrufen</span>
+      <span data-i18n="fr">Appeler</span>
+    </span>
+  </div>
+
+  <!-- Notes card -->
+  <div class="glass">
+    <div class="notes-header">
+      <svg viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>
+      <span>
+        <span data-i18n="en">Notes</span>
+        <span data-i18n="es">Notas</span>
+        <span data-i18n="ja">メモ</span>
+        <span data-i18n="de">Notizen</span>
+        <span data-i18n="fr">Notes</span>
+      </span>
+    </div>
+    <div class="notes-text">
+      <span data-i18n="en">Discuss Q4 design system updates and component library.</span>
+      <span data-i18n="es">Revisar actualizaciones del sistema de diseño del Q4.</span>
+      <span data-i18n="ja">Q4デザインシステムの更新について議論。</span>
+      <span data-i18n="de">Besprechung der Q4-Designsystem-Updates.</span>
+      <span data-i18n="fr">Discuter des mises à jour du système de design Q4.</span>
+    </div>
+  </div>
+
+  <!-- Dismiss alarm button -->
+  <div class="btn-dismiss">
+    <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4c0 1.1.89 2 2 2zm6-6v-5c0-3.07-1.64-5.64-4.5-6.32V4c0-.83-.67-1.5-1.5-1.5s-1.5.67-1.5 1.5v.68C7.63 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2zm-3.5-6.2l-1.28.76L12 9.2l-1.22 1.36-1.28-.76.42 1.42-1.18.88h1.46l.42 1.42.38-1.42h1.46l-1.18-.88.42-1.42z"/></svg>
+    <span>
+      <span data-i18n="en">Dismiss Alarm</span>
+      <span data-i18n="es">Descartar Alarma</span>
+      <span data-i18n="ja">アラーム解除</span>
+      <span data-i18n="de">Alarm verwerfen</span>
+      <span data-i18n="fr">Ignorer l'alarme</span>
+    </span>
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const lang = params.get('lang') || 'en';
+document.body.setAttribute('data-lang', lang);
+</script>
+</body>
+</html>
