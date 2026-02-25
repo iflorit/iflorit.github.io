@@ -6,6 +6,14 @@
   <title>Support — Call to Meet</title>
   <meta name="theme-color" content="#0a0a0f">
   <link rel="icon" type="image/png" href="app-icon.png">
+  <script>
+    (function(){
+      var s = localStorage.getItem('ctm-theme') || 'auto';
+      var dark = s === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : s === 'dark';
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme-setting', s);
+    })();
+  </script>
   <style>
     :root {
       --bg: #0a0a0f;
@@ -17,6 +25,16 @@
       --accent-glow: rgba(124, 92, 252, 0.15);
       --border: rgba(255, 255, 255, 0.06);
       --radius: 16px;
+    }
+    [data-theme="light"] {
+      --bg: #f5f5f7;
+      --bg-card: #ffffff;
+      --text: #1d1d1f;
+      --text-muted: #6e6e73;
+      --accent: #6840e0;
+      --accent-light: #7c5cfc;
+      --accent-glow: rgba(104, 64, 224, 0.10);
+      --border: rgba(0, 0, 0, 0.08);
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
@@ -48,6 +66,14 @@
     .lang-btn:hover, .lang-btn.active {
       background: rgba(124,92,252,0.1); border-color: var(--accent); color: var(--accent-light);
     }
+    .theme-toggle {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-muted); width: 30px; height: 30px; border-radius: 6px;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; margin-left: 4px; flex-shrink: 0;
+    }
+    .theme-toggle:hover { background: rgba(124,92,252,0.1); border-color: var(--accent); color: var(--accent-light); }
+    .theme-toggle svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .content { padding-bottom: 80px; }
     h1 { font-size: 32px; font-weight: 700; margin-bottom: 32px; }
     h2 { font-size: 20px; font-weight: 600; margin: 32px 0 12px; color: var(--accent-light); }
@@ -87,6 +113,7 @@
         <button class="lang-btn active" onclick="setLang('en')">EN</button>
         <button class="lang-btn" onclick="setLang('es')">ES</button>
         <button class="lang-btn" onclick="setLang('ja')">JA</button>
+        <button class="theme-toggle" onclick="cycleTheme()" id="theme-toggle" aria-label="Toggle theme"></button>
       </div>
     </div>
   </nav>
@@ -208,6 +235,34 @@
   </div>
 
   <script>
+    var themeIcons = {
+      auto: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/><line x1="1" y1="23" x2="23" y2="1" stroke-dasharray="3 3" opacity="0.5"/></svg>',
+      light: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/></svg>',
+      dark: '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>'
+    };
+    function applyTheme(setting) {
+      var dark = setting === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : setting === 'dark';
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+      document.documentElement.setAttribute('data-theme-setting', setting);
+      var meta = document.querySelector('meta[name="theme-color"]');
+      if (meta) meta.setAttribute('content', dark ? '#0a0a0f' : '#f5f5f7');
+      var btn = document.getElementById('theme-toggle');
+      if (btn) btn.innerHTML = themeIcons[setting] || themeIcons.auto;
+    }
+    function cycleTheme() {
+      var order = ['auto', 'light', 'dark'];
+      var current = document.documentElement.getAttribute('data-theme-setting') || 'auto';
+      var next = order[(order.indexOf(current) + 1) % order.length];
+      localStorage.setItem('ctm-theme', next);
+      applyTheme(next);
+    }
+    (function() {
+      applyTheme(localStorage.getItem('ctm-theme') || 'auto');
+      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
+        if (document.documentElement.getAttribute('data-theme-setting') === 'auto') applyTheme('auto');
+      });
+    })();
+
     function setLang(lang) {
       document.documentElement.setAttribute('data-lang', lang);
       document.querySelectorAll('.lang-btn').forEach(b => b.classList.toggle('active', b.textContent.trim() === lang.toUpperCase()));
