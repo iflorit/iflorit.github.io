@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=2064">
+<title>iPad Sidebar + Settings</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #000; }
+body {
+  width: 2064px; height: 2752px; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #000;
+  color: #fff;
+}
+
+.screen { width: 2064px; height: 2752px; position: relative; overflow: hidden; background: #000; display: flex; }
+
+/* iPad status bar */
+.status-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 80px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 60px 0; z-index: 10; color: #fff;
+}
+.sb-time { font-size: 40px; font-weight: 600; }
+.sb-right { display: flex; align-items: center; gap: 14px; }
+.sb-right svg { fill: #fff; }
+
+/* Two-column layout */
+.sidebar {
+  width: 640px; height: 2752px; flex-shrink: 0;
+  background: rgba(30,30,34,0.95);
+  padding-top: 110px;
+  overflow: hidden;
+  position: relative;
+}
+.separator {
+  width: 1px; height: 2752px; flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+}
+.detail {
+  flex: 1; height: 2752px;
+  background: #000;
+  padding-top: 110px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar: Toolbar */
+.sidebar-toolbar {
+  padding: 0 28px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sidebar-title { font-size: 42px; font-weight: 700; color: #fff; }
+.toolbar-icon {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  border-radius: 22px; background: rgba(255,255,255,0.08);
+}
+.toolbar-icon svg { width: 22px; height: 22px; fill: #0A84FF; }
+
+/* Sidebar: Week strip (compact) */
+.week-strip {
+  margin: 0 20px 20px;
+  background: rgba(255,255,255,0.05); border-radius: 28px; padding: 18px 12px 14px;
+  display: flex; justify-content: space-around; text-align: center;
+}
+.day { font-size: 20px; color: rgba(255,255,255,0.35); font-weight: 500; line-height: 1; padding: 6px 0; }
+.day-num { font-size: 26px; font-weight: 600; color: rgba(255,255,255,0.5); margin-top: 6px; }
+.day.active .day-num { color: #0A84FF; }
+.day-dots { display: flex; gap: 5px; justify-content: center; margin-top: 6px; min-height: 12px; }
+.day-dot { width: 8px; height: 8px; border-radius: 50%; }
+.day-dot.blue { background: #0A84FF; }
+.day-dot.green { background: #30D158; }
+.day-dot.red { background: #FF453A; }
+.day-dot.orange { background: #FF9F0A; }
+
+/* Sidebar: Event cards (compact) */
+.sidebar-events { padding: 0 16px; }
+.s-card {
+  background: rgba(255,255,255,0.04); border-radius: 28px;
+  padding: 22px 24px; margin-bottom: 14px; position: relative;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.s-card.highlight {
+  background: rgba(80,120,20,0.15);
+  border: 3px solid rgba(120,180,30,0.4);
+}
+.s-cbar { width: 6px; border-radius: 4px; flex-shrink: 0; align-self: stretch; min-height: 56px; }
+.s-cbar.blue { background: #0A84FF; }
+.s-cbar.green { background: #30D158; }
+.s-cbar.red { background: #FF453A; }
+.s-cbar.orange { background: #FF9F0A; }
+.s-body { flex: 1; min-width: 0; }
+.s-title { font-size: 28px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-sub { font-size: 22px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+.s-icons { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.s-icon-cam {
+  width: 44px; height: 44px; background: rgba(10,132,255,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.s-icon-cam svg { width: 22px; height: 22px; fill: #fff; }
+.s-alarm-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #FF9F0A; border-radius: 20px; padding: 4px 14px;
+  font-size: 18px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 8px;
+}
+.s-alarm-badge svg { width: 16px; height: 16px; fill: currentColor; }
+.s-alarm-badge.pending {
+  background: transparent; border: 2px solid rgba(255,159,10,0.5); color: #FF9F0A;
+}
+.s-timer { font-size: 26px; font-weight: 800; color: #30D158; font-variant-numeric: tabular-nums; margin-top: 6px; }
+
+/* Detail pane: Settings */
+.detail-content { padding: 20px 80px; }
+.detail-header { margin-bottom: 40px; }
+.detail-settings-title { font-size: 58px; font-weight: 700; color: #fff; }
+
+/* Settings groups */
+.settings-group { margin-bottom: 32px; }
+.settings-group-header {
+  font-size: 26px; font-weight: 600; color: rgba(255,255,255,0.4);
+  text-transform: uppercase; letter-spacing: 2px;
+  padding: 0 8px 16px;
+}
+.settings-card {
+  background: rgba(255,255,255,0.05); border-radius: 28px;
+  overflow: hidden;
+}
+.settings-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 30px 36px;
+}
+.settings-row + .settings-row {
+  border-top: 1px solid rgba(255,255,255,0.06);
+}
+.settings-row-left { display: flex; align-items: center; gap: 20px; flex: 1; }
+.settings-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.settings-icon svg { width: 26px; height: 26px; fill: #fff; }
+.settings-icon.orange { background: #FF9F0A; }
+.settings-icon.blue { background: #0A84FF; }
+.settings-icon.green { background: #30D158; }
+.settings-icon.purple { background: #AF52DE; }
+.settings-icon.red { background: #FF453A; }
+.settings-icon.teal { background: #5AC8FA; }
+.settings-label { font-size: 30px; color: #fff; font-weight: 500; }
+.settings-sublabel { font-size: 22px; color: rgba(255,255,255,0.35); margin-top: 2px; }
+
+/* iOS-style toggle */
+.toggle {
+  width: 84px; height: 52px; border-radius: 26px; position: relative; flex-shrink: 0;
+}
+.toggle.on { background: #30D158; }
+.toggle.off { background: rgba(255,255,255,0.15); }
+.toggle-circle {
+  width: 44px; height: 44px; border-radius: 50%; background: #fff;
+  position: absolute; top: 4px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+}
+.toggle.on .toggle-circle { right: 4px; }
+.toggle.off .toggle-circle { left: 4px; }
+
+/* PRO badge */
+.pro-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, #7c5cfc, #c084fc); border-radius: 16px; padding: 8px 24px;
+  font-size: 24px; font-weight: 800; color: #fff; letter-spacing: 2px;
+}
+.pro-status { font-size: 26px; color: #30D158; font-weight: 600; }
+
+/* Chevron */
+.chevron {
+  width: 24px; height: 24px; flex-shrink: 0; opacity: 0.3;
+}
+.chevron svg { fill: #fff; width: 24px; height: 24px; }
+
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="sb-time">9:41</span>
+    <span></span>
+    <div class="sb-right">
+      <svg width="50" height="36" viewBox="0 0 20 14"><rect x="0" y="10" width="3.5" height="4" rx="0.75"/><rect x="5.5" y="7" width="3.5" height="7" rx="0.75"/><rect x="11" y="3.5" width="3.5" height="10.5" rx="0.75"/><rect x="16.5" y="0" width="3.5" height="14" rx="0.75"/></svg>
+      <svg width="34" height="36" viewBox="0 0 16 21"><path d="M8 0C4.44 0 1.2 1.38 0 3.3l1.6 2.1C2.68 3.88 5.12 2.8 8 2.8s5.32 1.08 6.4 2.6L16 3.3C14.8 1.38 11.56 0 8 0zm0 5.6c-2.14 0-4.04.82-5 2.06l1.6 2.1c.6-.84 1.96-1.36 3.4-1.36s2.8.52 3.4 1.36l1.6-2.1C12.04 6.42 10.14 5.6 8 5.6zm0 5.6c-1.14 0-2.14.44-2.7 1.12L8 15.2l2.7-2.88C10.14 11.64 9.14 11.2 8 11.2z" fill="#fff"/></svg>
+      <svg width="62" height="36" viewBox="0 0 31 14"><rect x="0" y="0.5" width="27" height="13" rx="3.5" fill="none" stroke="#fff" stroke-width="1.3" opacity="0.4"/><rect x="2.5" y="3" width="18" height="8" rx="1.5" fill="#fff"/><path d="M28.5 4.5a2 2 0 010 5" fill="#fff" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-toolbar">
+      <span class="sidebar-title" id="sidebar-title">Meetings</span>
+      <div class="toolbar-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      </div>
+    </div>
+
+    <div class="week-strip">
+      <div class="day active" id="d0"><span id="d0l">Fri</span><div class="day-num">18</div><div class="day-dots"><span class="day-dot blue"></span><span class="day-dot green"></span><span class="day-dot red"></span></div></div>
+      <div class="day" id="d1"><span id="d1l">Sat</span><div class="day-num">19</div><div class="day-dots"></div></div>
+      <div class="day" id="d2"><span id="d2l">Sun</span><div class="day-num">20</div><div class="day-dots"><span class="day-dot red"></span></div></div>
+      <div class="day" id="d3"><span id="d3l">Mon</span><div class="day-num">21</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+      <div class="day" id="d4"><span id="d4l">Tue</span><div class="day-num">22</div><div class="day-dots"><span class="day-dot blue"></span><span class="day-dot orange"></span></div></div>
+      <div class="day" id="d5"><span id="d5l">Wed</span><div class="day-num">23</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+      <div class="day" id="d6"><span id="d6l">Thu</span><div class="day-num">24</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+    </div>
+
+    <div class="sidebar-events">
+      <!-- Event 1: Product Review -->
+      <div class="s-card highlight">
+        <div class="s-cbar blue"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev1t">Product Review</div>
+          <div class="s-sub">10:00 - 11:30</div>
+          <div class="s-alarm-badge"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+          <div class="s-timer">18:22</div>
+        </div>
+        <div class="s-icons">
+          <div class="s-icon-cam"><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Event 2: Lunch with Sarah -->
+      <div class="s-card">
+        <div class="s-cbar green"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev2t">Lunch with Sarah</div>
+          <div class="s-sub">13:00 - 14:00</div>
+          <div class="s-alarm-badge pending"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+        </div>
+      </div>
+
+      <!-- Event 3: HIIT Session -->
+      <div class="s-card">
+        <div class="s-cbar red"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev3t">HIIT Session</div>
+          <div class="s-sub">16:00 - 17:30</div>
+          <div class="s-alarm-badge"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+        </div>
+      </div>
+
+      <!-- Event 4: Team Standup -->
+      <div class="s-card">
+        <div class="s-cbar blue"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev4t">Team Standup</div>
+          <div class="s-sub">18:00 - 18:30</div>
+        </div>
+        <div class="s-icons">
+          <div class="s-icon-cam"><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Separator -->
+  <div class="separator"></div>
+
+  <!-- Detail pane: Settings -->
+  <div class="detail">
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-settings-title" id="settings-title">Settings</div>
+      </div>
+
+      <!-- Alarm Settings -->
+      <div class="settings-group">
+        <div class="settings-group-header" id="grp-alarm">Alarm Settings</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon orange">
+                <svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-auto">Auto-alarm for meetings</div>
+                <div class="settings-sublabel" id="sub-auto">Automatically set alarms for upcoming events</div>
+              </div>
+            </div>
+            <div class="toggle on"><div class="toggle-circle"></div></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon blue">
+                <svg viewBox="0 0 24 24"><path d="M3 9v6h4l5 5V4L7 9H3zm13.5 3c0-1.77-1.02-3.29-2.5-4.03v8.05c1.48-.73 2.5-2.25 2.5-4.02zM14 3.23v2.06c2.89.86 5 3.54 5 6.71s-2.11 5.85-5 6.71v2.06c4.01-.91 7-4.49 7-8.77s-2.99-7.86-7-8.77z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-sound">Sound before alarm</div>
+                <div class="settings-sublabel" id="sub-sound">Play a tone 30 seconds before the alarm fires</div>
+              </div>
+            </div>
+            <div class="toggle on"><div class="toggle-circle"></div></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon red">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-end">Event end alarms</div>
+                <div class="settings-sublabel" id="sub-end">Get alerted when events are about to end</div>
+              </div>
+            </div>
+            <div class="toggle off"><div class="toggle-circle"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Display -->
+      <div class="settings-group">
+        <div class="settings-group-header" id="grp-display">Display</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon teal">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-timer">Show countdown timer</div>
+                <div class="settings-sublabel" id="sub-timer">Display time remaining in event list</div>
+              </div>
+            </div>
+            <div class="toggle on"><div class="toggle-circle"></div></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon purple">
+                <svg viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9c.83 0 1.5-.67 1.5-1.5 0-.39-.15-.74-.39-1.01-.23-.26-.38-.61-.38-1 0-.83.67-1.5 1.5-1.5H16c2.76 0 5-2.24 5-5 0-4.42-4.03-8-9-8zm-5.5 9c-.83 0-1.5-.67-1.5-1.5S5.67 9 6.5 9 8 9.67 8 10.5 7.33 12 6.5 12zm3-4C8.67 8 8 7.33 8 6.5S8.67 5 9.5 5s1.5.67 1.5 1.5S10.33 8 9.5 8zm5 0c-.83 0-1.5-.67-1.5-1.5S13.67 5 14.5 5s1.5.67 1.5 1.5S15.33 8 14.5 8zm3 4c-.83 0-1.5-.67-1.5-1.5S16.67 9 17.5 9s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-focus">Focus Mode filtering</div>
+                <div class="settings-sublabel" id="sub-focus">Hide events from non-focused calendars</div>
+              </div>
+            </div>
+            <div class="toggle on"><div class="toggle-circle"></div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscription -->
+      <div class="settings-group">
+        <div class="settings-group-header" id="grp-sub">Subscription</div>
+        <div class="settings-card">
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon green">
+                <svg viewBox="0 0 24 24"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm-2 16l-4-4 1.41-1.41L10 14.17l6.59-6.59L18 9l-8 8z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-plan">Current Plan</div>
+                <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px;">
+                  <span class="pro-badge">PRO</span>
+                  <span class="pro-status" id="pro-status">Active</span>
+                </div>
+              </div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+          </div>
+          <div class="settings-row">
+            <div class="settings-row-left">
+              <div class="settings-icon green">
+                <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 3c1.93 0 3.5 1.57 3.5 3.5S13.93 13 12 13s-3.5-1.57-3.5-3.5S10.07 6 12 6zm7 13H5v-.23c0-.62.28-1.2.76-1.58C7.47 15.82 9.64 15 12 15s4.53.82 6.24 2.19c.48.38.76.97.76 1.58V19z"/></svg>
+              </div>
+              <div>
+                <div class="settings-label" id="lbl-alarms">Alarm Credits</div>
+                <div class="settings-sublabel" id="sub-alarms">Unlimited</div>
+              </div>
+            </div>
+            <div class="chevron"><svg viewBox="0 0 24 24"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const i18n = {
+  en: {
+    sidebarTitle: 'Meetings',
+    days: ['Fri','Sat','Sun','Mon','Tue','Wed','Thu'],
+    ev1: 'Product Review', ev2: 'Lunch with Sarah', ev3: 'HIIT Session', ev4: 'Team Standup',
+    settingsTitle: 'Settings',
+    grpAlarm: 'Alarm Settings', grpDisplay: 'Display', grpSub: 'Subscription',
+    lblAuto: 'Auto-alarm for meetings', subAuto: 'Automatically set alarms for upcoming events',
+    lblSound: 'Sound before alarm', subSound: 'Play a tone 30 seconds before the alarm fires',
+    lblEnd: 'Event end alarms', subEnd: 'Get alerted when events are about to end',
+    lblTimer: 'Show countdown timer', subTimer: 'Display time remaining in event list',
+    lblFocus: 'Focus Mode filtering', subFocus: 'Hide events from non-focused calendars',
+    lblPlan: 'Current Plan', proStatus: 'Active',
+    lblAlarms: 'Alarm Credits', subAlarms: 'Unlimited'
+  },
+  es: {
+    sidebarTitle: 'Reuniones',
+    days: ['Vie','S\u00e1b','Dom','Lun','Mar','Mi\u00e9','Jue'],
+    ev1: 'Revisi\u00f3n de Producto', ev2: 'Comida con Sara', ev3: 'Sesi\u00f3n HIIT', ev4: 'Standup del equipo',
+    settingsTitle: 'Ajustes',
+    grpAlarm: 'Ajustes de alarma', grpDisplay: 'Pantalla', grpSub: 'Suscripci\u00f3n',
+    lblAuto: 'Auto-alarma para reuniones', subAuto: 'Configurar alarmas autom\u00e1ticamente para pr\u00f3ximos eventos',
+    lblSound: 'Sonido antes de la alarma', subSound: 'Reproducir un tono 30 segundos antes de que suene la alarma',
+    lblEnd: 'Alarmas de fin de evento', subEnd: 'Recibir alerta cuando los eventos est\u00e9n por terminar',
+    lblTimer: 'Mostrar temporizador', subTimer: 'Mostrar tiempo restante en la lista de eventos',
+    lblFocus: 'Filtrado de Modo Concentraci\u00f3n', subFocus: 'Ocultar eventos de calendarios no enfocados',
+    lblPlan: 'Plan actual', proStatus: 'Activo',
+    lblAlarms: 'Cr\u00e9ditos de alarma', subAlarms: 'Ilimitados'
+  },
+  ja: {
+    sidebarTitle: '\u30df\u30fc\u30c6\u30a3\u30f3\u30b0',
+    days: ['\u91d1','\u571f','\u65e5','\u6708','\u706b','\u6c34','\u6728'],
+    ev1: '\u88fd\u54c1\u30ec\u30d3\u30e5\u30fc', ev2: '\u30b5\u30e9\u3068\u30e9\u30f3\u30c1', ev3: 'HIIT\u30bb\u30c3\u30b7\u30e7\u30f3', ev4: '\u30c1\u30fc\u30e0\u30b9\u30bf\u30f3\u30c9\u30a2\u30c3\u30d7',
+    settingsTitle: '\u8a2d\u5b9a',
+    grpAlarm: '\u30a2\u30e9\u30fc\u30e0\u8a2d\u5b9a', grpDisplay: '\u8868\u793a', grpSub: '\u30b5\u30d6\u30b9\u30af\u30ea\u30d7\u30b7\u30e7\u30f3',
+    lblAuto: '\u4f1a\u8b70\u306e\u81ea\u52d5\u30a2\u30e9\u30fc\u30e0', subAuto: '\u4eca\u5f8c\u306e\u30a4\u30d9\u30f3\u30c8\u306b\u81ea\u52d5\u7684\u306b\u30a2\u30e9\u30fc\u30e0\u3092\u8a2d\u5b9a',
+    lblSound: '\u30a2\u30e9\u30fc\u30e0\u524d\u306e\u30b5\u30a6\u30f3\u30c9', subSound: '\u30a2\u30e9\u30fc\u30e0\u306e30\u79d2\u524d\u306b\u30c8\u30fc\u30f3\u3092\u518d\u751f',
+    lblEnd: '\u30a4\u30d9\u30f3\u30c8\u7d42\u4e86\u30a2\u30e9\u30fc\u30e0', subEnd: '\u30a4\u30d9\u30f3\u30c8\u304c\u7d42\u4e86\u9593\u8fd1\u306b\u306a\u3063\u305f\u3089\u901a\u77e5',
+    lblTimer: '\u30ab\u30a6\u30f3\u30c8\u30c0\u30a6\u30f3\u30bf\u30a4\u30de\u30fc\u3092\u8868\u793a', subTimer: '\u30a4\u30d9\u30f3\u30c8\u30ea\u30b9\u30c8\u306b\u6b8b\u308a\u6642\u9593\u3092\u8868\u793a',
+    lblFocus: '\u96c6\u4e2d\u30e2\u30fc\u30c9\u30d5\u30a3\u30eb\u30bf\u30fc', subFocus: '\u975e\u96c6\u4e2d\u30ab\u30ec\u30f3\u30c0\u30fc\u306e\u30a4\u30d9\u30f3\u30c8\u3092\u975e\u8868\u793a',
+    lblPlan: '\u73fe\u5728\u306e\u30d7\u30e9\u30f3', proStatus: '\u6709\u52b9',
+    lblAlarms: '\u30a2\u30e9\u30fc\u30e0\u30af\u30ec\u30b8\u30c3\u30c8', subAlarms: '\u7121\u5236\u9650'
+  },
+  de: {
+    sidebarTitle: 'Meetings',
+    days: ['Fr','Sa','So','Mo','Di','Mi','Do'],
+    ev1: 'Produktbesprechung', ev2: 'Mittagessen mit Sarah', ev3: 'HIIT-Training', ev4: 'Team-Standup',
+    settingsTitle: 'Einstellungen',
+    grpAlarm: 'Alarm-Einstellungen', grpDisplay: 'Anzeige', grpSub: 'Abonnement',
+    lblAuto: 'Auto-Alarm f\u00fcr Meetings', subAuto: 'Automatisch Alarme f\u00fcr anstehende Termine setzen',
+    lblSound: 'Ton vor dem Alarm', subSound: 'Einen Ton 30 Sekunden vor dem Alarm abspielen',
+    lblEnd: 'Termin-Ende-Alarme', subEnd: 'Benachrichtigung wenn Termine bald enden',
+    lblTimer: 'Countdown-Timer anzeigen', subTimer: 'Verbleibende Zeit in der Terminliste anzeigen',
+    lblFocus: 'Fokusmodus-Filter', subFocus: 'Termine aus nicht fokussierten Kalendern ausblenden',
+    lblPlan: 'Aktueller Plan', proStatus: 'Aktiv',
+    lblAlarms: 'Alarm-Guthaben', subAlarms: 'Unbegrenzt'
+  },
+  fr: {
+    sidebarTitle: 'R\u00e9unions',
+    days: ['Ven','Sam','Dim','Lun','Mar','Mer','Jeu'],
+    ev1: 'Revue de produit', ev2: 'D\u00e9jeuner avec Sarah', ev3: 'S\u00e9ance HIIT', ev4: 'Standup d\'\u00e9quipe',
+    settingsTitle: 'R\u00e9glages',
+    grpAlarm: 'R\u00e9glages d\'alarme', grpDisplay: 'Affichage', grpSub: 'Abonnement',
+    lblAuto: 'Auto-alarme pour r\u00e9unions', subAuto: 'D\u00e9finir automatiquement des alarmes pour les \u00e9v\u00e9nements',
+    lblSound: 'Son avant l\'alarme', subSound: 'Jouer un son 30 secondes avant le d\u00e9clenchement',
+    lblEnd: 'Alarmes de fin d\'\u00e9v\u00e9nement', subEnd: '\u00catre alert\u00e9 quand les \u00e9v\u00e9nements se terminent',
+    lblTimer: 'Afficher le compte \u00e0 rebours', subTimer: 'Afficher le temps restant dans la liste',
+    lblFocus: 'Filtrage Mode Concentration', subFocus: 'Masquer les \u00e9v\u00e9nements des calendriers non cibl\u00e9s',
+    lblPlan: 'Plan actuel', proStatus: 'Actif',
+    lblAlarms: 'Cr\u00e9dits d\'alarme', subAlarms: 'Illimit\u00e9s'
+  }
+};
+const params = new URLSearchParams(window.location.search);
+const lang = params.get('lang') || 'en';
+const t = i18n[lang] || i18n.en;
+
+document.getElementById('sidebar-title').textContent = t.sidebarTitle;
+t.days.forEach((d, i) => { const el = document.getElementById('d' + i + 'l'); if (el) el.textContent = d; });
+document.getElementById('ev1t').textContent = t.ev1;
+document.getElementById('ev2t').textContent = t.ev2;
+document.getElementById('ev3t').textContent = t.ev3;
+document.getElementById('ev4t').textContent = t.ev4;
+document.getElementById('settings-title').textContent = t.settingsTitle;
+document.getElementById('grp-alarm').textContent = t.grpAlarm;
+document.getElementById('grp-display').textContent = t.grpDisplay;
+document.getElementById('grp-sub').textContent = t.grpSub;
+document.getElementById('lbl-auto').textContent = t.lblAuto;
+document.getElementById('sub-auto').textContent = t.subAuto;
+document.getElementById('lbl-sound').textContent = t.lblSound;
+document.getElementById('sub-sound').textContent = t.subSound;
+document.getElementById('lbl-end').textContent = t.lblEnd;
+document.getElementById('sub-end').textContent = t.subEnd;
+document.getElementById('lbl-timer').textContent = t.lblTimer;
+document.getElementById('sub-timer').textContent = t.subTimer;
+document.getElementById('lbl-focus').textContent = t.lblFocus;
+document.getElementById('sub-focus').textContent = t.subFocus;
+document.getElementById('lbl-plan').textContent = t.lblPlan;
+document.getElementById('pro-status').textContent = t.proStatus;
+document.getElementById('lbl-alarms').textContent = t.lblAlarms;
+document.getElementById('sub-alarms').textContent = t.subAlarms;
+</script>
+</body>
+</html>

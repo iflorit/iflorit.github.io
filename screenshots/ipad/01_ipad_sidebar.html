@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=2064">
+<title>iPad Sidebar + Event Detail</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { background: #000; }
+body {
+  width: 2064px; height: 2752px; overflow: hidden;
+  font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Helvetica Neue', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  background: #000;
+  color: #fff;
+}
+
+.screen { width: 2064px; height: 2752px; position: relative; overflow: hidden; background: #000; display: flex; }
+
+/* iPad status bar — no Dynamic Island */
+.status-bar {
+  position: absolute; top: 0; left: 0; right: 0; height: 80px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 20px 60px 0; z-index: 10; color: #fff;
+}
+.sb-time { font-size: 40px; font-weight: 600; }
+.sb-right { display: flex; align-items: center; gap: 14px; }
+.sb-right svg { fill: #fff; }
+
+/* Two-column layout */
+.sidebar {
+  width: 640px; height: 2752px; flex-shrink: 0;
+  background: rgba(30,30,34,0.95);
+  padding-top: 110px;
+  overflow: hidden;
+  position: relative;
+}
+.separator {
+  width: 1px; height: 2752px; flex-shrink: 0;
+  background: rgba(255,255,255,0.1);
+}
+.detail {
+  flex: 1; height: 2752px;
+  background: #000;
+  padding-top: 110px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Sidebar: Toolbar */
+.sidebar-toolbar {
+  padding: 0 28px 20px;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.sidebar-title { font-size: 42px; font-weight: 700; color: #fff; }
+.toolbar-icon {
+  width: 44px; height: 44px; display: flex; align-items: center; justify-content: center;
+  border-radius: 22px; background: rgba(255,255,255,0.08);
+}
+.toolbar-icon svg { width: 22px; height: 22px; fill: #0A84FF; }
+
+/* Sidebar: Week strip (compact) */
+.week-strip {
+  margin: 0 20px 20px;
+  background: rgba(255,255,255,0.05); border-radius: 28px; padding: 18px 12px 14px;
+  display: flex; justify-content: space-around; text-align: center;
+}
+.day { font-size: 20px; color: rgba(255,255,255,0.35); font-weight: 500; line-height: 1; padding: 6px 0; }
+.day-num { font-size: 26px; font-weight: 600; color: rgba(255,255,255,0.5); margin-top: 6px; }
+.day.active .day-num { color: #0A84FF; }
+.day-dots { display: flex; gap: 5px; justify-content: center; margin-top: 6px; min-height: 12px; }
+.day-dot { width: 8px; height: 8px; border-radius: 50%; }
+.day-dot.blue { background: #0A84FF; }
+.day-dot.green { background: #30D158; }
+.day-dot.red { background: #FF453A; }
+.day-dot.orange { background: #FF9F0A; }
+
+/* Sidebar: Event cards (compact) */
+.sidebar-events { padding: 0 16px; }
+.s-card {
+  background: rgba(255,255,255,0.04); border-radius: 28px;
+  padding: 22px 24px; margin-bottom: 14px; position: relative;
+  display: flex; align-items: flex-start; gap: 14px;
+}
+.s-card.selected {
+  background: rgba(10,132,255,0.15);
+  border: 2px solid rgba(10,132,255,0.4);
+}
+.s-card.highlight {
+  background: rgba(80,120,20,0.15);
+  border: 3px solid rgba(120,180,30,0.4);
+}
+.s-cbar { width: 6px; border-radius: 4px; flex-shrink: 0; align-self: stretch; min-height: 56px; }
+.s-cbar.blue { background: #0A84FF; }
+.s-cbar.green { background: #30D158; }
+.s-cbar.red { background: #FF453A; }
+.s-cbar.orange { background: #FF9F0A; }
+.s-body { flex: 1; min-width: 0; }
+.s-title { font-size: 28px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.s-sub { font-size: 22px; color: rgba(255,255,255,0.35); margin-top: 4px; }
+.s-icons { display: flex; gap: 10px; align-items: center; flex-shrink: 0; }
+.s-icon-cam {
+  width: 44px; height: 44px; background: rgba(10,132,255,0.3); border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+}
+.s-icon-cam svg { width: 22px; height: 22px; fill: #fff; }
+.s-alarm-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: #FF9F0A; border-radius: 20px; padding: 4px 14px;
+  font-size: 18px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 1px;
+  margin-top: 8px;
+}
+.s-alarm-badge svg { width: 16px; height: 16px; fill: currentColor; }
+.s-alarm-badge.pending {
+  background: transparent; border: 2px solid rgba(255,159,10,0.5); color: #FF9F0A;
+}
+.s-timer { font-size: 26px; font-weight: 800; color: #30D158; font-variant-numeric: tabular-nums; margin-top: 6px; }
+
+/* Detail pane */
+.detail-content { padding: 20px 80px; }
+.detail-header { margin-bottom: 50px; }
+.detail-cbar-line {
+  width: 6px; height: 80px; border-radius: 4px; background: #0A84FF; margin-bottom: 24px;
+}
+.detail-event-title { font-size: 58px; font-weight: 700; color: #fff; line-height: 1.2; }
+.detail-time { font-size: 36px; color: rgba(255,255,255,0.5); margin-top: 12px; }
+
+/* Detail sections */
+.detail-section {
+  background: rgba(255,255,255,0.04); border-radius: 28px;
+  padding: 36px 40px; margin-bottom: 28px;
+}
+.section-row { display: flex; align-items: center; gap: 20px; }
+.section-icon {
+  width: 56px; height: 56px; border-radius: 16px;
+  display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.section-icon svg { width: 28px; height: 28px; fill: #fff; }
+.section-icon.blue { background: rgba(10,132,255,0.25); }
+.section-icon.green { background: rgba(48,209,88,0.25); }
+.section-icon.orange { background: rgba(255,159,10,0.25); }
+.section-icon.purple { background: rgba(175,82,222,0.25); }
+.section-label { font-size: 26px; color: rgba(255,255,255,0.4); }
+.section-value { font-size: 30px; color: #fff; font-weight: 500; margin-top: 2px; }
+
+/* Join button */
+.join-row { display: flex; align-items: center; justify-content: space-between; }
+.join-btn {
+  background: #0A84FF; border-radius: 20px; padding: 16px 44px;
+  font-size: 30px; font-weight: 700; color: #fff; border: none; cursor: pointer;
+}
+
+/* Countdown section */
+.countdown-section {
+  background: rgba(48,209,88,0.08); border-radius: 28px;
+  padding: 40px; margin-bottom: 28px; text-align: center;
+  border: 2px solid rgba(48,209,88,0.2);
+}
+.countdown-label { font-size: 28px; color: rgba(255,255,255,0.4); margin-bottom: 16px; }
+.countdown-timer {
+  font-size: 96px; font-weight: 800; color: #30D158;
+  font-variant-numeric: tabular-nums; letter-spacing: -2px;
+  font-family: -apple-system, 'SF Pro', monospace;
+}
+.countdown-sub { font-size: 24px; color: rgba(255,255,255,0.3); margin-top: 12px; }
+
+/* Notes */
+.notes-text { font-size: 28px; color: rgba(255,255,255,0.6); line-height: 1.5; margin-top: 12px; }
+
+</style>
+</head>
+<body>
+<div class="screen">
+  <!-- Status bar -->
+  <div class="status-bar">
+    <span class="sb-time">9:41</span>
+    <span></span>
+    <div class="sb-right">
+      <svg width="50" height="36" viewBox="0 0 20 14"><rect x="0" y="10" width="3.5" height="4" rx="0.75"/><rect x="5.5" y="7" width="3.5" height="7" rx="0.75"/><rect x="11" y="3.5" width="3.5" height="10.5" rx="0.75"/><rect x="16.5" y="0" width="3.5" height="14" rx="0.75"/></svg>
+      <svg width="34" height="36" viewBox="0 0 16 21"><path d="M8 0C4.44 0 1.2 1.38 0 3.3l1.6 2.1C2.68 3.88 5.12 2.8 8 2.8s5.32 1.08 6.4 2.6L16 3.3C14.8 1.38 11.56 0 8 0zm0 5.6c-2.14 0-4.04.82-5 2.06l1.6 2.1c.6-.84 1.96-1.36 3.4-1.36s2.8.52 3.4 1.36l1.6-2.1C12.04 6.42 10.14 5.6 8 5.6zm0 5.6c-1.14 0-2.14.44-2.7 1.12L8 15.2l2.7-2.88C10.14 11.64 9.14 11.2 8 11.2z" fill="#fff"/></svg>
+      <svg width="62" height="36" viewBox="0 0 31 14"><rect x="0" y="0.5" width="27" height="13" rx="3.5" fill="none" stroke="#fff" stroke-width="1.3" opacity="0.4"/><rect x="2.5" y="3" width="18" height="8" rx="1.5" fill="#fff"/><path d="M28.5 4.5a2 2 0 010 5" fill="#fff" opacity="0.4"/></svg>
+    </div>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="sidebar-toolbar">
+      <span class="sidebar-title" id="sidebar-title">Meetings</span>
+      <div class="toolbar-icon">
+        <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+      </div>
+    </div>
+
+    <div class="week-strip">
+      <div class="day active" id="d0"><span id="d0l">Fri</span><div class="day-num">18</div><div class="day-dots"><span class="day-dot blue"></span><span class="day-dot green"></span><span class="day-dot red"></span></div></div>
+      <div class="day" id="d1"><span id="d1l">Sat</span><div class="day-num">19</div><div class="day-dots"></div></div>
+      <div class="day" id="d2"><span id="d2l">Sun</span><div class="day-num">20</div><div class="day-dots"><span class="day-dot red"></span></div></div>
+      <div class="day" id="d3"><span id="d3l">Mon</span><div class="day-num">21</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+      <div class="day" id="d4"><span id="d4l">Tue</span><div class="day-num">22</div><div class="day-dots"><span class="day-dot blue"></span><span class="day-dot orange"></span></div></div>
+      <div class="day" id="d5"><span id="d5l">Wed</span><div class="day-num">23</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+      <div class="day" id="d6"><span id="d6l">Thu</span><div class="day-num">24</div><div class="day-dots"><span class="day-dot blue"></span></div></div>
+    </div>
+
+    <div class="sidebar-events">
+      <!-- Event 1: Product Review (selected + alarm highlight) -->
+      <div class="s-card selected highlight">
+        <div class="s-cbar blue"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev1t">Product Review</div>
+          <div class="s-sub">10:00 - 11:30</div>
+          <div class="s-alarm-badge"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+          <div class="s-timer">18:22</div>
+        </div>
+        <div class="s-icons">
+          <div class="s-icon-cam"><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+        </div>
+      </div>
+
+      <!-- Event 2: Lunch with Sarah -->
+      <div class="s-card">
+        <div class="s-cbar green"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev2t">Lunch with Sarah</div>
+          <div class="s-sub">13:00 - 14:00</div>
+          <div class="s-alarm-badge pending"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+        </div>
+      </div>
+
+      <!-- Event 3: HIIT Session -->
+      <div class="s-card">
+        <div class="s-cbar red"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev3t">HIIT Session</div>
+          <div class="s-sub">16:00 - 17:30</div>
+          <div class="s-alarm-badge"><svg viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></svg> ALARM</div>
+        </div>
+      </div>
+
+      <!-- Event 4: Team Standup -->
+      <div class="s-card">
+        <div class="s-cbar blue"></div>
+        <div class="s-body">
+          <div class="s-title" id="ev4t">Team Standup</div>
+          <div class="s-sub">18:00 - 18:30</div>
+        </div>
+        <div class="s-icons">
+          <div class="s-icon-cam"><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Separator -->
+  <div class="separator"></div>
+
+  <!-- Detail pane: Event detail for Product Review -->
+  <div class="detail">
+    <div class="detail-content">
+      <div class="detail-header">
+        <div class="detail-cbar-line"></div>
+        <div class="detail-event-title" id="detail-title">Product Review</div>
+        <div class="detail-time" id="detail-time">10:00 - 11:30</div>
+      </div>
+
+      <!-- Countdown -->
+      <div class="countdown-section">
+        <div class="countdown-label" id="countdown-label">Time until meeting</div>
+        <div class="countdown-timer">18:22</div>
+        <div class="countdown-sub" id="countdown-sub">Alarm active</div>
+      </div>
+
+      <!-- Video call -->
+      <div class="detail-section">
+        <div class="join-row">
+          <div class="section-row">
+            <div class="section-icon blue">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg>
+            </div>
+            <div>
+              <div class="section-label" id="lbl-video">Video Call</div>
+              <div class="section-value">Zoom Meeting</div>
+            </div>
+          </div>
+          <button class="join-btn" id="join-btn">Join</button>
+        </div>
+      </div>
+
+      <!-- Calendar -->
+      <div class="detail-section">
+        <div class="section-row">
+          <div class="section-icon blue">
+            <svg viewBox="0 0 24 24"><path d="M19 4h-1V2h-2v2H8V2H6v2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 16H5V10h14v10zm0-12H5V6h14v2z"/></svg>
+          </div>
+          <div>
+            <div class="section-label" id="lbl-calendar">Calendar</div>
+            <div class="section-value" id="val-calendar">Work</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Location -->
+      <div class="detail-section">
+        <div class="section-row">
+          <div class="section-icon orange">
+            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+          </div>
+          <div>
+            <div class="section-label" id="lbl-location">Location</div>
+            <div class="section-value" id="val-location">Conference Room B</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Notes -->
+      <div class="detail-section">
+        <div class="section-row">
+          <div class="section-icon purple">
+            <svg viewBox="0 0 24 24"><path d="M3 18h12v-2H3v2zM3 6v2h18V6H3zm0 7h18v-2H3v2z"/></svg>
+          </div>
+          <div>
+            <div class="section-label" id="lbl-notes">Notes</div>
+          </div>
+        </div>
+        <div class="notes-text" id="notes-text">Review Q4 product roadmap. Discuss feature priorities and timeline adjustments for the upcoming release.</div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const i18n = {
+  en: {
+    sidebarTitle: 'Meetings',
+    days: ['Fri','Sat','Sun','Mon','Tue','Wed','Thu'],
+    ev1: 'Product Review', ev2: 'Lunch with Sarah', ev3: 'HIIT Session', ev4: 'Team Standup',
+    detailTitle: 'Product Review', detailTime: '10:00 - 11:30',
+    countdownLabel: 'Time until meeting', countdownSub: 'Alarm active',
+    lblVideo: 'Video Call', lblCalendar: 'Calendar', lblLocation: 'Location', lblNotes: 'Notes',
+    valCalendar: 'Work', valLocation: 'Conference Room B', joinBtn: 'Join',
+    notes: 'Review Q4 product roadmap. Discuss feature priorities and timeline adjustments for the upcoming release.'
+  },
+  es: {
+    sidebarTitle: 'Reuniones',
+    days: ['Vie','S\u00e1b','Dom','Lun','Mar','Mi\u00e9','Jue'],
+    ev1: 'Revisi\u00f3n de Producto', ev2: 'Comida con Sara', ev3: 'Sesi\u00f3n HIIT', ev4: 'Standup del equipo',
+    detailTitle: 'Revisi\u00f3n de Producto', detailTime: '10:00 - 11:30',
+    countdownLabel: 'Tiempo hasta la reuni\u00f3n', countdownSub: 'Alarma activa',
+    lblVideo: 'Videollamada', lblCalendar: 'Calendario', lblLocation: 'Ubicaci\u00f3n', lblNotes: 'Notas',
+    valCalendar: 'Trabajo', valLocation: 'Sala de conferencias B', joinBtn: 'Unirse',
+    notes: 'Revisar la hoja de ruta del producto del T4. Discutir prioridades de funciones y ajustes de calendario para el pr\u00f3ximo lanzamiento.'
+  },
+  ja: {
+    sidebarTitle: '\u30df\u30fc\u30c6\u30a3\u30f3\u30b0',
+    days: ['\u91d1','\u571f','\u65e5','\u6708','\u706b','\u6c34','\u6728'],
+    ev1: '\u88fd\u54c1\u30ec\u30d3\u30e5\u30fc', ev2: '\u30b5\u30e9\u3068\u30e9\u30f3\u30c1', ev3: 'HIIT\u30bb\u30c3\u30b7\u30e7\u30f3', ev4: '\u30c1\u30fc\u30e0\u30b9\u30bf\u30f3\u30c9\u30a2\u30c3\u30d7',
+    detailTitle: '\u88fd\u54c1\u30ec\u30d3\u30e5\u30fc', detailTime: '10:00 - 11:30',
+    countdownLabel: '\u4f1a\u8b70\u307e\u3067\u306e\u6642\u9593', countdownSub: '\u30a2\u30e9\u30fc\u30e0\u6709\u52b9',
+    lblVideo: '\u30d3\u30c7\u30aa\u901a\u8a71', lblCalendar: '\u30ab\u30ec\u30f3\u30c0\u30fc', lblLocation: '\u5834\u6240', lblNotes: '\u30e1\u30e2',
+    valCalendar: '\u4ed5\u4e8b', valLocation: '\u4f1a\u8b70\u5ba4B', joinBtn: '\u53c2\u52a0',
+    notes: 'Q4\u88fd\u54c1\u30ed\u30fc\u30c9\u30de\u30c3\u30d7\u3092\u30ec\u30d3\u30e5\u30fc\u3002\u6b21\u306e\u30ea\u30ea\u30fc\u30b9\u306b\u5411\u3051\u305f\u6a5f\u80fd\u306e\u512a\u5148\u9806\u4f4d\u3068\u30b9\u30b1\u30b8\u30e5\u30fc\u30eb\u8abf\u6574\u3092\u8b70\u8ad6\u3002'
+  },
+  de: {
+    sidebarTitle: 'Meetings',
+    days: ['Fr','Sa','So','Mo','Di','Mi','Do'],
+    ev1: 'Produktbesprechung', ev2: 'Mittagessen mit Sarah', ev3: 'HIIT-Training', ev4: 'Team-Standup',
+    detailTitle: 'Produktbesprechung', detailTime: '10:00 - 11:30',
+    countdownLabel: 'Zeit bis zum Meeting', countdownSub: 'Alarm aktiv',
+    lblVideo: 'Videoanruf', lblCalendar: 'Kalender', lblLocation: 'Ort', lblNotes: 'Notizen',
+    valCalendar: 'Arbeit', valLocation: 'Konferenzraum B', joinBtn: 'Beitreten',
+    notes: 'Q4-Produkt-Roadmap \u00fcberpr\u00fcfen. Funktionspriorit\u00e4ten und Zeitleistenanpassungen f\u00fcr die kommende Ver\u00f6ffentlichung besprechen.'
+  },
+  fr: {
+    sidebarTitle: 'R\u00e9unions',
+    days: ['Ven','Sam','Dim','Lun','Mar','Mer','Jeu'],
+    ev1: 'Revue de produit', ev2: 'D\u00e9jeuner avec Sarah', ev3: 'S\u00e9ance HIIT', ev4: 'Standup d\'\u00e9quipe',
+    detailTitle: 'Revue de produit', detailTime: '10:00 - 11:30',
+    countdownLabel: 'Temps avant la r\u00e9union', countdownSub: 'Alarme active',
+    lblVideo: 'Appel vid\u00e9o', lblCalendar: 'Calendrier', lblLocation: 'Lieu', lblNotes: 'Notes',
+    valCalendar: 'Travail', valLocation: 'Salle de conf\u00e9rence B', joinBtn: 'Rejoindre',
+    notes: 'Revoir la feuille de route produit du T4. Discuter des priorit\u00e9s fonctionnelles et des ajustements de calendrier pour la prochaine version.'
+  }
+};
+const params = new URLSearchParams(window.location.search);
+const lang = params.get('lang') || 'en';
+const t = i18n[lang] || i18n.en;
+
+document.getElementById('sidebar-title').textContent = t.sidebarTitle;
+t.days.forEach((d, i) => { const el = document.getElementById('d' + i + 'l'); if (el) el.textContent = d; });
+document.getElementById('ev1t').textContent = t.ev1;
+document.getElementById('ev2t').textContent = t.ev2;
+document.getElementById('ev3t').textContent = t.ev3;
+document.getElementById('ev4t').textContent = t.ev4;
+document.getElementById('detail-title').textContent = t.detailTitle;
+document.getElementById('detail-time').textContent = t.detailTime;
+document.getElementById('countdown-label').textContent = t.countdownLabel;
+document.getElementById('countdown-sub').textContent = t.countdownSub;
+document.getElementById('lbl-video').textContent = t.lblVideo;
+document.getElementById('lbl-calendar').textContent = t.lblCalendar;
+document.getElementById('lbl-location').textContent = t.lblLocation;
+document.getElementById('lbl-notes').textContent = t.lblNotes;
+document.getElementById('val-calendar').textContent = t.valCalendar;
+document.getElementById('val-location').textContent = t.valLocation;
+document.getElementById('join-btn').textContent = t.joinBtn;
+document.getElementById('notes-text').textContent = t.notes;
+</script>
+</body>
+</html>
