@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- App Clip Smart App Banner: en iOS muestra la tarjeta del App Clip (en
+     desarrollo requiere una Local Experience registrada para esta URL). -->
+<meta name="apple-itunes-app" content="app-id=6738656243, app-clip-bundle-id=es.florit.apple.Call-to-Meet.app.Clip, app-clip-display=card">
+<title>Call to Meet — countdown compartido</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         display: flex; min-height: 100vh; margin: 0; align-items: center;
+         justify-content: center; background: light-dark(#f5f5f7, #000);
+         color: light-dark(#1d1d1f, #f5f5f7); }
+  .card { text-align: center; padding: 2.5rem 2rem; max-width: 22rem; }
+  .icon { font-size: 2.5rem; }
+  h1 { font-size: 1.4rem; margin: .75rem 0 .25rem; }
+  #countdown { font-size: 3rem; font-weight: 700; font-variant-numeric: tabular-nums;
+               color: #34c759; margin: .5rem 0; }
+  #when { color: light-dark(#6e6e73, #98989d); font-size: .95rem; }
+  .btn { display: inline-block; margin-top: 1.25rem; padding: .8rem 1.6rem;
+         border-radius: 999px; text-decoration: none; color: #fff; font-weight: 600; }
+  .join { background: #0a84ff; } .call { background: #34c759; }
+  .store { display: block; margin-top: 2rem; font-size: .85rem;
+           color: light-dark(#6e6e73, #98989d); }
+  .store a { color: #0a84ff; text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="icon" id="icon">📅</div>
+  <h1 id="title">Call to Meet</h1>
+  <div id="countdown">–:–:–</div>
+  <div id="when"></div>
+  <a id="action" class="btn join" href="#" hidden></a>
+  <span class="store">Countdown en vivo, alarmas y más en
+    <a href="https://apps.apple.com/app/call-to-meet/id6738656243">Call to Meet para iPhone</a></span>
+</div>
+<script>
+(function () {
+  function b64url(s) { s = s.replace(/-/g, "+").replace(/_/g, "/");
+    return atob(s + "===".slice((s.length + 3) % 4)); }
+  var d = new URLSearchParams(location.search).get("d");
+  if (!d) return;
+  var p; try { p = JSON.parse(b64url(d)); } catch (e) { return; }
+  if (p.t) document.getElementById("title").textContent = p.t;
+  if (p.k === "flight") document.getElementById("icon").textContent = "✈️";
+  var when = new Date(p.s * 1000);
+  document.getElementById("when").textContent = when.toLocaleString("es-ES",
+    { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: p.z });
+  var a = document.getElementById("action");
+  if (p.ju) { a.href = p.ju; a.textContent = "Unirse"; a.hidden = false; }
+  else if (p.ph) { a.href = p.ph.replace("tel://", "tel:"); a.textContent = "Llamar";
+                   a.className = "btn call"; a.hidden = false; }
+  var cd = document.getElementById("countdown");
+  function tick() {
+    var left = Math.floor(p.s - Date.now() / 1000);
+    if (left <= 0) { cd.textContent = "En curso"; cd.style.color = "#ff453a"; return; }
+    var h = Math.floor(left / 3600), m = Math.floor(left % 3600 / 60), s = left % 60;
+    cd.textContent = (h ? h + ":" : "") + String(m).padStart(2, "0") + ":" + String(s).padStart(2, "0");
+    setTimeout(tick, 1000);
+  }
+  tick();
+})();
+</script>
+</body>
+</html>

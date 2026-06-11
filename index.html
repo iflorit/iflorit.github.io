@@ -1,3419 +1,450 @@
 <!DOCTYPE html>
 <html lang="en" data-lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Call to Meet — Never miss a meeting again</title>
-  <meta name="description" content="Live Activities, Dynamic Island countdowns, and smart alarms that make sure you never miss a call.">
-  <meta name="theme-color" content="#0a0a0f">
-  <link rel="icon" type="image/png" href="app-icon.png">
-
-  <!-- Theme: apply early to prevent flash -->
-  <script>
-    (function(){
-      var s = localStorage.getItem('ctm-theme') || 'auto';
-      var dark = s === 'auto' ? window.matchMedia('(prefers-color-scheme: dark)').matches : s === 'dark';
-      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-      document.documentElement.setAttribute('data-theme-setting', s);
-    })();
-  </script>
-
-  <!-- Open Graph -->
-  <meta property="og:title" content="Call to Meet">
-  <meta property="og:description" content="Never miss a meeting again. Live Activities, Dynamic Island, and AlarmKit alarms.">
-  <meta property="og:image" content="https://iflorit.github.io/app-icon.png">
-  <meta property="og:url" content="https://iflorit.github.io/">
-  <meta property="og:type" content="website">
-
-  <style>
-    :root {
-      --bg: #0a0a0f;
-      --bg-card: #141420;
-      --bg-card-hover: #1a1a2e;
-      --text: #e8e8f0;
-      --text-muted: #8888a0;
-      --accent: #7c5cfc;
-      --accent-light: #9d83ff;
-      --accent-glow: rgba(124, 92, 252, 0.15);
-      --pro-gradient: linear-gradient(135deg, #7c5cfc, #c084fc);
-      --border: rgba(255, 255, 255, 0.06);
-      --radius: 16px;
-      --radius-sm: 10px;
-      --nav-bg: rgba(10, 10, 15, 0.85);
-      --tab-text: #5ab4ff;
-      --tab-text-hover: #7cc4ff;
-      --chrome-label: rgba(255, 255, 255, 0.3);
-    }
-
-    [data-theme="light"] {
-      --bg: #f5f5f7;
-      --bg-card: #ffffff;
-      --bg-card-hover: #f0f0f5;
-      --text: #1d1d1f;
-      --text-muted: #6e6e73;
-      --accent: #6840e0;
-      --accent-light: #7c5cfc;
-      --accent-glow: rgba(104, 64, 224, 0.10);
-      --pro-gradient: linear-gradient(135deg, #6840e0, #a855f7);
-      --border: rgba(0, 0, 0, 0.08);
-      --nav-bg: rgba(245, 245, 247, 0.85);
-      --tab-text: #0066CC;
-      --tab-text-hover: #0A84FF;
-      --chrome-label: rgba(0, 0, 0, 0.35);
-    }
-
-    * { margin: 0; padding: 0; box-sizing: border-box; }
-
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      overflow-x: hidden;
-    }
-
-    /* ===== Layout ===== */
-    .container { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
-
-    section {
-      padding: 80px 0;
-    }
-
-    /* ===== Nav ===== */
-    nav {
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 100;
-      padding: 16px 0;
-      background: var(--nav-bg);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border-bottom: 1px solid var(--border);
-    }
-
-    nav .container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-
-    .nav-brand {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      text-decoration: none;
-      color: var(--text);
-    }
-
-    .nav-brand img {
-      width: 36px;
-      height: 36px;
-      border-radius: 8px;
-    }
-
-    .nav-brand span {
-      font-size: 18px;
-      font-weight: 600;
-    }
-
-    .nav-links {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      padding: 6px 12px;
-      border-radius: 8px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 500;
-      transition: all 0.2s;
-    }
-
-    .lang-btn:hover, .lang-btn.active {
-      background: var(--accent-glow);
-      border-color: var(--accent);
-      color: var(--accent-light);
-    }
-
-    .theme-toggle {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      width: 34px;
-      height: 34px;
-      border-radius: 8px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      margin-left: 4px;
-      flex-shrink: 0;
-    }
-
-    .theme-toggle:hover {
-      background: var(--accent-glow);
-      border-color: var(--accent);
-      color: var(--accent-light);
-    }
-
-    .theme-toggle svg {
-      width: 16px;
-      height: 16px;
-      fill: none;
-      stroke: currentColor;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    /* ===== Hero ===== */
-    .hero {
-      padding-top: 140px;
-      padding-bottom: 60px;
-      text-align: center;
-      position: relative;
-    }
-
-    .hero::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 600px;
-      height: 600px;
-      background: radial-gradient(circle, var(--accent-glow) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .hero-icon {
-      width: 100px;
-      height: 100px;
-      border-radius: 22px;
-      margin-bottom: 28px;
-      box-shadow: 0 8px 40px rgba(124, 92, 252, 0.25);
-    }
-
-    .hero h1 {
-      font-size: clamp(36px, 6vw, 56px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.1;
-      margin-bottom: 16px;
-    }
-
-    .hero h1 .gradient {
-      background: var(--pro-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero p {
-      font-size: 18px;
-      color: var(--text-muted);
-      max-width: 520px;
-      margin: 0 auto 36px;
-    }
-
-    .app-store-badge {
-      display: inline-block;
-      transition: transform 0.2s;
-    }
-
-    .app-store-badge:hover { transform: scale(1.05); }
-
-    .app-store-badge img { height: 52px; }
-
-    .platform-strip {
-      margin-top: 20px;
-      font-size: 13px;
-      color: var(--text-muted);
-      text-align: center;
-    }
-
-    /* ===== Showcase Tabs ===== */
-    .showcase-tabs {
-      display: flex;
-      justify-content: center;
-      gap: 6px;
-      padding: 20px 0 8px;
-    }
-
-    .showcase-tab {
-      padding: 10px 28px;
-      border-radius: 22px;
-      font-size: 15px;
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      cursor: pointer;
-      border: 1.5px solid rgba(10, 132, 255, 0.35);
-      background: rgba(10, 132, 255, 0.08);
-      color: var(--tab-text);
-      transition: all 0.25s ease;
-      user-select: none;
-    }
-
-    .showcase-tab:hover {
-      border-color: rgba(10, 132, 255, 0.55);
-      background: rgba(10, 132, 255, 0.14);
-      color: var(--tab-text-hover);
-    }
-
-    .showcase-tab.active {
-      background: linear-gradient(135deg, #0A84FF, #0066CC);
-      border-color: transparent;
-      color: #fff;
-      box-shadow: 0 4px 20px rgba(10, 132, 255, 0.4);
-    }
-
-    .showcase-panel { display: none; }
-    .showcase-panel.active { display: block; }
-
-    /* ===== DI Showcase (replaces screenshots) ===== */
-    .di-showcase {
-      padding: 0 0 60px;
-      overflow: hidden;
-    }
-
-    .di-scene {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 40px;
-      padding: 20px 20px;
-    }
-
-    .di-phone-wrap {
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    .di-phone {
-      position: relative;
-      width: 393px;
-      height: 852px;
-      transform-origin: top center;
-    }
-
-    /* Column: 1x4 — mobile <600px
-       Scale = (100vw - 40px padding) / 393px phone width, clamped */
-    @media (max-width: 599px) {
-      .di-scene { flex-direction: column; align-items: center; }
-      .di-phone-wrap { width: 100%; }
-      .di-phone {
-        --s: clamp(0.35, calc((100vw - 40px) / 393), 0.65);
-        transform: scale(var(--s));
-        margin: 0 auto;
-      }
-      .di-phone-wrap { height: calc(852px * clamp(0.35, calc((100vw - 40px) / 393), 0.65) + 40px); }
-    }
-
-    /* Grid 2x2 — tablet 600-1099px
-       Scale = (50vw - 60px gap/padding) / 393px, clamped */
-    @media (min-width: 600px) and (max-width: 1099px) {
-      .di-scene { flex-wrap: wrap; }
-      .di-phone-wrap { width: calc(50% - 20px); }
-      .di-phone {
-        --s: clamp(0.3, calc((50vw - 60px) / 393), 0.6);
-        transform: scale(var(--s));
-      }
-      .di-phone-wrap { height: calc(852px * clamp(0.3, calc((50vw - 60px) / 393), 0.6) + 40px); }
-    }
-
-    /* Row 4x1 — desktop ≥1100px
-       Scale = (25vw - 50px gap/padding) / 393px, clamped */
-    @media (min-width: 1100px) {
-      .di-scene { flex-wrap: nowrap; }
-      .di-phone-wrap { flex: 1; }
-      .di-phone {
-        --s: clamp(0.35, calc((25vw - 50px) / 393), 0.7);
-        transform: scale(var(--s));
-      }
-      .di-phone-wrap { height: calc(852px * clamp(0.35, calc((25vw - 50px) / 393), 0.7) + 40px); }
-    }
-
-    .di-phone-case {
-      position: absolute;
-      inset: -5px;
-      border-radius: 60px;
-      background:
-        linear-gradient(170deg,
-          #4a4a52 0%, #38383e 8%, #2c2c32 20%,
-          #252528 50%,
-          #2c2c32 80%, #38383e 92%, #4a4a52 100%);
-      box-shadow:
-        /* chamfer highlight */
-        inset 0 1px 0 rgba(255, 255, 255, 0.18),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.05),
-        inset 1px 0 0 rgba(255, 255, 255, 0.06),
-        inset -1px 0 0 rgba(255, 255, 255, 0.06),
-        /* outer ring */
-        0 0 0 0.5px rgba(255, 255, 255, 0.08),
-        0 0 0 1.5px #0c0c0f,
-        0 0 0 2px rgba(255, 255, 255, 0.04),
-        /* depth shadows */
-        0 25px 60px -12px rgba(0, 0, 0, 0.75),
-        0 12px 28px -6px rgba(0, 0, 0, 0.45),
-        0 4px 12px -2px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Flat antenna bands (subtle lines on sides) */
-    .di-phone-case::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0; bottom: 0;
-      border-radius: inherit;
-      background:
-        linear-gradient(0deg,
-          transparent 29%, rgba(80,80,88,0.3) 29.2%, rgba(80,80,88,0.3) 29.5%, transparent 29.7%,
-          transparent 70%, rgba(80,80,88,0.3) 70.2%, rgba(80,80,88,0.3) 70.5%, transparent 70.7%);
-      pointer-events: none;
-    }
-
-    /* iPhone side buttons */
-    .di-phone-btn-action {
-      position: absolute; left: -8px; top: 168px; z-index: 2;
-      width: 5px; height: 30px; border-radius: 2.5px;
-      background: linear-gradient(90deg, #3e3e44, #2e2e34, #3a3a40);
-      box-shadow:
-        -1px 0 3px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        inset 0 -1px 0 rgba(0,0,0,0.2),
-        inset -1px 0 0 rgba(255,255,255,0.06);
-    }
-    .di-phone-btn-volup {
-      position: absolute; left: -8px; top: 224px; z-index: 2;
-      width: 5px; height: 52px; border-radius: 2.5px;
-      background: linear-gradient(90deg, #3e3e44, #2e2e34, #3a3a40);
-      box-shadow:
-        -1px 0 3px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        inset 0 -1px 0 rgba(0,0,0,0.2),
-        inset -1px 0 0 rgba(255,255,255,0.06);
-    }
-    .di-phone-btn-voldn {
-      position: absolute; left: -8px; top: 290px; z-index: 2;
-      width: 5px; height: 52px; border-radius: 2.5px;
-      background: linear-gradient(90deg, #3e3e44, #2e2e34, #3a3a40);
-      box-shadow:
-        -1px 0 3px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        inset 0 -1px 0 rgba(0,0,0,0.2),
-        inset -1px 0 0 rgba(255,255,255,0.06);
-    }
-    .di-phone-btn-power {
-      position: absolute; right: -8px; top: 250px; z-index: 2;
-      width: 5px; height: 76px; border-radius: 2.5px;
-      background: linear-gradient(90deg, #3a3a40, #2e2e34, #3e3e44);
-      box-shadow:
-        1px 0 3px rgba(0,0,0,0.6),
-        inset 0 1px 0 rgba(255,255,255,0.12),
-        inset 0 -1px 0 rgba(0,0,0,0.2),
-        inset 1px 0 0 rgba(255,255,255,0.06);
-    }
-
-    .di-phone-body {
-      position: relative;
-      width: 100%;
-      height: 100%;
-      border-radius: 55px;
-      overflow: hidden;
-      /* Screen inset: dark gap between screen glass and titanium frame */
-      box-shadow:
-        inset 0 0 0 0.5px rgba(255,255,255,0.08),
-        0 0 0 1px #0a0a0c;
-      z-index: 1;
-    }
-
-    .di-wp { position: absolute; inset: 0; border-radius: 55px; }
-
-    .di-wp-1 {
-      background:
-        radial-gradient(ellipse 120% 80% at 25% 20%, #1b4d6e 0%, transparent 60%),
-        radial-gradient(ellipse 100% 100% at 75% 80%, #0d3b5c 0%, transparent 50%),
-        radial-gradient(ellipse 80% 60% at 50% 50%, #14405a 0%, transparent 70%),
-        radial-gradient(ellipse 140% 100% at 60% 30%, #0a2e47 0%, transparent 60%),
-        linear-gradient(180deg, #0c2233 0%, #091a28 50%, #060f17 100%);
-    }
-
-    .di-wp-2 {
-      background:
-        radial-gradient(ellipse 90% 90% at 70% 70%, #1b4d6e 0%, transparent 55%),
-        radial-gradient(ellipse 110% 60% at 20% 30%, #0d3b5c 0%, transparent 50%),
-        radial-gradient(ellipse 70% 80% at 55% 15%, #17506a 0%, transparent 60%),
-        radial-gradient(ellipse 100% 70% at 40% 85%, #0a2e47 0%, transparent 55%),
-        linear-gradient(200deg, #091a28 0%, #0c2233 50%, #060f17 100%);
-    }
-
-    .di-sbar {
-      position: absolute; top: 0; left: 0; right: 0; height: 54px;
-      display: flex; justify-content: space-between; align-items: center;
-      padding: 14px 34px 0; z-index: 5; color: #fff;
-    }
-    .di-sbar-time { font-size: 17px; font-weight: 600; width: 54px; }
-    .di-sbar-right { display: flex; align-items: center; gap: 5px; }
-    .di-sbar-right svg { fill: #fff; }
-
-    .di-hw { position: absolute; top: 11px; left: 50%; transform: translateX(-50%); z-index: 10; }
-
-    .di-idle-pill {
-      width: 126px; height: 37.33px; background: #000;
-      border-radius: 99px; box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12);
-    }
-
-    .di-exp-pill {
-      width: 371px; background: #000; border-radius: 50px;
-      padding: 6px 20px 18px;
-      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12), 0 4px 40px rgba(0,0,0,0.4);
-    }
-
-    .di-cam { display: flex; align-items: center; justify-content: center; height: 28px; margin-bottom: 6px; }
-    .di-cam-d { width: 12px; height: 12px; background: #050505; border-radius: 50%; border: 1px solid #222; }
-
-    .di-row { display: flex; align-items: center; gap: 10px; padding: 0 4px; }
-    .di-cbar { width: 4px; height: 44px; border-radius: 2px; flex-shrink: 0; background: #0A84FF; }
-    .di-inf { flex: 1; min-width: 0; }
-    .di-ttl { font-size: 15px; font-weight: 700; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; }
-    .di-sub { font-size: 13px; color: rgba(255,255,255,0.5); margin-top: 3px; text-align: left; }
-    .di-prov { width: 48px; height: 48px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .di-prov svg { width: 31px; height: 31px; fill: #fff; opacity: 0.85; }
-    .di-trow { text-align: right; margin-top: 10px; padding: 0 4px; }
-    .di-big-timer { font-size: 32px; font-weight: 800; color: #30D158; font-variant-numeric: tabular-nums; letter-spacing: -1px; font-family: -apple-system, 'SF Pro', monospace; }
-
-    .di-cmp-pill {
-      width: 182px; height: 37.33px; background: #000; border-radius: 99px;
-      display: flex; align-items: center; justify-content: space-between; padding: 0 12px;
-      box-shadow: 0 0 0 0.5px rgba(255,255,255,0.12);
-    }
-    .di-cmp-timer { font-size: 14px; font-weight: 700; color: #30D158; font-variant-numeric: tabular-nums; font-family: -apple-system, 'SF Pro', monospace; }
-    .di-cmp-sym svg { width: 19px; height: 19px; fill: #fff; opacity: 0.9; }
-
-    .di-lock-time { position: absolute; width: 100%; text-align: center; z-index: 2; top: 110px; }
-    .di-lock-h { font-size: 86px; font-weight: 700; letter-spacing: -3px; line-height: 1; color: #fff; }
-    .di-lock-d { font-size: 18px; font-weight: 500; color: rgba(255,255,255,0.7); margin-top: 4px; }
-
-    .di-la {
-      position: absolute; bottom: 125px; left: 20px; right: 20px; z-index: 2;
-      background: rgba(20,20,24,0.65); border-radius: 22px; padding: 16px;
-      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-    }
-
-    .di-ghost { position: absolute; left: 24px; right: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 14px; z-index: 2; }
-    .di-gb { border-radius: 22px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.03); }
-    .di-gb-sm { height: 170px; }
-    .di-gb-lg { grid-column: span 2; height: 90px; }
-
-    .di-arow { position: absolute; left: 30px; right: 30px; display: flex; justify-content: space-between; z-index: 2; }
-    .di-adot { width: 62px; height: 62px; border-radius: 15px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.03); }
-
-    .di-dock {
-      position: absolute; bottom: 18px; left: 50px; right: 50px; height: 88px;
-      background: rgba(255,255,255,0.04); border-radius: 34px;
-      display: flex; align-items: center; justify-content: space-around; padding: 0 22px;
-      border: 1px solid rgba(255,255,255,0.03); z-index: 2;
-    }
-    .di-ddot { width: 52px; height: 52px; border-radius: 13px; background: rgba(255,255,255,0.06); }
-
-    .di-plabel {
-      margin-top: -20px; font-size: 13px; font-weight: 600;
-      text-transform: uppercase; letter-spacing: 2px; color: var(--chrome-label);
-      text-align: center;
-    }
-
-    /* Timeline mockup (4th phone) */
-    .di-tl-nav {
-      position: absolute; top: 60px; left: 16px; right: 16px; z-index: 2;
-      display: flex; align-items: center; justify-content: space-between;
-    }
-    .di-tl-today-btn {
-      background: rgba(255,255,255,0.08); border-radius: 18px; padding: 6px 14px;
-      font-size: 14px; font-weight: 600; color: #fff;
-    }
-    .di-tl-title { font-size: 16px; font-weight: 600; color: #fff; }
-    .di-tl-gear { width: 32px; height: 32px; background: rgba(255,255,255,0.08); border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .di-tl-gear svg { width: 18px; height: 18px; fill: rgba(255,255,255,0.5); }
-
-    .di-tl-week {
-      position: absolute; top: 104px; left: 16px; right: 16px; z-index: 2;
-      background: rgba(255,255,255,0.06); border-radius: 16px; padding: 10px 6px 8px;
-      display: flex; justify-content: space-around; text-align: center;
-    }
-    .di-tl-day { font-size: 11px; color: rgba(255,255,255,0.35); font-weight: 500; line-height: 1; padding: 4px 0; }
-    .di-tl-day-num { font-size: 14px; font-weight: 600; color: rgba(255,255,255,0.5); margin-top: 4px; }
-    .di-tl-day.active .di-tl-day-num { color: #0A84FF; }
-    .di-tl-day-dots { display: flex; gap: 3px; justify-content: center; margin-top: 4px; min-height: 6px; }
-    .di-tl-day-dot { width: 5px; height: 5px; border-radius: 50%; }
-    .di-tl-day-dot.orange { background: #FF9F0A; }
-    .di-tl-day-dot.red { background: #FF453A; }
-    .di-tl-day-dot.blue { background: #0A84FF; }
-    .di-tl-day-dot.green { background: #30D158; }
-    .di-tl-day-bell { width: 5px; height: 5px; flex-shrink: 0; }
-
-    .di-tl-events { position: absolute; top: 190px; left: 12px; right: 12px; z-index: 2; text-align: left !important; }
-    .di-tl-events * { text-align: left; }
-    .di-tl-card {
-      background: rgba(255,255,255,0.05); border-radius: 16px;
-      padding: 14px 16px; margin-bottom: 10px; position: relative; text-align: left;
-    }
-    .di-tl-card.highlight {
-      background: rgba(80,120,20,0.2);
-      border: 2px solid rgba(120,180,30,0.5);
-      box-shadow: inset 0 0 20px rgba(120,180,30,0.05);
-    }
-    /* Row 1: color bar + title/time + icons */
-    .di-tl-row1 { display: flex; align-items: flex-start; gap: 8px; }
-    .di-tl-cbar { width: 4px; border-radius: 3px; flex-shrink: 0; align-self: stretch; min-height: 40px; }
-    .di-tl-card.highlight .di-tl-cbar { box-shadow: 0 0 6px currentColor; }
-    .di-tl-cbar.blue { background: #0A84FF; color: #0A84FF; }
-    .di-tl-cbar.green { background: #30D158; color: #30D158; }
-    .di-tl-cbar.yellow { background: #a0c030; color: #a0c030; }
-    .di-tl-cbar.red { background: #FF453A; color: #FF453A; }
-    .di-tl-card-body { flex: 1; min-width: 0; text-align: left; }
-    .di-tl-card-title { font-size: 16px; font-weight: 600; color: #fff; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; line-height: 1.3; text-align: left; }
-    .di-tl-card-sub { font-size: 13px; color: rgba(255,255,255,0.35); margin-top: 3px; display: flex; align-items: center; gap: 4px; }
-    .di-tl-card-sub .repeat { font-size: 11px; font-weight: 500; }
-    .di-tl-card-icons { display: flex; gap: 8px; align-items: center; flex-shrink: 0; margin-left: 8px; }
-    .di-tl-icon-cam { width: 34px; height: 34px; background: #0A84FF; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .di-tl-icon-cam svg { width: 16px; height: 16px; fill: #fff; }
-    .di-tl-icon-phone { width: 34px; height: 34px; background: #30D158; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
-    .di-tl-icon-phone svg { width: 16px; height: 16px; fill: #fff; }
-    /* Row 2: alarm pills (left) + timer (right) */
-    .di-tl-row2 { display: flex; align-items: flex-end; justify-content: space-between; margin-top: 8px; }
-    .di-tl-pills { display: flex; align-items: center; gap: 6px; }
-    .di-tl-alarm {
-      display: inline-flex; align-items: center; gap: 5px;
-      background: #FF9F0A; border-radius: 14px; padding: 4px 10px;
-      font-size: 11px; font-weight: 700; color: #fff; text-transform: uppercase; letter-spacing: 0.5px;
-    }
-    .di-tl-alarm.pending {
-      background: transparent; border: 1.5px solid rgba(255,159,10,0.5); color: #FF9F0A;
-    }
-    .di-tl-alarm svg { width: 12px; height: 12px; fill: currentColor; }
-    .di-tl-counter { font-size: 10px; font-weight: 700; color: #FF453A; border: 1.5px solid #FF453A; border-radius: 10px; padding: 1px 6px; }
-    .di-tl-timer { font-variant-numeric: tabular-nums; font-weight: 700; }
-    .di-tl-timer.big { font-size: 19px; font-weight: 800; color: #FF453A; }
-    .di-tl-timer.big.green { color: #30D158; }
-    .di-tl-timer.small { font-size: 16px; color: #30D158; }
-
-    @keyframes diPulse { 0%,100%{opacity:1} 50%{opacity:.85} }
-    .di-pulse { animation: diPulse 2s ease-in-out infinite; }
-
-    /* gap handled per-breakpoint above */
-
-    /* ===== Testimonials Carousel ===== */
-    .testimonials {
-      padding: 0 0 40px;
-      overflow: hidden;
-    }
-
-    .testimonials-track {
-      display: flex;
-      gap: 0;
-      animation: scroll-testimonials 120s linear infinite;
-      width: max-content;
-    }
-
-    .testimonials-track:hover {
-      animation-play-state: paused;
-    }
-
-    @keyframes scroll-testimonials {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
-    }
-
-    .testimonial-card {
-      flex: 0 0 300px;
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 20px;
-      margin-right: 16px;
-      transition: border-color 0.3s;
-    }
-
-    .testimonial-card:hover {
-      border-color: rgba(124, 92, 252, 0.3);
-    }
-
-    .testimonial-header {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-bottom: 12px;
-    }
-
-    .testimonial-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--pro-gradient);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 700;
-      color: white;
-      flex-shrink: 0;
-    }
-
-    .testimonial-name {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text);
-    }
-
-    .testimonial-role {
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .testimonial-stars {
-      color: #fbbf24;
-      font-size: 13px;
-      margin-bottom: 8px;
-      letter-spacing: 2px;
-    }
-
-    .testimonial-text {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    @media (max-width: 640px) {
-      .testimonial-card { flex: 0 0 260px; padding: 16px; }
-    }
-
-    /* ===== Features ===== */
-    .features-hero-row {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .features-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
-    }
-
-    .feature-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      transition: all 0.3s;
-    }
-
-    .feature-card:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(124, 92, 252, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .feature-card.feature-hero {
-      background: linear-gradient(135deg, rgba(124, 92, 252, 0.06), rgba(175, 108, 255, 0.03));
-      padding: 32px;
-      padding-left: 35px;
-      position: relative;
-      overflow: hidden;
-      box-shadow: 0 0 30px rgba(124, 92, 252, 0.08);
-    }
-
-    .feature-card.feature-hero::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      bottom: 0;
-      width: 3px;
-      background: linear-gradient(180deg, #7c5cfc, #af6cff);
-      border-radius: 3px 0 0 3px;
-    }
-
-    .feature-card.feature-hero:hover {
-      background: linear-gradient(135deg, rgba(124, 92, 252, 0.1), rgba(175, 108, 255, 0.05));
-      border-color: rgba(124, 92, 252, 0.3);
-      transform: translateY(-3px);
-    }
-
-    .feature-card.feature-hero .feature-icon {
-      width: 48px;
-      height: 48px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      background: linear-gradient(135deg, rgba(124, 92, 252, 0.15), rgba(175, 108, 255, 0.1));
-      font-size: 22px;
-      margin-bottom: 18px;
-    }
-
-    .feature-card.feature-hero h3 {
-      font-size: 19px;
-      font-weight: 700;
-      margin-bottom: 10px;
-    }
-
-    .feature-card.feature-hero p {
-      font-size: 15px;
-      line-height: 1.55;
-      color: var(--text-muted);
-    }
-
-    .feature-icon {
-      font-size: 28px;
-      margin-bottom: 16px;
-      display: block;
-    }
-
-    .feature-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .feature-card p {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    @media (max-width: 900px) {
-      .features-hero-row {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    .section-title {
-      font-size: clamp(28px, 4vw, 40px);
-      font-weight: 700;
-      text-align: center;
-      margin-bottom: 12px;
-      letter-spacing: -0.02em;
-    }
-
-    .section-subtitle {
-      text-align: center;
-      color: var(--text-muted);
-      font-size: 16px;
-      margin-bottom: 48px;
-      max-width: 500px;
-      margin-left: auto;
-      margin-right: auto;
-    }
-
-    /* ===== Value Proposition Strip ===== */
-    .value-strip {
-      background: linear-gradient(180deg, rgba(124, 92, 252, 0.06) 0%, rgba(124, 92, 252, 0.02) 100%);
-      border-top: 1px solid var(--border);
-      border-bottom: 1px solid var(--border);
-      padding: 28px 0;
-    }
-
-    .value-strip-inner {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 48px;
-      max-width: 1080px;
-      margin: 0 auto;
-      padding: 0 24px;
-    }
-
-    .value-strip-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .value-strip-icon {
-      flex-shrink: 0;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      filter: drop-shadow(0 0 6px rgba(124, 92, 252, 0.4));
-    }
-
-    .value-strip-icon svg {
-      width: 24px;
-      height: 24px;
-      stroke: var(--accent-light);
-      fill: none;
-      stroke-width: 1.5;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-    }
-
-    .value-strip-text {
-      font-size: 13px;
-      color: var(--text-muted);
-      line-height: 1.3;
-      letter-spacing: 0.01em;
-    }
-
-    @media (max-width: 599px) {
-      .value-strip-inner {
-        flex-direction: column;
-        gap: 20px;
-        align-items: flex-start;
-        padding: 0 32px;
-      }
-    }
-
-    /* ===== How It Works ===== */
-    .hiw-section {
-      background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 252, 0.04) 50%, transparent 100%);
-    }
-
-    .hiw-steps {
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      gap: 48px;
-      position: relative;
-      max-width: 900px;
-      margin: 0 auto;
-    }
-
-    .hiw-step {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      max-width: 260px;
-    }
-
-    .hiw-number {
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      background: var(--pro-gradient);
-      color: #fff;
-      font-size: 22px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-bottom: 20px;
-      flex-shrink: 0;
-    }
-
-    .hiw-step h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
-    }
-
-    .hiw-step p {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .hiw-connector {
-      position: absolute;
-      top: 28px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 55%;
-      height: 2px;
-      background: repeating-linear-gradient(90deg, rgba(124, 92, 252, 0.3) 0, rgba(124, 92, 252, 0.3) 6px, transparent 6px, transparent 12px);
-      z-index: 0;
-    }
-
-    .hiw-number { position: relative; z-index: 1; }
-
-    @media (max-width: 640px) {
-      .hiw-steps { flex-direction: column; align-items: center; gap: 36px; }
-      .hiw-step { max-width: 320px; }
-      .hiw-connector { display: none; }
-    }
-
-    /* How It Works i18n visibility */
-    [data-lang="en"] .hiw-step[data-i18n="en"],
-    [data-lang="es"] .hiw-step[data-i18n="es"],
-    [data-lang="ja"] .hiw-step[data-i18n="ja"],
-    [data-lang="de"] .hiw-step[data-i18n="de"],
-    [data-lang="fr"] .hiw-step[data-i18n="fr"] { display: flex !important; }
-
-    /* ===== Pro Section ===== */
-    .pro-section {
-      background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 252, 0.04) 50%, transparent 100%);
-    }
-
-    /* Comparison table */
-    .pro-comparison {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      max-width: 740px;
-      margin: 0 auto 56px;
-    }
-
-    .plan-col {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 32px 28px;
-      position: relative;
-    }
-
-    .plan-col.pro {
-      border-color: rgba(124, 92, 252, 0.4);
-      box-shadow: 0 0 40px rgba(124, 92, 252, 0.08);
-    }
-
-    .plan-col.pro::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 3px;
-      background: var(--pro-gradient);
-      border-radius: 20px 20px 0 0;
-    }
-
-    .plan-label {
-      font-size: 13px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--text-muted);
-      margin-bottom: 4px;
-    }
-
-    .plan-col.pro .plan-label {
-      background: var(--pro-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .plan-name {
-      font-size: 24px;
-      font-weight: 700;
-      margin-bottom: 20px;
-    }
-
-    .plan-features {
-      list-style: none;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-
-    .plan-features li {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-size: 14px;
-      line-height: 1.4;
-    }
-
-    .plan-features .icon {
-      flex-shrink: 0;
-      width: 22px;
-      height: 22px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-    }
-
-    .plan-features .icon.yes {
-      background: rgba(124, 92, 252, 0.15);
-      color: var(--accent-light);
-    }
-
-    .plan-features .icon.no {
-      background: rgba(255, 59, 48, 0.12);
-      color: #FF453A;
-    }
-
-    .plan-features .icon.free {
-      background: rgba(52, 199, 89, 0.12);
-      color: #34c759;
-    }
-
-    .plan-features .muted { color: var(--text-muted); }
-
-    /* Pricing cards */
-    .pricing-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
-      max-width: 740px;
-      margin: 0 auto 32px;
-    }
-
-    .price-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 24px 20px;
-      text-align: center;
-      position: relative;
-      transition: all 0.25s;
-    }
-
-    .price-card:hover {
-      border-color: rgba(124, 92, 252, 0.3);
-      transform: translateY(-2px);
-    }
-
-    .price-card.featured {
-      border-color: rgba(124, 92, 252, 0.5);
-      box-shadow: 0 4px 24px rgba(124, 92, 252, 0.12);
-    }
-
-    .price-badge {
-      position: absolute;
-      top: -10px;
-      left: 50%;
-      transform: translateX(-50%);
-      background: var(--pro-gradient);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 3px 12px;
-      border-radius: 10px;
-      text-transform: uppercase;
-      letter-spacing: 0.04em;
-      white-space: nowrap;
-    }
-
-    .price-period {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-muted);
-      margin-bottom: 8px;
-    }
-
-    .price-amount {
-      font-size: 32px;
-      font-weight: 700;
-      line-height: 1;
-      margin-bottom: 4px;
-    }
-
-    .price-unit {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .price-savings {
-      font-size: 12px;
-      font-weight: 600;
-      color: #34c759;
-      background: rgba(52, 199, 89, 0.1);
-      padding: 3px 10px;
-      border-radius: 8px;
-      display: inline-block;
-    }
-
-    .pro-footer-note {
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-muted);
-      max-width: 500px;
-      margin: 0 auto;
-      line-height: 1.5;
-    }
-
-    @media (max-width: 640px) {
-      .pro-comparison { grid-template-columns: 1fr; gap: 16px; }
-      .pricing-grid { grid-template-columns: 1fr; max-width: 320px; }
-    }
-
-    @media (min-width: 641px) and (max-width: 800px) {
-      .pricing-grid { grid-template-columns: 1fr 1fr; }
-    }
-
-    /* ===== Footer ===== */
-    footer {
-      padding: 40px 0;
-      border-top: 1px solid var(--border);
-    }
-
-    .footer-inner {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: wrap;
-      gap: 16px;
-    }
-
-    .footer-links {
-      display: flex;
-      gap: 24px;
-    }
-
-    .footer-links a {
-      color: var(--text-muted);
-      text-decoration: none;
-      font-size: 14px;
-      transition: color 0.2s;
-    }
-
-    .footer-links a:hover { color: var(--accent-light); }
-
-    .footer-copy {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
-
-    /* ===== Responsive ===== */
-    @media (max-width: 640px) {
-      section { padding: 60px 0; }
-      .hero { padding-top: 120px; }
-      .footer-inner { flex-direction: column; text-align: center; }
-    }
-
-    /* ===== i18n: hide all, show active language ===== */
-    [data-i18n] { display: none !important; }
-
-    /* Inline elements: span, img inside parents */
-    [data-lang="en"] span[data-i18n="en"],
-    [data-lang="es"] span[data-i18n="es"],
-    [data-lang="ja"] span[data-i18n="ja"],
-    [data-lang="de"] span[data-i18n="de"],
-    [data-lang="fr"] span[data-i18n="fr"] { display: inline !important; }
-
-    [data-lang="en"] img[data-i18n="en"],
-    [data-lang="es"] img[data-i18n="es"],
-    [data-lang="ja"] img[data-i18n="ja"],
-    [data-lang="de"] img[data-i18n="de"],
-    [data-lang="fr"] img[data-i18n="fr"] { display: inline !important; }
-
-    /* Block elements: p, div */
-    [data-lang="en"] p[data-i18n="en"],
-    [data-lang="es"] p[data-i18n="es"],
-    [data-lang="ja"] p[data-i18n="ja"],
-    [data-lang="de"] p[data-i18n="de"],
-    [data-lang="fr"] p[data-i18n="fr"] { display: block !important; }
-
-    [data-lang="en"] div[data-i18n="en"],
-    [data-lang="es"] div[data-i18n="es"],
-    [data-lang="ja"] div[data-i18n="ja"],
-    [data-lang="de"] div[data-i18n="de"],
-    [data-lang="fr"] div[data-i18n="fr"] { display: block !important; }
-
-    /* Feature cards in grid */
-    [data-lang="en"] .feature-card[data-i18n="en"],
-    [data-lang="es"] .feature-card[data-i18n="es"],
-    [data-lang="ja"] .feature-card[data-i18n="ja"],
-    [data-lang="de"] .feature-card[data-i18n="de"],
-    [data-lang="fr"] .feature-card[data-i18n="fr"] { display: block !important; }
-
-    /* Hero feature cards in hero row */
-    [data-lang="en"] .feature-card.feature-hero[data-i18n="en"],
-    [data-lang="es"] .feature-card.feature-hero[data-i18n="es"],
-    [data-lang="ja"] .feature-card.feature-hero[data-i18n="ja"],
-    [data-lang="de"] .feature-card.feature-hero[data-i18n="de"],
-    [data-lang="fr"] .feature-card.feature-hero[data-i18n="fr"] { display: flex !important; flex-direction: column; }
-
-    /* Plan comparison: list items as flex */
-    [data-lang="en"] .plan-features li[data-i18n="en"],
-    [data-lang="es"] .plan-features li[data-i18n="es"],
-    [data-lang="ja"] .plan-features li[data-i18n="ja"],
-    [data-lang="de"] .plan-features li[data-i18n="de"],
-    [data-lang="fr"] .plan-features li[data-i18n="fr"] { display: flex !important; }
-
-    /* Sections (testimonials, etc.) */
-    [data-lang="en"] section[data-i18n="en"],
-    [data-lang="es"] section[data-i18n="es"],
-    [data-lang="ja"] section[data-i18n="ja"],
-    [data-lang="de"] section[data-i18n="de"],
-    [data-lang="fr"] section[data-i18n="fr"] { display: block !important; }
-
-    /* ===== What's New ===== */
-    .whats-new {
-      background: linear-gradient(180deg, transparent 0%, rgba(124, 92, 252, 0.04) 50%, transparent 100%);
-    }
-
-    .whats-new-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 20px;
-      max-width: 740px;
-      margin: 0 auto;
-    }
-
-    .update-card {
-      background: var(--bg-card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 28px;
-      transition: all 0.3s;
-      position: relative;
-    }
-
-    .update-card:hover {
-      background: var(--bg-card-hover);
-      border-color: rgba(124, 92, 252, 0.2);
-      transform: translateY(-2px);
-    }
-
-    .update-card.featured {
-      grid-column: 1 / -1;
-      background: linear-gradient(135deg, rgba(124, 92, 252, 0.08) 0%, rgba(192, 132, 252, 0.04) 100%);
-      border-color: rgba(124, 92, 252, 0.25);
-    }
-
-    .update-card .update-icon {
-      font-size: 28px;
-      margin-bottom: 14px;
-      display: block;
-    }
-
-    .update-card h3 {
-      font-size: 17px;
-      font-weight: 600;
-      margin-bottom: 8px;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .update-card p {
-      font-size: 14px;
-      color: var(--text-muted);
-      line-height: 1.5;
-    }
-
-    .new-badge {
-      display: inline-block;
-      background: var(--pro-gradient);
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 2px 8px;
-      border-radius: 6px;
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      line-height: 1.4;
-      flex-shrink: 0;
-    }
-
-    [data-lang="en"] .update-card[data-i18n="en"],
-    [data-lang="es"] .update-card[data-i18n="es"],
-    [data-lang="ja"] .update-card[data-i18n="ja"],
-    [data-lang="de"] .update-card[data-i18n="de"],
-    [data-lang="fr"] .update-card[data-i18n="fr"] { display: block !important; }
-
-    [data-lang="en"] .update-card.featured[data-i18n="en"],
-    [data-lang="es"] .update-card.featured[data-i18n="es"],
-    [data-lang="ja"] .update-card.featured[data-i18n="ja"],
-    [data-lang="de"] .update-card.featured[data-i18n="de"],
-    [data-lang="fr"] .update-card.featured[data-i18n="fr"] { display: block !important; }
-
-    @media (max-width: 640px) {
-      .whats-new-grid {
-        grid-template-columns: 1fr;
-      }
-      .update-card.featured {
-        grid-column: auto;
-      }
-    }
-
-    /* ===== Watch Showcase (inside tab panel) ===== */
-    .watch-panel-inner {
-      position: relative;
-      padding: 20px 0 0;
-    }
-
-    .watch-panel-inner::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 700px;
-      height: 500px;
-      background: radial-gradient(ellipse, rgba(124, 92, 252, 0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .watch-header {
-      text-align: center;
-      margin-bottom: 48px;
-    }
-
-    .watch-header h2 {
-      font-size: clamp(28px, 4vw, 42px);
-      font-weight: 700;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 12px;
-    }
-
-    .watch-header h2 .gradient {
-      background: var(--pro-gradient);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .watch-header p {
-      font-size: 16px;
-      color: var(--text-muted);
-      max-width: 480px;
-      margin: 0 auto;
-      line-height: 1.5;
-    }
-
-    .watch-scene {
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      gap: 48px;
-      padding: 0 24px;
-    }
-
-    .watch-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      opacity: 0;
-      transform: translateY(30px);
-      transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
-                  transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .watch-item.watch-visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    .watch-item:nth-child(2) { transition-delay: 0.15s; }
-    .watch-item:nth-child(3) { transition-delay: 0.3s; }
-
-    .watch-frame {
-      position: relative;
-      width: 198px;
-      height: 242px;
-      flex-shrink: 0;
-    }
-
-    .watch-case {
-      position: absolute;
-      inset: 0;
-      border-radius: 48px;
-      background:
-        linear-gradient(170deg,
-          #3e3e46 0%, #30303a 10%, #26262e 25%,
-          #202028 50%,
-          #26262e 75%, #30303a 90%, #3e3e46 100%);
-      box-shadow:
-        /* chamfer highlight */
-        inset 0 1px 0 rgba(255, 255, 255, 0.15),
-        inset 0 -1px 0 rgba(255, 255, 255, 0.04),
-        inset 1px 0 0 rgba(255, 255, 255, 0.05),
-        inset -1px 0 0 rgba(255, 255, 255, 0.05),
-        /* outer ring */
-        0 0 0 0.5px rgba(255, 255, 255, 0.07),
-        0 0 0 1.5px #0c0c0f,
-        0 0 0 2px rgba(255, 255, 255, 0.03),
-        /* depth shadows */
-        0 20px 50px -10px rgba(0, 0, 0, 0.7),
-        0 8px 24px -4px rgba(0, 0, 0, 0.45),
-        0 3px 10px -2px rgba(0, 0, 0, 0.3);
-    }
-
-    .watch-crown {
-      position: absolute;
-      right: -7px;
-      top: 66px;
-      width: 7px;
-      height: 30px;
-      border-radius: 2.5px;
-      background: linear-gradient(90deg, #3a3a40, #2a2a30, #3e3e44);
-      box-shadow:
-        1px 0 3px rgba(0, 0, 0, 0.6),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12),
-        inset 0 -1px 0 rgba(0, 0, 0, 0.2),
-        inset 1px 0 0 rgba(255, 255, 255, 0.06);
-      /* Crown grip ridges */
-      background-image: repeating-linear-gradient(
-        0deg,
-        transparent, transparent 2.5px,
-        rgba(255,255,255,0.06) 2.5px, rgba(255,255,255,0.06) 3px,
-        transparent 3px, transparent 5.5px
-      );
-    }
-
-    .watch-side-btn {
-      position: absolute;
-      right: -6px;
-      top: 108px;
-      width: 6px;
-      height: 18px;
-      border-radius: 2px;
-      background: linear-gradient(90deg, #3a3a40, #2a2a30, #3e3e44);
-      box-shadow:
-        1px 0 3px rgba(0, 0, 0, 0.5),
-        inset 0 1px 0 rgba(255,255,255,0.10),
-        inset 0 -1px 0 rgba(0,0,0,0.2);
-    }
-
-    .watch-screen {
-      position: absolute;
-      top: 16px;
-      left: 14px;
-      right: 14px;
-      bottom: 16px;
-      border-radius: 36px;
-      overflow: hidden;
-      background: #000;
-      box-shadow:
-        inset 0 0 0 0.5px rgba(255, 255, 255, 0.08),
-        0 0 0 1px #0a0a0c;
-    }
-
-    .watch-screen iframe {
-      width: 100%;
-      height: 100%;
-      border: none;
-      display: block;
-      border-radius: 36px;
-      background: #000;
-    }
-
-    .watch-label {
-      margin-top: 16px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      color: var(--chrome-label);
-      text-align: center;
-    }
-
-    @media (max-width: 899px) and (min-width: 600px) {
-      .watch-scene { gap: 28px; }
-      .watch-frame { width: 165px; height: 202px; }
-      .watch-case { border-radius: 40px; }
-      .watch-screen { top: 13px; left: 12px; right: 12px; bottom: 13px; border-radius: 30px; }
-      .watch-screen iframe { border-radius: 30px; }
-      .watch-crown { right: -6px; top: 56px; width: 6px; height: 25px; }
-      .watch-side-btn { right: -5px; top: 90px; width: 5px; height: 15px; }
-    }
-
-    @media (max-width: 599px) {
-      .watch-scene {
-        flex-wrap: nowrap;
-        justify-content: flex-start;
-        overflow-x: auto;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        gap: 24px;
-        padding: 0 calc(50vw - 99px);
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-      }
-      .watch-scene::-webkit-scrollbar { display: none; }
-      .watch-item { flex: 0 0 auto; scroll-snap-align: center; }
-      .watch-frame { width: 198px; height: 242px; }
-      .watch-header { margin-bottom: 32px; }
-      .watch-dots { display: flex; justify-content: center; gap: 8px; margin-top: 20px; }
-      .watch-dot { width: 6px; height: 6px; border-radius: 50%; background: rgba(255, 255, 255, 0.15); transition: background 0.3s; }
-      .watch-dot.watch-dot-active { background: var(--accent); }
-    }
-
-    @media (min-width: 600px) {
-      .watch-dots { display: none; }
-    }
-
-    /* ===== Second CTA ===== */
-    .cta-bottom {
-      text-align: center;
-      padding: 60px 0 20px;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Call to Meet — Never miss a meeting again</title>
+<meta name="description" content="Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent. Works with Zoom, Google Meet and Microsoft Teams.">
+<link rel="icon" type="image/png" href="app-icon.png">
+<meta property="og:title" content="Call to Meet — Never miss a meeting again">
+<meta property="og:description" content="The countdown to your meeting, living on your Lock Screen, Dynamic Island and Apple Watch.">
+<meta property="og:image" content="https://iflorit.github.io/app-icon.png">
+<meta property="og:type" content="website">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08090c; --bg2:#0b0d12; --card:#101218; --line:rgba(255,255,255,.08);
+  --green:#30D158; --blue:#0A84FF; --orange:#FF9F0A; --red:#FF453A; --purple:#7c5cfc;
+  --ink:#f5f5f7; --mut:#8b8b94; --mut2:#6a6a72;
+  --max:1200px;
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--ink);
+  font-family:'Inter','Noto Sans JP',-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.5;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 28px}
+.mono{font-family:'JetBrains Mono','Noto Sans JP',monospace}
+.g{color:var(--green)}
+
+/* ---------- NAV ---------- */
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);
+  background:rgba(8,9,12,.72);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:66px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:700;font-size:18px;letter-spacing:-.01em}
+.brand img{width:32px;height:32px;border-radius:8px}
+.nav-right{display:flex;align-items:center;gap:26px}
+.nav-links{display:flex;gap:26px;color:var(--mut);font-size:15px;font-weight:500}
+.nav-links a:hover{color:var(--ink)}
+.langs{display:flex;gap:2px;background:rgba(255,255,255,.05);border-radius:980px;padding:3px}
+.langs button{background:none;border:0;color:var(--mut);font:600 12px/1 'Inter',sans-serif;
+  padding:6px 9px;border-radius:980px;cursor:pointer;letter-spacing:.03em}
+.langs button.active{background:rgba(255,255,255,.12);color:var(--ink)}
+.btn-cta{color:var(--ink);border:1px solid rgba(255,255,255,.18);padding:9px 17px;border-radius:980px;
+  font-size:14px;font-weight:600}
+.btn-cta:hover{background:rgba(255,255,255,.08)}
+@media(max-width:760px){.nav-links{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;z-index:0;background:
+  radial-gradient(58% 50% at 80% 12%,rgba(10,70,120,.34),transparent 66%),
+  radial-gradient(40% 40% at 6% 88%,rgba(48,209,88,.07),transparent 70%);pointer-events:none}
+.hero-grid{position:relative;z-index:2;display:grid;grid-template-columns:1.05fr .95fr;
+  align-items:center;gap:30px;padding:78px 0 90px}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;font-size:13px;font-weight:700;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:26px}
+.eyebrow .dot{width:8px;height:8px;border-radius:50%;background:var(--green);box-shadow:0 0 12px var(--green)}
+h1{font-size:clamp(34px,5.4vw,72px);line-height:1.04;font-weight:800;letter-spacing:-.035em;max-width:660px;overflow-wrap:break-word}
+.hero .sub{margin-top:26px;font-size:clamp(16px,1.5vw,21px);line-height:1.5;color:var(--mut);max-width:500px;font-weight:400;overflow-wrap:break-word}
+.actions{margin-top:38px;display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+.badge{height:54px}
+.compat{font-size:14px;color:var(--mut);font-weight:500}
+.compat b{color:#cfcfd6;font-weight:600}
+
+/* hero stage: lock screen bleeding off right + floating chips */
+.stage{position:relative;height:600px;display:flex;align-items:center;justify-content:flex-end}
+.phone{position:relative;width:330px;border-radius:46px;overflow:hidden;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.10),0 0 0 8px #131316,0 0 0 9px rgba(255,255,255,.05),0 60px 120px -30px rgba(0,0,0,.9);
+  transform:translateY(20px)}
+.phone img{display:block;width:100%}
+.di{position:absolute;top:48px;left:50%;transform:translateX(-50%);z-index:6;background:#000;border-radius:20px;
+  height:38px;display:flex;align-items:center;gap:11px;padding:0 15px;box-shadow:0 0 0 .5px rgba(255,255,255,.12)}
+.di .t{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;color:var(--green)}
+.di svg{width:17px;height:17px;fill:#fff;opacity:.9}
+.float{position:absolute;z-index:7;background:rgba(20,21,26,.74);backdrop-filter:blur(22px);
+  border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:12px 15px;display:flex;align-items:center;gap:11px;
+  box-shadow:0 24px 60px -16px rgba(0,0,0,.7)}
+.float .bar{width:4px;height:32px;border-radius:2px}
+.float .tt{font-size:13px;font-weight:600}.float .ss{font-size:11px;color:var(--mut);margin-top:2px}
+.f1{top:120px;left:0}.f2{bottom:120px;left:24px}
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;gap:10px;padding:54px 0 40px}
+  .copy{max-width:100%;min-width:0}
+  h1{font-size:clamp(30px,8vw,46px);max-width:100%}
+  .hero .sub{max-width:100%}
+  .stage{height:480px;justify-content:center;margin-top:18px}
+  .f1{left:0}.f2{left:0}
+  .fb-cap h2{font-size:clamp(24px,6vw,34px)}
+}
+
+/* ---------- TRUST ---------- */
+.trust{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--bg2)}
+.trust-in{display:flex;align-items:center;justify-content:center;gap:40px;flex-wrap:wrap;padding:26px 0}
+.trust .lbl{font-size:13px;color:var(--mut2);font-weight:600;letter-spacing:.04em}
+.trust .logos{display:flex;gap:30px;align-items:center;color:#c7c7cf;font-weight:700;font-size:17px;letter-spacing:-.01em;flex-wrap:wrap;justify-content:center}
+.trust .logos span{display:flex;align-items:center;gap:8px;opacity:.85}
+.dotsep{width:5px;height:5px;border-radius:50%;background:var(--mut2)}
+
+/* ---------- SECTION SHELL ---------- */
+section{position:relative}
+.sec{padding:104px 0}
+.sec-head{max-width:680px;margin-bottom:54px}
+.sec-head.center{margin-left:auto;margin-right:auto;text-align:center}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:18px}
+h2{font-size:clamp(30px,3.6vw,46px);line-height:1.07;font-weight:800;letter-spacing:-.03em}
+.sec-head p{margin-top:18px;font-size:18px;color:var(--mut);line-height:1.55}
+
+/* ---------- FULL BLEED ---------- */
+.fullbleed{position:relative;padding:0;overflow:hidden;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.fullbleed .inner{position:relative;display:flex;align-items:center;justify-content:center;min-height:520px;
+  background:radial-gradient(60% 90% at 50% 120%,rgba(10,70,120,.30),transparent 70%)}
+.fb-phone{width:300px;border-radius:42px;overflow:hidden;margin:60px 0 -160px;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.10),0 0 0 8px #131316,0 80px 150px -40px rgba(0,0,0,.9)}
+.fb-phone img{display:block;width:100%}
+.fb-cap{position:absolute;top:64px;left:0;right:0;text-align:center;padding:0 24px}
+.fb-cap h2{max-width:760px;margin:0 auto}
+
+/* ---------- FEATURE ROWS ---------- */
+.frow{display:grid;grid-template-columns:1fr 1fr;align-items:center;gap:64px;padding:78px 0}
+.frow:nth-child(even) .ftext{order:2}
+.frow:nth-child(even) .fvis{order:1}
+.ftext h3{font-size:clamp(26px,2.8vw,36px);font-weight:800;letter-spacing:-.025em;line-height:1.1;margin:16px 0 16px}
+.ftext p{font-size:17px;color:var(--mut);line-height:1.6;max-width:440px}
+.spec{margin-top:24px;display:flex;gap:10px;flex-wrap:wrap}
+.spec span{font-size:12.5px;font-weight:600;color:#cfcfd6;background:rgba(255,255,255,.06);
+  border:1px solid var(--line);border-radius:980px;padding:7px 13px}
+.fvis{display:flex;justify-content:center;position:relative}
+.fvis .phone{transform:none}
+@media(max-width:860px){
+  .frow{grid-template-columns:1fr;gap:30px;padding:50px 0}
+  .frow:nth-child(even) .ftext{order:2}.frow:nth-child(even) .fvis{order:1}
+}
+
+/* ---------- EVERY SCREEN ---------- */
+.devices{position:relative;height:540px;margin-top:30px}
+.devices .d-phone{position:absolute;left:50%;top:0;transform:translateX(-58%);width:300px;border-radius:42px;overflow:hidden;z-index:2;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.10),0 0 0 8px #131316,0 60px 120px -36px rgba(0,0,0,.9)}
+.devices .d-ipad{position:absolute;left:50%;top:60px;transform:translateX(6%);width:360px;border-radius:30px;overflow:hidden;z-index:1;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.10),0 0 0 8px #131316,0 60px 120px -36px rgba(0,0,0,.9)}
+.devices .d-watch{position:absolute;left:50%;bottom:0;transform:translateX(-200px);width:150px;border-radius:38px;overflow:hidden;z-index:3;
+  box-shadow:inset 0 0 0 2px rgba(255,255,255,.12),0 0 0 6px #1c1c1f,0 40px 90px -24px rgba(0,0,0,.9)}
+.devices img{display:block;width:100%}
+@media(max-width:860px){.devices{height:420px}.devices .d-ipad{display:none}.devices .d-phone{transform:translateX(-50%)}.devices .d-watch{transform:translateX(-150px)}}
+
+/* ---------- HOW IT WORKS ---------- */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.step{background:var(--bg);padding:34px 28px}
+.step .num{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;color:var(--green);letter-spacing:.05em}
+.step h4{font-size:19px;font-weight:700;margin:18px 0 10px;letter-spacing:-.01em}
+.step p{font-size:14.5px;color:var(--mut);line-height:1.55}
+@media(max-width:860px){.steps{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.steps{grid-template-columns:1fr}}
+
+/* ---------- PRICING ---------- */
+.price{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:880px;margin:0 auto}
+.plan{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 30px;position:relative}
+.plan.pro{border-color:rgba(48,209,88,.4);box-shadow:0 0 0 1px rgba(48,209,88,.18),0 30px 80px -40px rgba(48,209,88,.25)}
+.plan .pname{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
+.plan.pro .pname{color:var(--green)}
+.plan .ptag{font-size:15px;color:var(--mut);margin-top:14px;min-height:44px}
+.plist{margin-top:22px;display:flex;flex-direction:column;gap:13px}
+.plist li{list-style:none;display:flex;gap:11px;align-items:flex-start;font-size:15px;color:#dcdce2}
+.plist svg{width:18px;height:18px;flex-shrink:0;margin-top:1px;fill:var(--green)}
+@media(max-width:680px){.price{grid-template-columns:1fr}}
+
+/* ---------- FINAL CTA ---------- */
+.final{text-align:center;padding:120px 0;position:relative;overflow:hidden}
+.final::before{content:'';position:absolute;inset:0;background:radial-gradient(50% 70% at 50% 30%,rgba(48,209,88,.10),transparent 70%)}
+.final h2{position:relative;max-width:720px;margin:0 auto 34px}
+.final .badge{height:58px}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--line);background:var(--bg2)}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:34px 0;flex-wrap:wrap;gap:16px}
+.foot .brand{font-size:15px}.foot .brand img{width:26px;height:26px}
+.foot-links{display:flex;gap:24px;color:var(--mut);font-size:14px}
+.foot-links a:hover{color:var(--ink)}
+.copy{color:var(--mut2);font-size:13px}
+</style>
 </head>
 <body>
-
-  <!-- Nav -->
-  <nav>
-    <div class="container">
-      <a href="#" class="nav-brand">
-        <img src="app-icon.png" alt="Call to Meet" width="36" height="36">
-        <span>Call to Meet</span>
-      </a>
-      <div class="nav-links">
-        <button class="lang-btn active" onclick="setLang('en')">EN</button>
-        <button class="lang-btn" onclick="setLang('es')">ES</button>
-        <button class="lang-btn" onclick="setLang('de')">DE</button>
-        <button class="lang-btn" onclick="setLang('fr')">FR</button>
-        <button class="lang-btn" onclick="setLang('ja')">JA</button>
-        <button class="theme-toggle" onclick="cycleTheme()" id="theme-toggle" aria-label="Toggle theme">
-          <!-- icon set by JS -->
-        </button>
-      </div>
+<header><div class="wrap nav">
+  <a class="brand" href="#"><img src="app-icon.png" alt="Call to Meet">Call to Meet</a>
+  <div class="nav-right">
+    <nav class="nav-links">
+      <a href="#features" data-k="nav_features">Features</a>
+      <a href="#screens" data-k="nav_screens">Devices</a>
+      <a href="#pricing" data-k="nav_pricing">Pricing</a>
+    </nav>
+    <div class="langs" id="langs">
+      <button data-l="en">EN</button><button data-l="es">ES</button><button data-l="de">DE</button><button data-l="fr">FR</button><button data-l="ja">JA</button>
     </div>
-  </nav>
+    <a class="btn-cta" href="#get" data-k="nav_cta">Get the app</a>
+  </div>
+</div></header>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container">
-      <img src="app-icon.png" alt="Call to Meet" class="hero-icon" width="100" height="100">
-
-      <h1>
-        <span data-i18n="en">Never miss a<br><span class="gradient">meeting</span> again</span>
-        <span data-i18n="es">No te pierdas<br>ninguna <span class="gradient">reunión</span></span>
-        <span data-i18n="de">Verpasse nie wieder<br>ein <span class="gradient">Meeting</span></span>
-        <span data-i18n="fr">Ne ratez plus<br>aucune <span class="gradient">réunion</span></span>
-        <span data-i18n="ja"><span class="gradient">ミーティング</span>を<br>もう逃しません</span>
-      </h1>
-
-      <p data-i18n="en">Dial into Zoom, Meet & Teams right from your Apple Watch. Live countdown on Dynamic Island. Alarms that cut through silence.</p>
-      <p data-i18n="es">Llama a Zoom, Meet y Teams directamente desde tu Apple Watch. Cuenta atrás en Dynamic Island. Alarmas que suenan aunque estés en silencio.</p>
-      <p data-i18n="de">Zoom, Meet & Teams direkt von der Apple Watch anrufen. Live-Countdown auf Dynamic Island. Alarme, die jede Stille durchbrechen.</p>
-      <p data-i18n="fr">Appelez Zoom, Meet & Teams directement depuis votre Apple Watch. Compte à rebours sur Dynamic Island. Des alarmes qui percent le silence.</p>
-      <p data-i18n="ja">Apple WatchからZoom・Meet・Teamsに電話で参加。Dynamic Islandにライブカウントダウン。サイレントモードも貫通するアラーム。</p>
-
-      <a href="https://apps.apple.com/app/call-to-meet/id6738656243" class="app-store-badge" target="_blank" rel="noopener">
-        <img data-i18n="en" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="52">
-        <img data-i18n="es" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Descargar en el App Store" height="52">
-        <img data-i18n="de" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Im App Store laden" height="52">
-        <img data-i18n="fr" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Télécharger dans l'App Store" height="52">
-        <img data-i18n="ja" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Storeからダウンロード" height="52">
-      </a>
-
-      <div class="platform-strip">
-        <span data-i18n="en">Works with Zoom · Teams · Google Meet</span>
-        <span data-i18n="es">Compatible con Zoom · Teams · Google Meet</span>
-        <span data-i18n="de">Funktioniert mit Zoom · Teams · Google Meet</span>
-        <span data-i18n="fr">Compatible avec Zoom · Teams · Google Meet</span>
-        <span data-i18n="ja">対応サービス Zoom · Teams · Google Meet</span>
-      </div>
-    </div>
-  </section>
-
-  <!-- DI Showcase SVG Symbols -->
-  <svg style="display:none">
-    <defs>
-      <symbol id="sf-video" viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></symbol>
-      <symbol id="sf-cellular" viewBox="0 0 20 14"><rect x="0" y="10" width="3.5" height="4" rx="0.75"/><rect x="5.5" y="7" width="3.5" height="7" rx="0.75"/><rect x="11" y="3.5" width="3.5" height="10.5" rx="0.75"/><rect x="16.5" y="0" width="3.5" height="14" rx="0.75"/></symbol>
-      <symbol id="sf-battery" viewBox="0 0 31 14"><rect x="0" y="0.5" width="27" height="13" rx="3.5" fill="none" stroke="#fff" stroke-width="1.3" opacity="0.4"/><rect x="2.5" y="3" width="18" height="8" rx="1.5" fill="#fff"/><path d="M28.5 4.5a2 2 0 010 5" fill="#fff" opacity="0.4"/></symbol>
-      <symbol id="sf-phone" viewBox="0 0 24 24"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.58.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.57a1 1 0 01-.25 1.02l-2.2 2.2z"/></symbol>
-      <symbol id="sf-bell" viewBox="0 0 24 24"><path d="M12 22c1.1 0 2-.9 2-2h-4a2 2 0 002 2zm6-6V11c0-3.07-1.63-5.64-4.5-6.32V4a1.5 1.5 0 00-3 0v.68C7.64 5.36 6 7.92 6 11v5l-2 2v1h16v-1l-2-2z"/></symbol>
-      <symbol id="sf-gear" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 1012 8.5a3.5 3.5 0 000 7zm7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-.98l2.11-1.65a.5.5 0 00.12-.64l-2-3.46a.5.5 0 00-.61-.22l-2.49 1a7.23 7.23 0 00-1.69-.98l-.38-2.65A.49.49 0 0014 2h-4a.49.49 0 00-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.5.5 0 00-.61.22l-2 3.46a.49.49 0 00.12.64l2.11 1.65c-.04.32-.07.65-.07.98s.03.66.07.98l-2.11 1.65a.5.5 0 00-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1c.52.4 1.08.73 1.69.98l.38 2.65c.05.24.26.42.49.42h4c.24 0 .44-.18.49-.42l.38-2.65c.61-.25 1.17-.59 1.69-.98l2.49 1c.23.09.49 0 .61-.22l2-3.46a.5.5 0 00-.12-.64l-2.11-1.65z"/></symbol>
-    </defs>
-  </svg>
-
-  <!-- Device Showcase (iPhone / Apple Watch tabs) -->
-  <section class="di-showcase">
-    <div class="showcase-tabs">
-      <button class="showcase-tab active" data-panel="panel-iphone">iPhone</button>
-      <button class="showcase-tab" data-panel="panel-watch">Apple Watch</button>
-    </div>
-    <div id="panel-iphone" class="showcase-panel active">
-    <div class="di-scene">
-
-      <!-- PHONE 0: Lock Screen -->
-      <div class="di-phone-wrap">
-        <div class="di-phone">
-          <div class="di-phone-case"></div>
-          <div class="di-phone-btn-action"></div>
-          <div class="di-phone-btn-volup"></div>
-          <div class="di-phone-btn-voldn"></div>
-          <div class="di-phone-btn-power"></div>
-          <div class="di-phone-body">
-            <div class="di-wp di-wp-2"></div>
-            <div class="di-sbar">
-              <span></span><span></span>
-              <div class="di-sbar-right">
-                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
-                <svg width="31" height="14"><use href="#sf-battery"/></svg>
-              </div>
-            </div>
-            <div class="di-hw"><div class="di-idle-pill"></div></div>
-            <div class="di-lock-time">
-              <div class="di-lock-h">9:41</div>
-              <div class="di-lock-d">
-                <span data-i18n="en">Friday, February 18</span>
-                <span data-i18n="es">Viernes, 18 de febrero</span>
-                <span data-i18n="de">Freitag, 18. Februar</span>
-                <span data-i18n="fr">Vendredi 18 février</span>
-                <span data-i18n="ja">2月18日 金曜日</span>
-              </div>
-            </div>
-            <div class="di-la">
-              <div class="di-row">
-                <div class="di-cbar"></div>
-                <div class="di-inf">
-                  <div class="di-ttl">
-                    <span data-i18n="en">Product Review</span>
-                    <span data-i18n="es">Revisión de Producto</span>
-                    <span data-i18n="de">Produktbesprechung</span>
-                    <span data-i18n="fr">Revue de produit</span>
-                    <span data-i18n="ja">製品レビュー</span>
-                  </div>
-                  <div class="di-sub">
-                    <span data-i18n="en">Starts at 10:00</span>
-                    <span data-i18n="es">Empieza a las 10:00</span>
-                    <span data-i18n="de">Beginn um 10:00</span>
-                    <span data-i18n="fr">Début à 10:00</span>
-                    <span data-i18n="ja">10:00に開始</span>
-                  </div>
-                </div>
-                <div class="di-prov"><svg><use href="#sf-video"/></svg></div>
-              </div>
-              <div class="di-trow">
-                <span class="di-big-timer di-pulse" id="di-timer-lock">9:41</span>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="di-plabel">
-          <span data-i18n="en">Lock Screen</span>
-          <span data-i18n="es">Pantalla de bloqueo</span>
-          <span data-i18n="de">Sperrbildschirm</span>
-          <span data-i18n="fr">Écran de verrouillage</span>
-          <span data-i18n="ja">ロック画面</span>
-        </div>
-      </div>
-
-      <!-- PHONE 1: Expanded DI -->
-      <div class="di-phone-wrap">
-        <div class="di-phone">
-          <div class="di-phone-case"></div>
-          <div class="di-phone-btn-action"></div>
-          <div class="di-phone-btn-volup"></div>
-          <div class="di-phone-btn-voldn"></div>
-          <div class="di-phone-btn-power"></div>
-          <div class="di-phone-body">
-            <div class="di-wp di-wp-1"></div>
-            <div class="di-sbar">
-              <span class="di-sbar-time">9:41</span><span></span>
-              <div class="di-sbar-right">
-                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
-                <svg width="31" height="14"><use href="#sf-battery"/></svg>
-              </div>
-            </div>
-            <div class="di-hw">
-              <div class="di-exp-pill">
-                <div class="di-cam"><div class="di-cam-d"></div></div>
-                <div class="di-row">
-                  <div class="di-cbar"></div>
-                  <div class="di-inf">
-                    <div class="di-ttl">
-                      <span data-i18n="en">Product Review</span>
-                      <span data-i18n="es">Revisión de Producto</span>
-                      <span data-i18n="de">Produktbesprechung</span>
-                      <span data-i18n="fr">Revue de produit</span>
-                      <span data-i18n="ja">製品レビュー</span>
-                    </div>
-                    <div class="di-sub">
-                      <span data-i18n="en">Starts at 10:00</span>
-                      <span data-i18n="es">Empieza a las 10:00</span>
-                      <span data-i18n="de">Beginn um 10:00</span>
-                      <span data-i18n="fr">Début à 10:00</span>
-                      <span data-i18n="ja">10:00に開始</span>
-                    </div>
-                  </div>
-                  <div class="di-prov"><svg><use href="#sf-video"/></svg></div>
-                </div>
-                <div class="di-trow">
-                  <span class="di-big-timer di-pulse" id="di-timer-exp">9:41</span>
-                </div>
-              </div>
-            </div>
-            <div class="di-ghost" style="top:120px;">
-              <div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-lg"></div>
-            </div>
-            <div class="di-arow" style="top:460px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
-            <div class="di-arow" style="top:545px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
-            <div class="di-dock"><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div></div>
-          </div>
-        </div>
-        <div class="di-plabel">
-          <span data-i18n="en">Extended Dynamic Island</span>
-          <span data-i18n="es">Dynamic Island extendida</span>
-          <span data-i18n="de">Erweiterte Dynamic Island</span>
-          <span data-i18n="fr">Dynamic Island étendue</span>
-          <span data-i18n="ja">拡張Dynamic Island</span>
-        </div>
-      </div>
-
-      <!-- PHONE 2: Compact DI -->
-      <div class="di-phone-wrap">
-        <div class="di-phone">
-          <div class="di-phone-case"></div>
-          <div class="di-phone-btn-action"></div>
-          <div class="di-phone-btn-volup"></div>
-          <div class="di-phone-btn-voldn"></div>
-          <div class="di-phone-btn-power"></div>
-          <div class="di-phone-body">
-            <div class="di-wp di-wp-2"></div>
-            <div class="di-sbar">
-              <span class="di-sbar-time">9:41</span><span></span>
-              <div class="di-sbar-right">
-                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
-                <svg width="31" height="14"><use href="#sf-battery"/></svg>
-              </div>
-            </div>
-            <div class="di-hw">
-              <div class="di-cmp-pill">
-                <span class="di-cmp-timer di-pulse" id="di-timer-cmp">9:41</span>
-                <span class="di-cmp-sym"><svg><use href="#sf-video"/></svg></span>
-              </div>
-            </div>
-            <div class="di-ghost" style="top:120px;">
-              <div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-sm"></div><div class="di-gb di-gb-lg"></div>
-            </div>
-            <div class="di-arow" style="top:460px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
-            <div class="di-arow" style="top:545px;"><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div><div class="di-adot"></div></div>
-            <div class="di-dock"><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div><div class="di-ddot"></div></div>
-          </div>
-        </div>
-        <div class="di-plabel">
-          <span data-i18n="en">Compact Dynamic Island</span>
-          <span data-i18n="es">Dynamic Island compacta</span>
-          <span data-i18n="de">Kompakte Dynamic Island</span>
-          <span data-i18n="fr">Dynamic Island compacte</span>
-          <span data-i18n="ja">コンパクトDynamic Island</span>
-        </div>
-      </div>
-
-      <!-- PHONE 3: Timeline / Event List -->
-      <div class="di-phone-wrap">
-        <div class="di-phone">
-          <div class="di-phone-case"></div>
-          <div class="di-phone-btn-action"></div>
-          <div class="di-phone-btn-volup"></div>
-          <div class="di-phone-btn-voldn"></div>
-          <div class="di-phone-btn-power"></div>
-          <div class="di-phone-body">
-            <div class="di-wp" style="background:#000;"></div>
-            <div class="di-sbar">
-              <span class="di-sbar-time">9:41</span><span></span>
-              <div class="di-sbar-right">
-                <svg width="20" height="14"><use href="#sf-cellular"/></svg>
-                <svg width="31" height="14"><use href="#sf-battery"/></svg>
-              </div>
-            </div>
-            <div class="di-hw"><div class="di-idle-pill"></div></div>
-            <!-- nav bar removed for simplicity -->
-            <div class="di-tl-week">
-              <div class="di-tl-day active"><span data-i18n="en">Fri</span><span data-i18n="es">Vie</span><span data-i18n="de">Fr</span><span data-i18n="fr">Ven</span><span data-i18n="ja">金</span><div class="di-tl-day-num">18</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span><span class="di-tl-day-dot green"></span><span class="di-tl-day-dot red"></span></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Sat</span><span data-i18n="es">Sáb</span><span data-i18n="de">Sa</span><span data-i18n="fr">Sam</span><span data-i18n="ja">土</span><div class="di-tl-day-num">19</div><div class="di-tl-day-dots"></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Sun</span><span data-i18n="es">Dom</span><span data-i18n="de">So</span><span data-i18n="fr">Dim</span><span data-i18n="ja">日</span><div class="di-tl-day-num">20</div><div class="di-tl-day-dots"><span class="di-tl-day-dot red"></span></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Mon</span><span data-i18n="es">Lun</span><span data-i18n="de">Mo</span><span data-i18n="fr">Lun</span><span data-i18n="ja">月</span><div class="di-tl-day-num">21</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Tue</span><span data-i18n="es">Mar</span><span data-i18n="de">Di</span><span data-i18n="fr">Mar</span><span data-i18n="ja">火</span><div class="di-tl-day-num">22</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span><span class="di-tl-day-dot orange"></span></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Wed</span><span data-i18n="es">Mié</span><span data-i18n="de">Mi</span><span data-i18n="fr">Mer</span><span data-i18n="ja">水</span><div class="di-tl-day-num">23</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
-              <div class="di-tl-day"><span data-i18n="en">Thu</span><span data-i18n="es">Jue</span><span data-i18n="de">Do</span><span data-i18n="fr">Jeu</span><span data-i18n="ja">木</span><div class="di-tl-day-num">24</div><div class="di-tl-day-dots"><span class="di-tl-day-dot blue"></span></div></div>
-            </div>
-            <div class="di-tl-events">
-              <!-- Event 1: Product Review — blue bar, green countdown, camera button, 10:00-11:30 -->
-              <div class="di-tl-card highlight">
-                <div class="di-tl-row1">
-                  <div class="di-tl-cbar blue"></div>
-                  <div class="di-tl-card-body">
-                    <div class="di-tl-card-title">
-                      <span data-i18n="en">Product Review</span>
-                      <span data-i18n="es">Revisión de Producto</span>
-                      <span data-i18n="de">Produktbesprechung</span>
-                      <span data-i18n="fr">Revue de produit</span>
-                      <span data-i18n="ja">製品レビュー</span>
-                    </div>
-                    <div class="di-tl-card-sub">10:00 - 11:30</div>
-                  </div>
-                  <div class="di-tl-card-icons"><div class="di-tl-icon-cam"><svg><use href="#sf-video"/></svg></div></div>
-                </div>
-                <div class="di-tl-row2">
-                  <div class="di-tl-pills">
-                    <span class="di-tl-alarm"><svg><use href="#sf-bell"/></svg> ALARM</span>
-                  </div>
-                  <span class="di-tl-timer big green di-pulse" id="di-timer-tl">18:22</span>
-                </div>
-              </div>
-              <!-- Event 2: Lunch break — green bar, 13:00 -->
-              <div class="di-tl-card">
-                <div class="di-tl-row1">
-                  <div class="di-tl-cbar green"></div>
-                  <div class="di-tl-card-body">
-                    <div class="di-tl-card-title">
-                      <span data-i18n="en">Lunch with Sarah</span>
-                      <span data-i18n="es">Comida con Sara</span>
-                      <span data-i18n="de">Mittagessen mit Sarah</span>
-                      <span data-i18n="fr">Déjeuner avec Sarah</span>
-                      <span data-i18n="ja">サラとランチ</span>
-                    </div>
-                    <div class="di-tl-card-sub">13:00 - 14:00</div>
-                  </div>
-                </div>
-                <div class="di-tl-row2">
-                  <div class="di-tl-pills"></div>
-                  <span></span>
-                </div>
-              </div>
-              <!-- Event 3: Workout — red bar, 16:00-17:30, no call -->
-              <div class="di-tl-card">
-                <div class="di-tl-row1">
-                  <div class="di-tl-cbar red"></div>
-                  <div class="di-tl-card-body">
-                    <div class="di-tl-card-title">
-                      <span data-i18n="en">HIIT Session</span>
-                      <span data-i18n="es">Sesión HIIT</span>
-                      <span data-i18n="de">HIIT-Training</span>
-                      <span data-i18n="fr">Séance HIIT</span>
-                      <span data-i18n="ja">HIITセッション</span>
-                    </div>
-                    <div class="di-tl-card-sub">16:00 - 17:30</div>
-                  </div>
-                </div>
-                <div class="di-tl-row2">
-                  <div class="di-tl-pills">
-                    <span class="di-tl-alarm"><svg><use href="#sf-bell"/></svg> ALARM</span>
-                  </div>
-                  <span></span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="di-plabel">
-          <span data-i18n="en">Event List</span>
-          <span data-i18n="es">Lista de eventos</span>
-          <span data-i18n="de">Eventliste</span>
-          <span data-i18n="fr">Liste d'événements</span>
-          <span data-i18n="ja">イベント一覧</span>
-        </div>
-      </div>
-
-    </div>
-    </div><!-- /panel-iphone -->
-
-    <div id="panel-watch" class="showcase-panel">
-      <div class="watch-panel-inner">
-        <div class="watch-header">
-          <h2>
-            <span data-i18n="en">Now on <span class="gradient">Apple Watch</span></span>
-            <span data-i18n="es">Ahora en <span class="gradient">Apple Watch</span></span>
-            <span data-i18n="ja"><span class="gradient">Apple Watch</span> に対応</span>
-            <span data-i18n="de">Jetzt auf der <span class="gradient">Apple Watch</span></span>
-            <span data-i18n="fr">Maintenant sur <span class="gradient">Apple Watch</span></span>
-          </h2>
-          <p>
-            <span data-i18n="en">Your meetings, countdowns, and one-tap calling — right on your wrist.</span>
-            <span data-i18n="es">Tus reuniones, cuentas atrás y llamadas con un toque — en tu muñeca.</span>
-            <span data-i18n="ja">ミーティング、カウントダウン、ワンタップ通話 — すべて手首に。</span>
-            <span data-i18n="de">Meetings, Countdowns und Anrufe per Fingertipp — direkt am Handgelenk.</span>
-            <span data-i18n="fr">Vos réunions, comptes à rebours et appels en un geste — à votre poignet.</span>
-          </p>
-        </div>
-
-        <div class="watch-scene" id="watch-scene">
-          <div class="watch-item">
-            <div class="watch-frame">
-              <div class="watch-case"></div>
-              <div class="watch-crown"></div>
-              <div class="watch-side-btn"></div>
-              <div class="watch-screen">
-                <iframe src="screenshots/watch/01_event_list.html" loading="lazy" title="Watch Event List" scrolling="no"></iframe>
-              </div>
-            </div>
-            <div class="watch-label">
-              <span data-i18n="en">Event List</span>
-              <span data-i18n="es">Lista de eventos</span>
-              <span data-i18n="ja">イベント一覧</span>
-              <span data-i18n="de">Terminliste</span>
-              <span data-i18n="fr">Liste d'événements</span>
-            </div>
-          </div>
-
-          <div class="watch-item">
-            <div class="watch-frame">
-              <div class="watch-case"></div>
-              <div class="watch-crown"></div>
-              <div class="watch-side-btn"></div>
-              <div class="watch-screen">
-                <iframe src="screenshots/watch/02_meeting_detail.html" loading="lazy" title="Watch Meeting Detail" scrolling="no"></iframe>
-              </div>
-            </div>
-            <div class="watch-label">
-              <span data-i18n="en">Meeting Detail</span>
-              <span data-i18n="es">Detalle de reunión</span>
-              <span data-i18n="ja">ミーティング詳細</span>
-              <span data-i18n="de">Meeting-Details</span>
-              <span data-i18n="fr">Détail de la réunion</span>
-            </div>
-          </div>
-
-          <div class="watch-item">
-            <div class="watch-frame">
-              <div class="watch-case"></div>
-              <div class="watch-crown"></div>
-              <div class="watch-side-btn"></div>
-              <div class="watch-screen">
-                <iframe src="screenshots/watch/03_settings.html" loading="lazy" title="Watch Settings" scrolling="no"></iframe>
-              </div>
-            </div>
-            <div class="watch-label">
-              <span data-i18n="en">Settings</span>
-              <span data-i18n="es">Ajustes</span>
-              <span data-i18n="ja">設定</span>
-              <span data-i18n="de">Einstellungen</span>
-              <span data-i18n="fr">Réglages</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="watch-dots">
-          <div class="watch-dot watch-dot-active"></div>
-          <div class="watch-dot"></div>
-          <div class="watch-dot"></div>
-        </div>
-      </div>
-    </div><!-- /panel-watch -->
-  </section>
-
-  <!-- Value Proposition Strip -->
-  <div class="value-strip">
-    <div class="value-strip-inner">
-      <div class="value-strip-item">
-        <div class="value-strip-icon">
-          <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="7"/><line x1="9" y1="18" x2="15" y2="18"/><circle cx="12" cy="8" r="2"/></svg>
-        </div>
-        <div class="value-strip-text">
-          <span data-i18n="en">Dial into Zoom, Meet &amp; Teams from your Watch</span>
-          <span data-i18n="es">Llama a Zoom, Meet y Teams desde tu Watch</span>
-          <span data-i18n="de">Zoom, Meet &amp; Teams von der Watch anrufen</span>
-          <span data-i18n="fr">Appelez Zoom, Meet &amp; Teams depuis votre Watch</span>
-          <span data-i18n="ja">WatchからZoom・Meet・Teamsに電話参加</span>
-        </div>
-      </div>
-      <div class="value-strip-item">
-        <div class="value-strip-icon">
-          <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="3"/><path d="M9 2v1a1 1 0 0 0 1 1h4a1 1 0 0 0 1-1V2"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="13" y2="14"/></svg>
-        </div>
-        <div class="value-strip-text">
-          <span data-i18n="en">Dynamic Island countdown — always visible</span>
-          <span data-i18n="es">Cuenta atrás en Dynamic Island — siempre visible</span>
-          <span data-i18n="de">Dynamic Island Countdown — immer sichtbar</span>
-          <span data-i18n="fr">Compte à rebours Dynamic Island — toujours visible</span>
-          <span data-i18n="ja">Dynamic Islandカウントダウン — 常に表示</span>
-        </div>
-      </div>
-      <div class="value-strip-item">
-        <div class="value-strip-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/><line x1="12" y1="2" x2="12" y2="4"/></svg>
-        </div>
-        <div class="value-strip-text">
-          <span data-i18n="en">Alarms ring through Do Not Disturb</span>
-          <span data-i18n="es">Las alarmas suenan aunque tengas No molestar</span>
-          <span data-i18n="de">Alarme klingeln trotz „Nicht stören"</span>
-          <span data-i18n="fr">Les alarmes sonnent malgré Ne pas déranger</span>
-          <span data-i18n="ja">おやすみモード中でもアラームが鳴る</span>
-        </div>
-      </div>
+<!-- HERO -->
+<section class="hero"><div class="wrap hero-grid">
+  <div class="copy">
+    <span class="eyebrow"><span class="dot"></span><span data-k="hero_eyebrow">Live Activity · Dynamic Island</span></span>
+    <h1 data-k="hero_h1">The countdown to your meeting, living on your Lock&nbsp;Screen.</h1>
+    <p class="sub" data-k="hero_sub">Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent.</p>
+    <div class="actions">
+      <a href="#get"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+      <span class="compat"><span data-k="hero_compat">Works with</span> <b>Zoom</b> · <b>Meet</b> · <b>Teams</b></span>
     </div>
   </div>
-
-  <!-- What's New -->
-  <section class="whats-new" id="whats-new">
-    <div class="container">
-      <h2 class="section-title">
-        <span data-i18n="en">What's New in v1.6</span>
-        <span data-i18n="es">Novedades en v1.6</span>
-        <span data-i18n="de">Neu in v1.6</span>
-        <span data-i18n="fr">Nouveautés v1.6</span>
-        <span data-i18n="ja">v1.6 の新機能</span>
-      </h2>
-      <p class="section-subtitle">
-        <span data-i18n="en">The biggest update yet — now on your wrist</span>
-        <span data-i18n="es">La mayor actualización hasta ahora — ahora en tu muñeca</span>
-        <span data-i18n="de">Das bisher größte Update — jetzt am Handgelenk</span>
-        <span data-i18n="fr">La plus grande mise à jour — maintenant à votre poignet</span>
-        <span data-i18n="ja">過去最大のアップデート — 手首にも対応</span>
-      </p>
-
-      <div class="whats-new-grid">
-        <!-- EN cards -->
-        <div class="update-card featured" data-i18n="en">
-          <span class="update-icon">&#9201;</span>
-          <h3>Apple Watch App <span class="new-badge">NEW</span></h3>
-          <p>Your meetings, on your wrist. Browse your event list, see countdown timers, check meeting details, and join calls — all without reaching for your iPhone.</p>
-        </div>
-        <div class="update-card" data-i18n="en">
-          <span class="update-icon">&#10024;</span>
-          <h3>iOS 26 &amp; Liquid Glass</h3>
-          <p>Redesigned with the new Liquid Glass design language. Beautiful translucent surfaces that feel right at home on iOS 26.</p>
-        </div>
-        <div class="update-card" data-i18n="en">
-          <span class="update-icon">&#128276;</span>
-          <h3>AlarmKit Alarms</h3>
-          <p>Full-volume alarms that cut through Do Not Disturb and silent mode. Your meetings are too important to miss.</p>
-        </div>
-        <div class="update-card" data-i18n="en">
-          <span class="update-icon">&#127873;</span>
-          <h3>Freemium Model</h3>
-          <p>2 free alarms active at once — cancel one and the slot frees up. Need more? Upgrade to Pro for unlimited.</p>
-        </div>
-
-        <!-- ES cards -->
-        <div class="update-card featured" data-i18n="es">
-          <span class="update-icon">&#9201;</span>
-          <h3>App para Apple Watch <span class="new-badge">NUEVO</span></h3>
-          <p>Tus reuniones, en tu muñeca. Consulta tu lista de eventos, ve cuentas atrás, revisa los detalles y únete a llamadas — todo sin sacar el iPhone.</p>
-        </div>
-        <div class="update-card" data-i18n="es">
-          <span class="update-icon">&#10024;</span>
-          <h3>iOS 26 y Liquid Glass</h3>
-          <p>Rediseñada con el nuevo lenguaje de diseño Liquid Glass. Superficies translúcidas que encajan perfectamente en iOS 26.</p>
-        </div>
-        <div class="update-card" data-i18n="es">
-          <span class="update-icon">&#128276;</span>
-          <h3>Alarmas con AlarmKit</h3>
-          <p>Alarmas a volumen máximo que atraviesan el modo No Molestar y silencio. Tus reuniones son demasiado importantes para perderlas.</p>
-        </div>
-        <div class="update-card" data-i18n="es">
-          <span class="update-icon">&#127873;</span>
-          <h3>Modelo freemium</h3>
-          <p>2 alarmas activas a la vez — cancela una y recuperas el crédito. ¿Necesitas más? Hazte Pro para ilimitadas.</p>
-        </div>
-
-        <!-- DE cards -->
-        <div class="update-card featured" data-i18n="de">
-          <span class="update-icon">&#9201;</span>
-          <h3>Apple Watch App <span class="new-badge">NEU</span></h3>
-          <p>Deine Meetings, am Handgelenk. Eventliste durchstöbern, Countdowns sehen, Details prüfen und Calls beitreten — alles ohne dein iPhone.</p>
-        </div>
-        <div class="update-card" data-i18n="de">
-          <span class="update-icon">&#10024;</span>
-          <h3>iOS 26 &amp; Liquid Glass</h3>
-          <p>Neugestaltet mit der Liquid-Glass-Designsprache. Wunderschöne transluzente Oberflächen, perfekt für iOS 26.</p>
-        </div>
-        <div class="update-card" data-i18n="de">
-          <span class="update-icon">&#128276;</span>
-          <h3>AlarmKit-Alarme</h3>
-          <p>Alarme in voller Lautstärke, die Nicht-Stören und Lautlos-Modus durchdringen. Deine Meetings sind zu wichtig.</p>
-        </div>
-        <div class="update-card" data-i18n="de">
-          <span class="update-icon">&#127873;</span>
-          <h3>Freemium-Modell</h3>
-          <p>2 kostenlose Alarme gleichzeitig — wird einer beendet, ist der Platz wieder frei. Mehr nötig? Upgrade auf Pro.</p>
-        </div>
-
-        <!-- FR cards -->
-        <div class="update-card featured" data-i18n="fr">
-          <span class="update-icon">&#9201;</span>
-          <h3>App Apple Watch <span class="new-badge">NOUVEAU</span></h3>
-          <p>Vos réunions, à votre poignet. Parcourez vos événements, suivez les comptes à rebours, consultez les détails et rejoignez les appels — sans sortir votre iPhone.</p>
-        </div>
-        <div class="update-card" data-i18n="fr">
-          <span class="update-icon">&#10024;</span>
-          <h3>iOS 26 et Liquid Glass</h3>
-          <p>Repensée avec le nouveau design Liquid Glass. Des surfaces translucides parfaitement intégrées à iOS 26.</p>
-        </div>
-        <div class="update-card" data-i18n="fr">
-          <span class="update-icon">&#128276;</span>
-          <h3>Alarmes AlarmKit</h3>
-          <p>Des alarmes à plein volume qui traversent le mode Ne pas déranger et le mode silencieux. Vos réunions sont trop importantes.</p>
-        </div>
-        <div class="update-card" data-i18n="fr">
-          <span class="update-icon">&#127873;</span>
-          <h3>Modèle freemium</h3>
-          <p>2 alarmes actives en même temps — annulez-en une et le créneau se libère. Besoin de plus ? Passez à Pro.</p>
-        </div>
-
-        <!-- JA cards -->
-        <div class="update-card featured" data-i18n="ja">
-          <span class="update-icon">&#9201;</span>
-          <h3>Apple Watch アプリ <span class="new-badge">NEW</span></h3>
-          <p>ミーティングを手首で管理。イベント一覧の閲覧、カウントダウン、詳細確認、通話への参加 — すべてiPhoneなしで。</p>
-        </div>
-        <div class="update-card" data-i18n="ja">
-          <span class="update-icon">&#10024;</span>
-          <h3>iOS 26 & Liquid Glass</h3>
-          <p>新しいLiquid Glassデザインで刷新。iOS 26にぴったりの美しい半透明サーフェス。</p>
-        </div>
-        <div class="update-card" data-i18n="ja">
-          <span class="update-icon">&#128276;</span>
-          <h3>AlarmKitアラーム</h3>
-          <p>おやすみモードやマナーモードでもフルボリュームで鳴るアラーム。大事なミーティングを逃しません。</p>
-        </div>
-        <div class="update-card" data-i18n="ja">
-          <span class="update-icon">&#127873;</span>
-          <h3>フリーミアムモデル</h3>
-          <p>無料で同時に2つのアラーム — 1つ解除すれば枠が空きます。もっと必要ならProで無制限に。</p>
-        </div>
-      </div>
+  <div class="stage">
+    <div class="float f1"><div class="bar" style="background:var(--orange)"></div><div><div class="tt" data-k="float1_t">Alarm fired</div><div class="ss" data-k="float1_s">Product Review · now</div></div></div>
+    <div class="float f2"><div class="bar" style="background:var(--blue)"></div><div><div class="tt" data-k="float2_t">Joining Zoom…</div><div class="ss" data-k="float2_s">Team Standup</div></div></div>
+    <div class="phone">
+      <div class="di"><span class="t">18:22</span><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+      <img class="loc-img" data-shot="03_lock_screen.png" src="screenshots/en/03_lock_screen.png" alt="Lock Screen countdown">
     </div>
-  </section>
+  </div>
+</div></section>
 
-  <!-- Features -->
-  <section class="features">
-    <div class="container">
-      <h2 class="section-title">
-        <span data-i18n="en">Key Features</span>
-        <span data-i18n="es">Funciones principales</span>
-        <span data-i18n="de">Hauptfunktionen</span>
-        <span data-i18n="fr">Fonctionnalités clés</span>
-        <span data-i18n="ja">主な機能</span>
-      </h2>
-      <p class="section-subtitle">
-        <span data-i18n="en">Everything you need to stay on top of your meetings</span>
-        <span data-i18n="es">Todo lo que necesitas para no perder tus reuniones</span>
-        <span data-i18n="de">Alles, was du brauchst, um kein Meeting zu verpassen</span>
-        <span data-i18n="fr">Tout ce qu'il faut pour ne rater aucune réunion</span>
-        <span data-i18n="ja">ミーティングを見逃さないために必要な全て</span>
-      </p>
+<!-- TRUST -->
+<div class="trust"><div class="wrap trust-in">
+  <span class="lbl" data-k="trust_lbl">Joins the tools you already use</span>
+  <div class="logos">
+    <span>Zoom</span><span class="dotsep"></span><span>Google Meet</span><span class="dotsep"></span><span>Microsoft Teams</span>
+  </div>
+</div></div>
 
-      <!-- Hero features: 3 key differentiators -->
-      <div class="features-hero-row">
-        <!-- EN hero features -->
-        <div class="feature-card feature-hero" data-i18n="en">
-          <span class="feature-icon">&#9201;</span>
-          <h3>Watch Calling</h3>
-          <p>One tap to dial into any Zoom, Meet, or Teams meeting — right from your Apple Watch.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="en">
-          <span class="feature-icon">&#9899;</span>
-          <h3>Dynamic Island Countdown</h3>
-          <p>Your next meeting countdown, always visible on Dynamic Island and Lock Screen.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="en">
-          <span class="feature-icon">&#128276;</span>
-          <h3>AlarmKit Alarms</h3>
-          <p>Full-volume alarms that cut through Do Not Disturb and Silent Mode.</p>
-        </div>
+<!-- FULL BLEED -->
+<div class="fullbleed"><div class="inner">
+  <div class="fb-cap"><h2 data-k="fb_h">Your time, always in view.</h2></div>
+  <div class="fb-phone"><img class="loc-img" data-shot="02_event_list.png" src="screenshots/en/02_event_list.png" alt="Event list with countdowns"></div>
+</div></div>
 
-        <!-- ES hero features -->
-        <div class="feature-card feature-hero" data-i18n="es">
-          <span class="feature-icon">&#9201;</span>
-          <h3>Llamadas desde el Watch</h3>
-          <p>Un toque para llamar a cualquier reunión de Zoom, Meet o Teams — directo desde tu Apple Watch.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="es">
-          <span class="feature-icon">&#9899;</span>
-          <h3>Cuenta atrás en Dynamic Island</h3>
-          <p>La cuenta atrás de tu próxima reunión, siempre visible en Dynamic Island y pantalla de bloqueo.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="es">
-          <span class="feature-icon">&#128276;</span>
-          <h3>Alarmas AlarmKit</h3>
-          <p>Alarmas a volumen máximo que suenan incluso con No Molestar y modo silencio.</p>
-        </div>
+<!-- FEATURES -->
+<section id="features" class="sec"><div class="wrap">
+  <div class="sec-head">
+    <div class="kicker" data-k="feat_kicker">What it does</div>
+    <h2 data-k="feat_h">Three places you can't miss it.</h2>
+  </div>
 
-        <!-- DE hero features -->
-        <div class="feature-card feature-hero" data-i18n="de">
-          <span class="feature-icon">&#9201;</span>
-          <h3>Watch-Anrufe</h3>
-          <p>Ein Tipp, um jedes Zoom-, Meet- oder Teams-Meeting anzurufen — direkt von der Apple Watch.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="de">
-          <span class="feature-icon">&#9899;</span>
-          <h3>Dynamic Island Countdown</h3>
-          <p>Der Countdown zum nächsten Meeting, immer sichtbar auf Dynamic Island und Sperrbildschirm.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="de">
-          <span class="feature-icon">&#128276;</span>
-          <h3>AlarmKit-Alarme</h3>
-          <p>Alarme mit voller Lautstärke, die durch Nicht-Stören und Lautlos-Modus durchdringen.</p>
-        </div>
-
-        <!-- FR hero features -->
-        <div class="feature-card feature-hero" data-i18n="fr">
-          <span class="feature-icon">&#9201;</span>
-          <h3>Appels depuis la Watch</h3>
-          <p>Un geste pour appeler Zoom, Meet ou Teams — directement depuis votre Apple Watch.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="fr">
-          <span class="feature-icon">&#9899;</span>
-          <h3>Compte à rebours Dynamic Island</h3>
-          <p>Le compte à rebours de votre prochaine réunion, toujours visible sur Dynamic Island et l'écran verrouillé.</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="fr">
-          <span class="feature-icon">&#128276;</span>
-          <h3>Alarmes AlarmKit</h3>
-          <p>Alarmes à plein volume qui percent le mode silencieux et Ne pas déranger.</p>
-        </div>
-
-        <!-- JA hero features -->
-        <div class="feature-card feature-hero" data-i18n="ja">
-          <span class="feature-icon">&#9201;</span>
-          <h3>Watchから通話</h3>
-          <p>Zoom・Meet・Teamsにワンタップで電話参加 — Apple Watchから直接。</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="ja">
-          <span class="feature-icon">&#9899;</span>
-          <h3>Dynamic Islandカウントダウン</h3>
-          <p>次のミーティングまでのカウントダウンがDynamic Islandとロック画面に常時表示。</p>
-        </div>
-        <div class="feature-card feature-hero" data-i18n="ja">
-          <span class="feature-icon">&#128276;</span>
-          <h3>AlarmKitアラーム</h3>
-          <p>おやすみモードやマナーモードを貫通するフルボリュームアラーム。</p>
-        </div>
-      </div>
-
-      <!-- Secondary features -->
-      <div class="features-grid">
-        <!-- EN secondary features -->
-        <div class="feature-card" data-i18n="en">
-          <span class="feature-icon">&#128197;</span>
-          <h3>Calendar Sync</h3>
-          <p>Automatically detects meetings with call links from Zoom, Teams, Google Meet, and more.</p>
-        </div>
-        <div class="feature-card" data-i18n="en">
-          <span class="feature-icon">&#9889;</span>
-          <h3>One-Tap Join</h3>
-          <p>Jump into your meeting with a single tap from the notification, Lock Screen, or Dynamic Island.</p>
-        </div>
-        <div class="feature-card" data-i18n="en">
-          <span class="feature-icon">&#127760;</span>
-          <h3>Freemium</h3>
-          <p>2 free alarms active at once — cancel one and the slot frees up. Go Pro for unlimited.</p>
-        </div>
-
-        <!-- ES secondary features -->
-        <div class="feature-card" data-i18n="es">
-          <span class="feature-icon">&#128197;</span>
-          <h3>Sincronización de calendario</h3>
-          <p>Detecta automáticamente reuniones con enlaces de Zoom, Teams, Google Meet y más.</p>
-        </div>
-        <div class="feature-card" data-i18n="es">
-          <span class="feature-icon">&#9889;</span>
-          <h3>Unirse con un toque</h3>
-          <p>Entra a tu reunión con un solo toque desde la notificación, pantalla de bloqueo o Dynamic Island.</p>
-        </div>
-        <div class="feature-card" data-i18n="es">
-          <span class="feature-icon">&#127760;</span>
-          <h3>Freemium</h3>
-          <p>2 alarmas activas a la vez — cancela una y recuperas el crédito. Hazte Pro para ilimitadas.</p>
-        </div>
-
-        <!-- DE secondary features -->
-        <div class="feature-card" data-i18n="de">
-          <span class="feature-icon">&#128197;</span>
-          <h3>Kalender-Synchronisation</h3>
-          <p>Erkennt automatisch Meetings mit Links von Zoom, Teams, Google Meet und mehr.</p>
-        </div>
-        <div class="feature-card" data-i18n="de">
-          <span class="feature-icon">&#9889;</span>
-          <h3>Ein-Tipp-Beitritt</h3>
-          <p>Tritt deinem Meeting mit einem Tipp von der Benachrichtigung, dem Sperrbildschirm oder Dynamic Island bei.</p>
-        </div>
-        <div class="feature-card" data-i18n="de">
-          <span class="feature-icon">&#127760;</span>
-          <h3>Freemium</h3>
-          <p>2 kostenlose Alarme gleichzeitig — wird einer beendet, ist der Platz frei. Upgrade auf Pro für unbegrenzte.</p>
-        </div>
-
-        <!-- FR secondary features -->
-        <div class="feature-card" data-i18n="fr">
-          <span class="feature-icon">&#128197;</span>
-          <h3>Synchronisation calendrier</h3>
-          <p>Détecte automatiquement les réunions avec liens Zoom, Teams, Google Meet et plus.</p>
-        </div>
-        <div class="feature-card" data-i18n="fr">
-          <span class="feature-icon">&#9889;</span>
-          <h3>Rejoindre en un geste</h3>
-          <p>Rejoignez votre réunion d'un seul geste depuis la notification, l'écran verrouillé ou Dynamic Island.</p>
-        </div>
-        <div class="feature-card" data-i18n="fr">
-          <span class="feature-icon">&#127760;</span>
-          <h3>Freemium</h3>
-          <p>2 alarmes actives en même temps — annulez-en une et le créneau se libère. Passez à Pro pour illimitées.</p>
-        </div>
-
-        <!-- JA secondary features -->
-        <div class="feature-card" data-i18n="ja">
-          <span class="feature-icon">&#128197;</span>
-          <h3>カレンダー同期</h3>
-          <p>Zoom、Teams、Google Meetなどのリンクを自動検出。</p>
-        </div>
-        <div class="feature-card" data-i18n="ja">
-          <span class="feature-icon">&#9889;</span>
-          <h3>ワンタップで参加</h3>
-          <p>通知、ロック画面、Dynamic Islandからワンタップでミーティングに参加。</p>
-        </div>
-        <div class="feature-card" data-i18n="ja">
-          <span class="feature-icon">&#127760;</span>
-          <h3>フリーミアム</h3>
-          <p>無料で同時に2つのアラーム — 解除すれば枠が空きます。Proで無制限に。</p>
-        </div>
-      </div>
+  <div class="frow">
+    <div class="ftext">
+      <div class="kicker" data-k="f1_k">Lock Screen</div>
+      <h3 data-k="f1_h">Glance, and you already know.</h3>
+      <p data-k="f1_p">A Live Activity puts your next meeting and its live countdown right on the Lock Screen — no app to open, no notification to chase.</p>
+      <div class="spec"><span data-k="f1_s1">Live Activities</span><span data-k="f1_s2">Auto-updating</span><span data-k="f1_s3">Tap to join</span></div>
     </div>
-  </section>
+    <div class="fvis"><div class="phone"><img class="loc-img" data-shot="03_lock_screen.png" src="screenshots/en/03_lock_screen.png" alt="Lock Screen"></div></div>
+  </div>
 
-  <!-- How It Works -->
-  <section class="hiw-section">
-    <div class="container">
-      <h2 class="section-title">
-        <span data-i18n="en">How it works</span>
-        <span data-i18n="es">Cómo funciona</span>
-        <span data-i18n="de">So funktioniert's</span>
-        <span data-i18n="fr">Comment ça marche</span>
-        <span data-i18n="ja">使い方</span>
-      </h2>
-
-      <div class="hiw-steps">
-        <div class="hiw-connector"></div>
-
-        <!-- EN -->
-        <div class="hiw-step" data-i18n="en">
-          <div class="hiw-number">1</div>
-          <h3>Sync your calendar</h3>
-          <p>The app detects meetings with call links from Zoom, Teams, and Google Meet.</p>
-        </div>
-        <div class="hiw-step" data-i18n="en">
-          <div class="hiw-number">2</div>
-          <h3>See your countdown</h3>
-          <p>A Live Activity and Dynamic Island show the time until your next meeting.</p>
-        </div>
-        <div class="hiw-step" data-i18n="en">
-          <div class="hiw-number">3</div>
-          <h3>Never miss a call</h3>
-          <p>An AlarmKit alarm fires on time, and you join with one tap from any screen.</p>
-        </div>
-
-        <!-- ES -->
-        <div class="hiw-step" data-i18n="es">
-          <div class="hiw-number">1</div>
-          <h3>Sincroniza tu calendario</h3>
-          <p>La app detecta reuniones con enlaces de Zoom, Teams y Google Meet.</p>
-        </div>
-        <div class="hiw-step" data-i18n="es">
-          <div class="hiw-number">2</div>
-          <h3>Ve tu cuenta atrás</h3>
-          <p>Una Live Activity y Dynamic Island muestran el tiempo hasta tu próxima reunión.</p>
-        </div>
-        <div class="hiw-step" data-i18n="es">
-          <div class="hiw-number">3</div>
-          <h3>No pierdas ninguna llamada</h3>
-          <p>Una alarma con AlarmKit suena a tiempo y te unes con un toque desde cualquier pantalla.</p>
-        </div>
-
-        <!-- DE -->
-        <div class="hiw-step" data-i18n="de">
-          <div class="hiw-number">1</div>
-          <h3>Kalender synchronisieren</h3>
-          <p>Die App erkennt Meetings mit Links von Zoom, Teams und Google Meet.</p>
-        </div>
-        <div class="hiw-step" data-i18n="de">
-          <div class="hiw-number">2</div>
-          <h3>Countdown sehen</h3>
-          <p>Eine Live Activity und Dynamic Island zeigen die Zeit bis zum nächsten Meeting.</p>
-        </div>
-        <div class="hiw-step" data-i18n="de">
-          <div class="hiw-number">3</div>
-          <h3>Keinen Call verpassen</h3>
-          <p>Ein AlarmKit-Alarm klingelt pünktlich und du trittst mit einem Tipp bei.</p>
-        </div>
-
-        <!-- FR -->
-        <div class="hiw-step" data-i18n="fr">
-          <div class="hiw-number">1</div>
-          <h3>Synchronisez votre calendrier</h3>
-          <p>L'app détecte les réunions avec des liens Zoom, Teams et Google Meet.</p>
-        </div>
-        <div class="hiw-step" data-i18n="fr">
-          <div class="hiw-number">2</div>
-          <h3>Voyez le compte à rebours</h3>
-          <p>Une Live Activity et Dynamic Island affichent le temps avant votre prochaine réunion.</p>
-        </div>
-        <div class="hiw-step" data-i18n="fr">
-          <div class="hiw-number">3</div>
-          <h3>Ne ratez aucun appel</h3>
-          <p>Une alarme AlarmKit sonne à l'heure et vous rejoignez d'un geste depuis n'importe quel écran.</p>
-        </div>
-
-        <!-- JA -->
-        <div class="hiw-step" data-i18n="ja">
-          <div class="hiw-number">1</div>
-          <h3>カレンダーを同期</h3>
-          <p>Zoom、Teams、Google Meetのリンク付きミーティングを自動検出。</p>
-        </div>
-        <div class="hiw-step" data-i18n="ja">
-          <div class="hiw-number">2</div>
-          <h3>カウントダウンを確認</h3>
-          <p>Live ActivityとDynamic Islandで次のミーティングまでの時間を表示。</p>
-        </div>
-        <div class="hiw-step" data-i18n="ja">
-          <div class="hiw-number">3</div>
-          <h3>通話を逃さない</h3>
-          <p>AlarmKitアラームが時間通りに鳴り、どの画面からもワンタップで参加。</p>
-        </div>
-      </div>
+  <div class="frow">
+    <div class="ftext">
+      <div class="kicker" data-k="f2_k">Dynamic Island</div>
+      <h3 data-k="f2_h">Always counting down.</h3>
+      <p data-k="f2_p">The countdown lives in the Dynamic Island while you work, message and scroll. The closer it gets, the harder it is to miss.</p>
+      <div class="spec"><span data-k="f2_s1">Compact &amp; expanded</span><span data-k="f2_s2">Green when close</span><span data-k="f2_s3">One-tap join</span></div>
     </div>
-  </section>
+    <div class="fvis"><div class="phone">
+      <div class="di"><span class="t">18:22</span><svg viewBox="0 0 24 24"><rect x="2" y="5.5" width="13" height="13" rx="2.5"/><path d="M16.5 9l5-3v12l-5-3z"/></svg></div>
+      <img class="loc-img" data-shot="02_event_list.png" src="screenshots/en/02_event_list.png" alt="Dynamic Island countdown"></div></div>
+  </div>
 
-  <!-- Testimonials -->
-  <section class="testimonials" data-i18n="en">
-    <div class="testimonials-track">
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role">Account Executive, NYC</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">I juggle 8-10 calls a day across Zoom and Teams. The one-tap join from the lock screen alone is worth it. No more digging through my calendar two minutes before a call.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">R</div>
-          <div><div class="testimonial-name">Raj P.</div><div class="testimonial-role">Engineering Manager, London</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">The Dynamic Island countdown is genuinely useful during focus time. I can see my next meeting approaching without switching apps. Wish it supported Google Calendar natively though.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">L</div>
-          <div><div class="testimonial-name">Lisa C.</div><div class="testimonial-role">Freelancer, Toronto</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">I tried every calendar app out there — this is the only one I found that uses Dynamic Island to show your next meeting countdown. Plus the alarms cut through Do Not Disturb. Game changer.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Product Manager, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Clean app. The timeline view is exactly what I needed — shows only meetings, not the 50 other calendar entries. Pro subscription is fair for what you get.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Remote Engineer, Austin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">The countdown between back-to-back meetings is a lifesaver — I always know exactly how many minutes I have before the next call. And the alarm cuts right through Do Not Disturb, so I never join late anymore.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karen L.</div><div class="testimonial-role">Team Lead, Singapore</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">I check my next meeting from my Watch while I'm still in another call — a discreet glance at my wrist instead of pulling out my phone. The Watch app alone is worth the Pro upgrade.</div>
-      </div>
-      <!-- Duplicate set for seamless scroll -->
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Sarah K.</div><div class="testimonial-role">Account Executive, NYC</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">I juggle 8-10 calls a day across Zoom and Teams. The one-tap join from the lock screen alone is worth it. No more digging through my calendar two minutes before a call.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">R</div>
-          <div><div class="testimonial-name">Raj P.</div><div class="testimonial-role">Engineering Manager, London</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">The Dynamic Island countdown is genuinely useful during focus time. I can see my next meeting approaching without switching apps. Wish it supported Google Calendar natively though.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">L</div>
-          <div><div class="testimonial-name">Lisa C.</div><div class="testimonial-role">Freelancer, Toronto</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">I tried every calendar app out there — this is the only one I found that uses Dynamic Island to show your next meeting countdown. Plus the alarms cut through Do Not Disturb. Game changer.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Product Manager, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Clean app. The timeline view is exactly what I needed — shows only meetings, not the 50 other calendar entries. Pro subscription is fair for what you get.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Remote Engineer, Austin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">The countdown between back-to-back meetings is a lifesaver — I always know exactly how many minutes I have before the next call. And the alarm cuts right through Do Not Disturb, so I never join late anymore.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karen L.</div><div class="testimonial-role">Team Lead, Singapore</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">I check my next meeting from my Watch while I'm still in another call — a discreet glance at my wrist instead of pulling out my phone. The Watch app alone is worth the Pro upgrade.</div>
-      </div>
+  <div class="frow">
+    <div class="ftext">
+      <div class="kicker" data-k="f3_k">AlarmKit</div>
+      <h3 data-k="f3_h">It rings, even on silent.</h3>
+      <p data-k="f3_p">Set a real alarm for any meeting and it breaks through silent mode and Focus — the only reminder you genuinely cannot sleep through.</p>
+      <div class="spec"><span data-k="f3_s1">Breaks through silent</span><span data-k="f3_s2">Up to 8h ahead</span><span data-k="f3_s3">Per-event</span></div>
     </div>
-  </section>
+    <div class="fvis"><div class="phone"><img class="loc-img" data-shot="02_event_list.png" src="screenshots/en/02_event_list.png" alt="Per-event alarms"></div></div>
+  </div>
+</div></section>
 
-  <section class="testimonials" data-i18n="es">
-    <div class="testimonials-track">
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Ana G.</div><div class="testimonial-role">Ejecutiva de Cuentas, CDMX</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Manejo 8-10 llamadas al día entre Zoom y Teams. Solo por poder unirme con un toque desde la pantalla de bloqueo ya merece la pena. Se acabaron los 2 minutos buscando el link.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">P</div>
-          <div><div class="testimonial-name">Pablo S.</div><div class="testimonial-role">Tech Lead, Buenos Aires</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">La cuenta atrás en Dynamic Island es muy útil cuando estoy concentrado programando. Veo la siguiente reunión sin cambiar de app. Le faltaría sincronizar con Google Calendar directamente.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marta L.</div><div class="testimonial-role">Freelance, Barcelona</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Probé todas las apps de calendario que pude — es la única que he encontrado que usa Dynamic Island para la cuenta atrás de tu siguiente reunión. Además, las alarmas suenan con el No Molestar puesto. Imprescindible.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">C</div>
-          <div><div class="testimonial-name">Carlos R.</div><div class="testimonial-role">Director de Producto, Madrid</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">App limpia. El timeline es justo lo que necesitaba — solo muestra reuniones, no las 50 entradas que tengo en el calendario. La suscripción Pro es razonable por lo que ofrece.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alejandro R.</div><div class="testimonial-role">Ingeniero Remoto, Medellín</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">La cuenta atrás entre reuniones seguidas me salva la vida — siempre sé exactamente cuántos minutos tengo antes de la próxima llamada. Y la alarma suena incluso con el No Molestar activado, así que ya no llego tarde.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karla L.</div><div class="testimonial-role">Líder de Equipo, Buenos Aires</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Consulto la próxima reunión desde el Watch mientras estoy en otra llamada — un vistazo discreto a la muñeca en vez de sacar el teléfono. Solo la app del Watch ya vale la suscripción Pro.</div>
-      </div>
-      <!-- Duplicate set for seamless scroll -->
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Ana G.</div><div class="testimonial-role">Ejecutiva de Cuentas, CDMX</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Manejo 8-10 llamadas al día entre Zoom y Teams. Solo por poder unirme con un toque desde la pantalla de bloqueo ya merece la pena. Se acabaron los 2 minutos buscando el link.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">P</div>
-          <div><div class="testimonial-name">Pablo S.</div><div class="testimonial-role">Tech Lead, Buenos Aires</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">La cuenta atrás en Dynamic Island es muy útil cuando estoy concentrado programando. Veo la siguiente reunión sin cambiar de app. Le faltaría sincronizar con Google Calendar directamente.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marta L.</div><div class="testimonial-role">Freelance, Barcelona</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Probé todas las apps de calendario que pude — es la única que he encontrado que usa Dynamic Island para la cuenta atrás de tu siguiente reunión. Además, las alarmas suenan con el No Molestar puesto. Imprescindible.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">C</div>
-          <div><div class="testimonial-name">Carlos R.</div><div class="testimonial-role">Director de Producto, Madrid</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">App limpia. El timeline es justo lo que necesitaba — solo muestra reuniones, no las 50 entradas que tengo en el calendario. La suscripción Pro es razonable por lo que ofrece.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alejandro R.</div><div class="testimonial-role">Ingeniero Remoto, Medellín</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">La cuenta atrás entre reuniones seguidas me salva la vida — siempre sé exactamente cuántos minutos tengo antes de la próxima llamada. Y la alarma suena incluso con el No Molestar activado, así que ya no llego tarde.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karla L.</div><div class="testimonial-role">Líder de Equipo, Buenos Aires</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Consulto la próxima reunión desde el Watch mientras estoy en otra llamada — un vistazo discreto a la muñeca en vez de sacar el teléfono. Solo la app del Watch ya vale la suscripción Pro.</div>
-      </div>
+<!-- EVERY SCREEN -->
+<section id="screens" class="sec" style="background:var(--bg2);border-top:1px solid var(--line);border-bottom:1px solid var(--line)"><div class="wrap">
+  <div class="sec-head center">
+    <div class="kicker" data-k="dev_kicker">iPhone · Apple Watch · iPad</div>
+    <h2 data-k="dev_h">On every screen you own.</h2>
+    <p data-k="dev_p">The same live countdown follows you from your wrist to your Lock Screen to the iPad on your desk — always in sync.</p>
+  </div>
+  <div class="devices">
+    <div class="d-ipad"><img class="loc-img" data-shot="06_ipad_sidebar.png" src="screenshots/en/06_ipad_sidebar.png" alt="iPad"></div>
+    <div class="d-phone"><img class="loc-img" data-shot="03_lock_screen.png" src="screenshots/en/03_lock_screen.png" alt="iPhone"></div>
+    <div class="d-watch"><img class="loc-img" data-shot="watch.png" src="screenshots/en/watch.png" alt="Apple Watch"></div>
+  </div>
+</div></section>
+
+<!-- HOW IT WORKS -->
+<section class="sec"><div class="wrap">
+  <div class="sec-head">
+    <div class="kicker" data-k="how_kicker">How it works</div>
+    <h2 data-k="how_h">Set it once. Forget the rest.</h2>
+  </div>
+  <div class="steps">
+    <div class="step"><div class="num">01</div><h4 data-k="s1_h">Connect your calendar</h4><p data-k="s1_p">Call to Meet reads the calendars you already keep — nothing to retype.</p></div>
+    <div class="step"><div class="num">02</div><h4 data-k="s2_h">Every event counts down</h4><p data-k="s2_p">Each meeting becomes a live countdown across your devices, automatically.</p></div>
+    <div class="step"><div class="num">03</div><h4 data-k="s3_h">The alarm fires</h4><p data-k="s3_p">When it matters, a real alarm rings — even on silent or in Focus.</p></div>
+    <div class="step"><div class="num">04</div><h4 data-k="s4_h">Join in one tap</h4><p data-k="s4_p">Zoom, Meet or Teams open straight from the alert. You're in.</p></div>
+  </div>
+</div></section>
+
+<!-- PRICING -->
+<section id="pricing" class="sec" style="background:var(--bg2);border-top:1px solid var(--line)"><div class="wrap">
+  <div class="sec-head center">
+    <div class="kicker" data-k="price_kicker">Pricing</div>
+    <h2 data-k="price_h">Free to start. Pro when you're ready.</h2>
+  </div>
+  <div class="price">
+    <div class="plan">
+      <div class="pname" data-k="free_name">Free</div>
+      <div class="ptag" data-k="free_tag">Everything you need to never miss the meeting that matters.</div>
+      <ul class="plist">
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_1">Live Activities &amp; Dynamic Island</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_2">2 active alarms</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_3">Zoom, Meet &amp; Teams</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_4">Apple Watch &amp; iPad</span></li>
+      </ul>
     </div>
-  </section>
-
-  <section class="testimonials" data-i18n="ja">
-    <div class="testimonials-track">
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">Y</div>
-          <div><div class="testimonial-name">Yuki M.</div><div class="testimonial-role">Sales, Osaka</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">ZoomとTeamsを1日8-10件使っています。ロック画面からワンタップで参加できるだけで価値があります。リンクを探す手間がなくなりました。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Kenji S.</div><div class="testimonial-role">Engineer, Tokyo</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">集中している時のDynamic Islandのカウントダウンが本当に便利。アプリを切り替えずに次の会議が見えます。Googleカレンダーに直接対応してくれたら完璧。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Aiko T.</div><div class="testimonial-role">Designer, Kyoto</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">カレンダーアプリをいろいろ試しましたが、Dynamic Islandで次のミーティングのカウントダウンを表示するのはこれだけ。しかもアラームはおやすみモードでも鳴ります。手放せません。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">T</div>
-          <div><div class="testimonial-name">Takeshi Y.</div><div class="testimonial-role">PM, Tokyo</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">すっきりしたアプリ。タイムラインがまさに欲しかったもの — 会議だけ表示して、カレンダーの他の50件は出ません。Pro版は内容に見合った価格です。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Akira R.</div><div class="testimonial-role">リモートエンジニア, 札幌</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">連続ミーティング間のカウントダウンが本当に助かります — 次の通話まであと何分あるか常に把握できます。おやすみモードでもアラームが鳴るので、もう遅刻しません。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Kaori L.</div><div class="testimonial-role">チームリーダー, 横浜</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">別の通話中でもWatchで次のミーティングを確認できます — スマホを取り出さず、手首をさっと見るだけ。Watchアプリだけでも Pro版にする価値があります。</div>
-      </div>
-      <!-- Duplicate set for seamless scroll -->
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">Y</div>
-          <div><div class="testimonial-name">Yuki M.</div><div class="testimonial-role">Sales, Osaka</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">ZoomとTeamsを1日8-10件使っています。ロック画面からワンタップで参加できるだけで価値があります。リンクを探す手間がなくなりました。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Kenji S.</div><div class="testimonial-role">Engineer, Tokyo</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">集中している時のDynamic Islandのカウントダウンが本当に便利。アプリを切り替えずに次の会議が見えます。Googleカレンダーに直接対応してくれたら完璧。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Aiko T.</div><div class="testimonial-role">Designer, Kyoto</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">カレンダーアプリをいろいろ試しましたが、Dynamic Islandで次のミーティングのカウントダウンを表示するのはこれだけ。しかもアラームはおやすみモードでも鳴ります。手放せません。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">T</div>
-          <div><div class="testimonial-name">Takeshi Y.</div><div class="testimonial-role">PM, Tokyo</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">すっきりしたアプリ。タイムラインがまさに欲しかったもの — 会議だけ表示して、カレンダーの他の50件は出ません。Pro版は内容に見合った価格です。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Akira R.</div><div class="testimonial-role">リモートエンジニア, 札幌</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">連続ミーティング間のカウントダウンが本当に助かります — 次の通話まであと何分あるか常に把握できます。おやすみモードでもアラームが鳴るので、もう遅刻しません。</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Kaori L.</div><div class="testimonial-role">チームリーダー, 横浜</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">別の通話中でもWatchで次のミーティングを確認できます — スマホを取り出さず、手首をさっと見るだけ。Watchアプリだけでも Pro版にする価値があります。</div>
-      </div>
+    <div class="plan pro">
+      <div class="pname">Pro</div>
+      <div class="ptag" data-k="pro_tag">For days packed wall-to-wall with meetings.</div>
+      <ul class="plist">
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_1">Everything in Free</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_2">Unlimited alarms</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_3">End-of-meeting alerts</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_4">Focus-mode filtering</span></li>
+      </ul>
     </div>
-  </section>
+  </div>
+</div></section>
 
-  <section class="testimonials" data-i18n="de">
-    <div class="testimonials-track">
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Stefan K.</div><div class="testimonial-role">Account Manager, München</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Ich habe täglich 8-10 Calls über Zoom und Teams. Allein das Beitreten per Tipp vom Sperrbildschirm ist es wert. Kein Suchen mehr nach dem Link zwei Minuten vor dem Call.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Produktmanager, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Der Dynamic Island Countdown ist wirklich nützlich beim konzentrierten Arbeiten. Ich sehe mein nächstes Meeting ohne die App zu wechseln. Google Kalender direkt wäre noch perfekt.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">L</div>
-          <div><div class="testimonial-name">Lisa M.</div><div class="testimonial-role">Freelancerin, Wien</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Ich habe jede Kalender-App ausprobiert — diese ist die einzige mit Dynamic Island Countdown für das nächste Meeting. Und die Alarme klingen sogar im Nicht-Stören-Modus. Unverzichtbar.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">T</div>
-          <div><div class="testimonial-name">Thomas R.</div><div class="testimonial-role">Berater, Zürich</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Saubere App. Die Timeline zeigt genau das, was ich brauche — nur Meetings, nicht die 50 anderen Kalendereinträge. Pro-Abo ist fair für das Gebotene.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Remote-Ingenieur, Wien</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Der Countdown zwischen aufeinanderfolgenden Meetings rettet mir den Tag — ich weiß immer genau, wie viele Minuten bis zum nächsten Call bleiben. Und der Alarm klingelt auch im Nicht-Stören-Modus, sodass ich nie mehr zu spät komme.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Katrin L.</div><div class="testimonial-role">Teamleiterin, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Ich checke das nächste Meeting auf der Watch, während ich noch im Gespräch bin — ein diskreter Blick aufs Handgelenk statt das Handy rauszuholen. Allein die Watch-App ist das Pro-Abo wert.</div>
-      </div>
-      <!-- Duplicate set for seamless scroll -->
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Stefan K.</div><div class="testimonial-role">Account Manager, München</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Ich habe täglich 8-10 Calls über Zoom und Teams. Allein das Beitreten per Tipp vom Sperrbildschirm ist es wert. Kein Suchen mehr nach dem Link zwei Minuten vor dem Call.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marcus T.</div><div class="testimonial-role">Produktmanager, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Der Dynamic Island Countdown ist wirklich nützlich beim konzentrierten Arbeiten. Ich sehe mein nächstes Meeting ohne die App zu wechseln. Google Kalender direkt wäre noch perfekt.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">L</div>
-          <div><div class="testimonial-name">Lisa M.</div><div class="testimonial-role">Freelancerin, Wien</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Ich habe jede Kalender-App ausprobiert — diese ist die einzige mit Dynamic Island Countdown für das nächste Meeting. Und die Alarme klingen sogar im Nicht-Stören-Modus. Unverzichtbar.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">T</div>
-          <div><div class="testimonial-name">Thomas R.</div><div class="testimonial-role">Berater, Zürich</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Saubere App. Die Timeline zeigt genau das, was ich brauche — nur Meetings, nicht die 50 anderen Kalendereinträge. Pro-Abo ist fair für das Gebotene.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Remote-Ingenieur, Wien</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Der Countdown zwischen aufeinanderfolgenden Meetings rettet mir den Tag — ich weiß immer genau, wie viele Minuten bis zum nächsten Call bleiben. Und der Alarm klingelt auch im Nicht-Stören-Modus, sodass ich nie mehr zu spät komme.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Katrin L.</div><div class="testimonial-role">Teamleiterin, Berlin</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Ich checke das nächste Meeting auf der Watch, während ich noch im Gespräch bin — ein diskreter Blick aufs Handgelenk statt das Handy rauszuholen. Allein die Watch-App ist das Pro-Abo wert.</div>
-      </div>
-    </div>
-  </section>
+<!-- FINAL CTA -->
+<section id="get" class="final"><div class="wrap">
+  <h2 data-k="final_h">Never miss a meeting again.</h2>
+  <a href="https://apps.apple.com/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+</div></section>
 
-  <section class="testimonials" data-i18n="fr">
-    <div class="testimonials-track">
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Sophie L.</div><div class="testimonial-role">Chargée de compte, Paris</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Je gère 8 à 10 appels par jour entre Zoom et Teams. Pouvoir rejoindre d'un seul geste depuis l'écran verrouillé, ça vaut le coup. Fini les deux minutes à chercher le lien.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">P</div>
-          <div><div class="testimonial-name">Pierre D.</div><div class="testimonial-role">Chef de projet, Lyon</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Le compte à rebours Dynamic Island est vraiment utile quand je suis concentré. Je vois ma prochaine réunion sans changer d'app. Il manquerait juste Google Agenda en natif.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marie C.</div><div class="testimonial-role">Freelance, Bruxelles</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">J'ai essayé toutes les apps de calendrier — c'est la seule qui utilise Dynamic Island pour le compte à rebours. En plus, les alarmes sonnent même en mode Ne pas déranger. Indispensable.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Antoine R.</div><div class="testimonial-role">Directeur produit, Genève</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">App épurée. La timeline montre exactement ce qu'il faut — juste les réunions, pas les 50 autres entrées du calendrier. L'abonnement Pro est raisonnable.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Ingénieur remote, Lyon</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Le compte à rebours entre les réunions consécutives me sauve la mise — je sais toujours exactement combien de minutes il me reste avant le prochain appel. Et l'alarme perce le mode Ne pas déranger, donc je ne suis plus jamais en retard.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karen L.</div><div class="testimonial-role">Cheffe d'équipe, Bruxelles</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Je consulte ma prochaine réunion sur la Watch pendant que je suis encore en appel — un coup d'œil discret au poignet au lieu de sortir mon téléphone. L'app Watch seule justifie l'abonnement Pro.</div>
-      </div>
-      <!-- Duplicate set for seamless scroll -->
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">S</div>
-          <div><div class="testimonial-name">Sophie L.</div><div class="testimonial-role">Chargée de compte, Paris</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">Je gère 8 à 10 appels par jour entre Zoom et Teams. Pouvoir rejoindre d'un seul geste depuis l'écran verrouillé, ça vaut le coup. Fini les deux minutes à chercher le lien.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">P</div>
-          <div><div class="testimonial-name">Pierre D.</div><div class="testimonial-role">Chef de projet, Lyon</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Le compte à rebours Dynamic Island est vraiment utile quand je suis concentré. Je vois ma prochaine réunion sans changer d'app. Il manquerait juste Google Agenda en natif.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">M</div>
-          <div><div class="testimonial-name">Marie C.</div><div class="testimonial-role">Freelance, Bruxelles</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9733;</div>
-        <div class="testimonial-text">J'ai essayé toutes les apps de calendrier — c'est la seule qui utilise Dynamic Island pour le compte à rebours. En plus, les alarmes sonnent même en mode Ne pas déranger. Indispensable.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Antoine R.</div><div class="testimonial-role">Directeur produit, Genève</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">App épurée. La timeline montre exactement ce qu'il faut — juste les réunions, pas les 50 autres entrées du calendrier. L'abonnement Pro est raisonnable.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">A</div>
-          <div><div class="testimonial-name">Alex R.</div><div class="testimonial-role">Ingénieur remote, Lyon</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Le compte à rebours entre les réunions consécutives me sauve la mise — je sais toujours exactement combien de minutes il me reste avant le prochain appel. Et l'alarme perce le mode Ne pas déranger, donc je ne suis plus jamais en retard.</div>
-      </div>
-      <div class="testimonial-card">
-        <div class="testimonial-header">
-          <div class="testimonial-avatar">K</div>
-          <div><div class="testimonial-name">Karen L.</div><div class="testimonial-role">Cheffe d'équipe, Bruxelles</div></div>
-        </div>
-        <div class="testimonial-stars">&#9733;&#9733;&#9733;&#9733;&#9734;</div>
-        <div class="testimonial-text">Je consulte ma prochaine réunion sur la Watch pendant que je suis encore en appel — un coup d'œil discret au poignet au lieu de sortir mon téléphone. L'app Watch seule justifie l'abonnement Pro.</div>
-      </div>
-    </div>
-  </section>
+<footer><div class="wrap foot">
+  <a class="brand" href="#"><img src="app-icon.png" alt="">Call to Meet</a>
+  <div class="foot-links">
+    <a href="privacy.html" data-k="foot_privacy">Privacy</a>
+    <a href="terms.html" data-k="foot_terms">Terms</a>
+    <a href="support.html" data-k="foot_support">Support</a>
+  </div>
+  <div class="copy">© 2026 Call to Meet</div>
+</div></footer>
 
-  <!-- Pro Section -->
-  <section class="pro-section" id="pro">
-    <div class="container">
-      <h2 class="section-title">
-        <span data-i18n="en">Free vs <span class="gradient">Pro</span></span>
-        <span data-i18n="es">Gratis vs <span class="gradient">Pro</span></span>
-        <span data-i18n="de">Kostenlos vs <span class="gradient">Pro</span></span>
-        <span data-i18n="fr">Gratuit vs <span class="gradient">Pro</span></span>
-        <span data-i18n="ja">無料 vs <span class="gradient">Pro</span></span>
-      </h2>
-      <p class="section-subtitle">
-        <span data-i18n="en">Live Activity is always free. Upgrade for unlimited alarms.</span>
-        <span data-i18n="es">Live Activity siempre es gratis. Hazte Pro para alarmas ilimitadas.</span>
-        <span data-i18n="de">Live Activity ist immer kostenlos. Upgrade für unbegrenzte Alarme.</span>
-        <span data-i18n="fr">Live Activity est toujours gratuit. Passez au Pro pour des alarmes illimitées.</span>
-        <span data-i18n="ja">Live Activityは常に無料。Proで無制限アラーム。</span>
-      </p>
-
-      <!-- Free vs Pro comparison -->
-      <div class="pro-comparison">
-        <!-- Free column -->
-        <div class="plan-col">
-          <div class="plan-label">
-            <span data-i18n="en">Free</span>
-            <span data-i18n="es">Gratis</span>
-            <span data-i18n="de">Kostenlos</span>
-            <span data-i18n="fr">Gratuit</span>
-            <span data-i18n="ja">無料</span>
-          </div>
-          <div class="plan-name">
-            <span data-i18n="en">Basic</span>
-            <span data-i18n="es">Básico</span>
-            <span data-i18n="de">Basis</span>
-            <span data-i18n="fr">Basique</span>
-            <span data-i18n="ja">ベーシック</span>
-          </div>
-          <ul class="plan-features">
-            <li data-i18n="en"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="en"><span class="icon free">&#10003;</span> Calendar sync & One-Tap Join</li>
-            <li data-i18n="en"><span class="icon free">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
-            <li data-i18n="en"><span class="icon free">&#10003;</span> 2 simultaneous alarms</li>
-            <li data-i18n="en"><span class="icon no">&#10007;</span> <span class="muted">Auto-alarm for all events</span></li>
-            <li data-i18n="en"><span class="icon no">&#10007;</span> <span class="muted">Unlimited alarms</span></li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> Live Activity y Dynamic Island</li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> Sincronización y unirse con un toque</li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> AlarmKit (suena en modo silencio)</li>
-            <li data-i18n="es"><span class="icon free">&#10003;</span> 2 alarmas simultáneas</li>
-            <li data-i18n="es"><span class="icon no">&#10007;</span> <span class="muted">Alarma automática</span></li>
-            <li data-i18n="es"><span class="icon no">&#10007;</span> <span class="muted">Alarmas ilimitadas</span></li>
-            <li data-i18n="de"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="de"><span class="icon free">&#10003;</span> Kalender-Sync & Ein-Tipp-Beitritt</li>
-            <li data-i18n="de"><span class="icon free">&#10003;</span> AlarmKit (klingelt im Lautlos-Modus)</li>
-            <li data-i18n="de"><span class="icon free">&#10003;</span> 2 gleichzeitige Alarme</li>
-            <li data-i18n="de"><span class="icon no">&#10007;</span> <span class="muted">Auto-Alarm für alle Events</span></li>
-            <li data-i18n="de"><span class="icon no">&#10007;</span> <span class="muted">Unbegrenzte Alarme</span></li>
-            <li data-i18n="fr"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="fr"><span class="icon free">&#10003;</span> Synchro calendrier & rejoindre en un geste</li>
-            <li data-i18n="fr"><span class="icon free">&#10003;</span> AlarmKit (sonne en mode silencieux)</li>
-            <li data-i18n="fr"><span class="icon free">&#10003;</span> 2 alarmes simultanées</li>
-            <li data-i18n="fr"><span class="icon no">&#10007;</span> <span class="muted">Alarme auto pour tous les événements</span></li>
-            <li data-i18n="fr"><span class="icon no">&#10007;</span> <span class="muted">Alarmes illimitées</span></li>
-            <li data-i18n="ja"><span class="icon free">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="ja"><span class="icon free">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
-            <li data-i18n="ja"><span class="icon free">&#10003;</span> AlarmKit（マナーモード対応）</li>
-            <li data-i18n="ja"><span class="icon free">&#10003;</span> 同時に2つのアラーム</li>
-            <li data-i18n="ja"><span class="icon no">&#10007;</span> <span class="muted">自動アラーム</span></li>
-            <li data-i18n="ja"><span class="icon no">&#10007;</span> <span class="muted">無制限アラーム</span></li>
-          </ul>
-        </div>
-
-        <!-- Pro column -->
-        <div class="plan-col pro">
-          <div class="plan-label">Pro</div>
-          <div class="plan-name">
-            <span data-i18n="en">Unlimited</span>
-            <span data-i18n="es">Ilimitado</span>
-            <span data-i18n="de">Unbegrenzt</span>
-            <span data-i18n="fr">Illimité</span>
-            <span data-i18n="ja">アンリミテッド</span>
-          </div>
-          <ul class="plan-features">
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> Calendar sync & One-Tap Join</li>
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> AlarmKit alerts (bypass silent mode)</li>
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> <strong>Unlimited alarms</strong></li>
-            <li data-i18n="en"><span class="icon yes">&#10003;</span> Auto-alarm for all events</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> Live Activity y Dynamic Island</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> Sincronización y unirse con un toque</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> AlarmKit (suena en modo silencio)</li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> <strong>Alarmas ilimitadas</strong></li>
-            <li data-i18n="es"><span class="icon yes">&#10003;</span> Alarmas automáticas para todos los eventos</li>
-            <li data-i18n="de"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="de"><span class="icon yes">&#10003;</span> Kalender-Sync & Ein-Tipp-Beitritt</li>
-            <li data-i18n="de"><span class="icon yes">&#10003;</span> AlarmKit (klingelt im Lautlos-Modus)</li>
-            <li data-i18n="de"><span class="icon yes">&#10003;</span> <strong>Unbegrenzte Alarme</strong></li>
-            <li data-i18n="de"><span class="icon yes">&#10003;</span> Auto-Alarm für alle Events</li>
-            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Synchro calendrier & rejoindre en un geste</li>
-            <li data-i18n="fr"><span class="icon yes">&#10003;</span> AlarmKit (sonne en mode silencieux)</li>
-            <li data-i18n="fr"><span class="icon yes">&#10003;</span> <strong>Alarmes illimitées</strong></li>
-            <li data-i18n="fr"><span class="icon yes">&#10003;</span> Alarme auto pour tous les événements</li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> Live Activity & Dynamic Island</li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> カレンダー同期 & ワンタップ参加</li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> AlarmKit（マナーモード対応）</li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> <strong>無制限アラーム</strong></li>
-            <li data-i18n="ja"><span class="icon yes">&#10003;</span> 全イベント自動アラーム</li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Pricing -->
-      <h3 class="section-title" style="font-size: 24px; margin-bottom: 32px;">
-        <span data-i18n="en">Choose your plan</span>
-        <span data-i18n="es">Elige tu plan</span>
-        <span data-i18n="de">Wähle deinen Plan</span>
-        <span data-i18n="fr">Choisissez votre plan</span>
-        <span data-i18n="ja">プランを選択</span>
-      </h3>
-
-      <div class="pricing-grid">
-        <!-- Monthly -->
-        <div class="price-card">
-          <div class="price-badge" data-i18n="en">Popular</div>
-          <div class="price-badge" data-i18n="es">Popular</div>
-          <div class="price-badge" data-i18n="de">Beliebt</div>
-          <div class="price-badge" data-i18n="fr">Populaire</div>
-          <div class="price-badge" data-i18n="ja">人気</div>
-          <div class="price-period">
-            <span data-i18n="en">Monthly</span>
-            <span data-i18n="es">Mensual</span>
-            <span data-i18n="de">Monatlich</span>
-            <span data-i18n="fr">Mensuel</span>
-            <span data-i18n="ja">月額</span>
-          </div>
-          <div class="price-amount">&euro;4.99</div>
-          <div class="price-unit">
-            <span data-i18n="en">/month</span>
-            <span data-i18n="es">/mes</span>
-            <span data-i18n="de">/Monat</span>
-            <span data-i18n="fr">/mois</span>
-            <span data-i18n="ja">/月</span>
-          </div>
-        </div>
-
-        <!-- Semiannual -->
-        <div class="price-card">
-          <div class="price-period">
-            <span data-i18n="en">Semiannual</span>
-            <span data-i18n="es">Semestral</span>
-            <span data-i18n="de">Halbjährlich</span>
-            <span data-i18n="fr">Semestriel</span>
-            <span data-i18n="ja">半年</span>
-          </div>
-          <div class="price-amount">&euro;19.99</div>
-          <div class="price-unit">
-            <span data-i18n="en">/6 months</span>
-            <span data-i18n="es">/6 meses</span>
-            <span data-i18n="de">/6 Monate</span>
-            <span data-i18n="fr">/6 mois</span>
-            <span data-i18n="ja">/6ヶ月</span>
-          </div>
-          <div class="price-savings">
-            <span data-i18n="en">Save 33%</span>
-            <span data-i18n="es">Ahorra 33%</span>
-            <span data-i18n="de">33% sparen</span>
-            <span data-i18n="fr">Économisez 33%</span>
-            <span data-i18n="ja">33%お得</span>
-          </div>
-        </div>
-
-        <!-- Yearly -->
-        <div class="price-card featured">
-          <div class="price-badge" data-i18n="en">Best Value</div>
-          <div class="price-badge" data-i18n="es">Mejor Precio</div>
-          <div class="price-badge" data-i18n="de">Bestes Angebot</div>
-          <div class="price-badge" data-i18n="fr">Meilleure offre</div>
-          <div class="price-badge" data-i18n="ja">お得</div>
-          <div class="price-period">
-            <span data-i18n="en">Yearly</span>
-            <span data-i18n="es">Anual</span>
-            <span data-i18n="de">Jährlich</span>
-            <span data-i18n="fr">Annuel</span>
-            <span data-i18n="ja">年額</span>
-          </div>
-          <div class="price-amount">&euro;29.99</div>
-          <div class="price-unit">
-            <span data-i18n="en">/year</span>
-            <span data-i18n="es">/año</span>
-            <span data-i18n="de">/Jahr</span>
-            <span data-i18n="fr">/an</span>
-            <span data-i18n="ja">/年</span>
-          </div>
-          <div class="price-savings">
-            <span data-i18n="en">Save 50%</span>
-            <span data-i18n="es">Ahorra 50%</span>
-            <span data-i18n="de">50% sparen</span>
-            <span data-i18n="fr">Économisez 50%</span>
-            <span data-i18n="ja">50%お得</span>
-          </div>
-        </div>
-      </div>
-
-      <p class="pro-footer-note">
-        <span data-i18n="en">All plans auto-renew. Cancel anytime in your iPhone Settings. Managed entirely through the App Store.</span>
-        <span data-i18n="es">Todos los planes se renuevan automáticamente. Cancela en cualquier momento desde Ajustes de tu iPhone. Gestionado a través del App Store.</span>
-        <span data-i18n="de">Alle Pläne verlängern sich automatisch. Jederzeit in den iPhone-Einstellungen kündbar. Verwaltet über den App Store.</span>
-        <span data-i18n="fr">Tous les plans se renouvellent automatiquement. Annulez à tout moment dans les Réglages de votre iPhone. Géré via l'App Store.</span>
-        <span data-i18n="ja">全プラン自動更新。iPhoneの設定からいつでもキャンセル可能。App Storeで管理。</span>
-      </p>
-
-      <div class="cta-bottom">
-        <a href="https://apps.apple.com/app/call-to-meet/id6738656243" class="app-store-badge" target="_blank" rel="noopener">
-          <img data-i18n="en" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store" height="52">
-          <img data-i18n="es" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Descargar en el App Store" height="52">
-          <img data-i18n="de" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Im App Store laden" height="52">
-          <img data-i18n="fr" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Télécharger dans l'App Store" height="52">
-          <img data-i18n="ja" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="App Storeからダウンロード" height="52">
-        </a>
-      </div>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer>
-    <div class="container footer-inner">
-      <div class="footer-links">
-        <a href="privacy.html">
-          <span data-i18n="en">Privacy Policy</span>
-          <span data-i18n="es">Política de Privacidad</span>
-          <span data-i18n="de">Datenschutz</span>
-          <span data-i18n="fr">Politique de confidentialité</span>
-          <span data-i18n="ja">プライバシーポリシー</span>
-        </a>
-        <a href="terms.html">
-          <span data-i18n="en">Terms of Service</span>
-          <span data-i18n="es">Condiciones del Servicio</span>
-          <span data-i18n="de">Nutzungsbedingungen</span>
-          <span data-i18n="fr">Conditions d'utilisation</span>
-          <span data-i18n="ja">利用規約</span>
-        </a>
-        <a href="support.html">
-          <span data-i18n="en">Support</span>
-          <span data-i18n="es">Soporte</span>
-          <span data-i18n="de">Support</span>
-          <span data-i18n="fr">Assistance</span>
-          <span data-i18n="ja">サポート</span>
-        </a>
-      </div>
-      <span class="footer-copy">&copy; 2026 Ismael Florit.
-        <span data-i18n="en">All rights reserved.</span>
-        <span data-i18n="es">Todos los derechos reservados.</span>
-        <span data-i18n="de">Alle Rechte vorbehalten.</span>
-        <span data-i18n="fr">Tous droits réservés.</span>
-        <span data-i18n="ja">All rights reserved.</span>
-      </span>
-    </div>
-  </footer>
-
-  <script>
-    // ===== Theme switching =====
-    var themeIcons = {
-      auto: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41m11.32-11.32l1.41-1.41"/><line x1="1" y1="23" x2="23" y2="1" stroke-dasharray="3 3" opacity="0.5"/></svg>',
-      light: '<svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><path d="M12 1v2m0 18v2M4.22 4.22l1.42 1.42m12.72 12.72l1.42 1.42M1 12h2m18 0h2M4.22 19.78l1.42-1.42m12.72-12.72l1.42-1.42"/></svg>',
-      dark: '<svg viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>'
-    };
-
-    function applyTheme(setting) {
-      var dark = setting === 'auto'
-        ? window.matchMedia('(prefers-color-scheme: dark)').matches
-        : setting === 'dark';
-      var resolved = dark ? 'dark' : 'light';
-      document.documentElement.setAttribute('data-theme', resolved);
-      document.documentElement.setAttribute('data-theme-setting', setting);
-      // Update meta theme-color
-      var meta = document.querySelector('meta[name="theme-color"]');
-      if (meta) meta.setAttribute('content', dark ? '#0a0a0f' : '#f5f5f7');
-      // Update toggle icon
-      var btn = document.getElementById('theme-toggle');
-      if (btn) btn.innerHTML = themeIcons[setting] || themeIcons.auto;
-    }
-
-    function cycleTheme() {
-      var order = ['auto', 'light', 'dark'];
-      var current = document.documentElement.getAttribute('data-theme-setting') || 'auto';
-      var next = order[(order.indexOf(current) + 1) % order.length];
-      localStorage.setItem('ctm-theme', next);
-      applyTheme(next);
-    }
-
-    // Apply saved theme (complements the early <head> script)
-    (function() {
-      var setting = localStorage.getItem('ctm-theme') || 'auto';
-      applyTheme(setting);
-      // Listen for system theme changes when in auto mode
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', function() {
-        var s = document.documentElement.getAttribute('data-theme-setting');
-        if (s === 'auto') applyTheme('auto');
-      });
-    })();
-
-    function setLang(lang) {
-      document.documentElement.setAttribute('data-lang', lang);
-      document.querySelectorAll('.lang-btn').forEach(btn => {
-        btn.classList.toggle('active', btn.textContent.trim() === lang.toUpperCase());
-      });
-      localStorage.setItem('ctm-lang', lang);
-    }
-
-    // Auto-detect language: saved preference > browser languages > timezone region > fallback EN
-    (function() {
-      const supported = ['en', 'es', 'de', 'fr', 'ja'];
-      const saved = localStorage.getItem('ctm-lang');
-      if (saved && supported.includes(saved)) { setLang(saved); return; }
-
-      // Check all browser language preferences (e.g. ['es-MX', 'es', 'en-US', 'en'])
-      const langs = navigator.languages || [navigator.language || ''];
-      for (const l of langs) {
-        const code = l.toLowerCase().split('-')[0];
-        if (supported.includes(code)) { setLang(code); return; }
-      }
-
-      // Infer from timezone region (covers users with English browser in Spanish-speaking countries)
-      try {
-        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '';
-        const esZones = ['Europe/Madrid', 'Atlantic/Canary', 'Africa/Ceuta',
-          'America/Mexico_City', 'America/Bogota', 'America/Lima', 'America/Santiago',
-          'America/Buenos_Aires', 'America/Argentina', 'America/Montevideo',
-          'America/Caracas', 'America/Guayaquil', 'America/Asuncion',
-          'America/La_Paz', 'America/Havana', 'America/Santo_Domingo',
-          'America/Panama', 'America/Costa_Rica', 'America/El_Salvador',
-          'America/Guatemala', 'America/Tegucigalpa', 'America/Managua'];
-        const deZones = ['Europe/Berlin', 'Europe/Vienna', 'Europe/Zurich'];
-        const frZones = ['Europe/Paris', 'Europe/Brussels', 'America/Montreal',
-          'Africa/Dakar', 'Africa/Abidjan', 'Indian/Reunion'];
-        const jaZones = ['Asia/Tokyo'];
-        if (esZones.some(z => tz.startsWith(z))) { setLang('es'); return; }
-        if (deZones.some(z => tz.startsWith(z))) { setLang('de'); return; }
-        if (frZones.some(z => tz.startsWith(z))) { setLang('fr'); return; }
-        if (jaZones.some(z => tz.startsWith(z))) { setLang('ja'); return; }
-      } catch(e) {}
-
-      setLang('en');
-    })();
-
-    // Showcase tab switcher + watch fade-in/dots/iframe lang
-    (function() {
-      var tabs = document.querySelectorAll('.showcase-tab');
-      var panels = document.querySelectorAll('.showcase-panel');
-      var watchInitialised = false;
-
-      // Watch observer setup (created once, re-used on tab switch)
-      var watchObserver = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('watch-visible');
-            watchObserver.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-
-      // Mobile dots scroll tracking
-      var scene = document.getElementById('watch-scene');
-      var dots = document.querySelectorAll('.watch-dot');
-      if (scene && dots.length) {
-        scene.addEventListener('scroll', function() {
-          var scrollLeft = scene.scrollLeft;
-          var itemWidth = scene.querySelector('.watch-item').offsetWidth + 24;
-          var idx = Math.round(scrollLeft / itemWidth);
-          dots.forEach(function(d, i) { d.classList.toggle('watch-dot-active', i === idx); });
-        }, { passive: true });
-      }
-
-      function updateWatchIframeLang() {
-        var lang = document.documentElement.getAttribute('data-lang') || 'en';
-        document.querySelectorAll('.watch-screen iframe').forEach(function(iframe) {
-          var src = iframe.getAttribute('src') || '';
-          var base = src.split('?')[0];
-          iframe.setAttribute('src', base + '?lang=' + lang);
-        });
-      }
-
-      // Sync watch iframe lang on language change
-      var langObs = new MutationObserver(function(mutations) {
-        mutations.forEach(function(m) {
-          if (m.attributeName === 'data-lang') { updateWatchIframeLang(); }
-        });
-      });
-      langObs.observe(document.documentElement, { attributes: true, attributeFilter: ['data-lang'] });
-
-      function activateWatchPanel() {
-        if (!watchInitialised) {
-          updateWatchIframeLang();
-          watchInitialised = true;
-        }
-        // Re-observe items that haven't animated yet
-        document.querySelectorAll('.watch-item').forEach(function(item) {
-          if (!item.classList.contains('watch-visible')) {
-            watchObserver.observe(item);
-          }
-        });
-      }
-
-      // Tab click handler
-      tabs.forEach(function(tab) {
-        tab.addEventListener('click', function() {
-          var targetId = tab.getAttribute('data-panel');
-          tabs.forEach(function(t) { t.classList.remove('active'); });
-          panels.forEach(function(p) { p.classList.remove('active'); });
-          tab.classList.add('active');
-          var target = document.getElementById(targetId);
-          if (target) target.classList.add('active');
-          if (targetId === 'panel-watch') activateWatchPanel();
-        });
-      });
-    })();
-
-    // DI showcase live countdown (9:41 = 581s)
-    (function() {
-      let s = 581;
-      const appStoreUrl = 'https://apps.apple.com/app/call-to-meet/id6738656243';
-      const dlText = {en:'Download now!',es:'Descargar ahora!',de:'Jetzt laden!',fr:'Télécharger!',ja:'ダウンロード!'};
-      const els = ['di-timer-exp','di-timer-cmp','di-timer-lock','di-timer-tl'].map(id => document.getElementById(id)).filter(Boolean);
-      if (!els[0]) return;
-      function fmt(v) {
-        return Math.floor(v/60) + ':' + (v%60).toString().padStart(2,'0');
-      }
-      function showDownload() {
-        const lang = document.documentElement.getAttribute('data-lang') || 'en';
-        const text = dlText[lang] || dlText.en;
-        els.forEach(e => {
-          e.innerHTML = '<a href="'+appStoreUrl+'" target="_blank" rel="noopener" style="color:#FF453A;text-decoration:none">'+text+'</a>';
-        });
-      }
-      setInterval(() => {
-        if (s <= 0) { showDownload(); return; }
-        s--;
-        const t = fmt(s);
-        els.forEach(e => { e.textContent = t; });
-      }, 1000);
-    })();
-  </script>
-
+<script>
+const I18N = {
+  en:{nav_features:"Features",nav_screens:"Devices",nav_pricing:"Pricing",nav_cta:"Get the app",
+    hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"The countdown to your meeting, living on your Lock&nbsp;Screen.",
+    hero_sub:"Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent.",
+    hero_compat:"Works with",float1_t:"Alarm fired",float1_s:"Product Review · now",float2_t:"Joining Zoom…",float2_s:"Team Standup",
+    trust_lbl:"Joins the tools you already use",fb_h:"Your time, always in view.",
+    feat_kicker:"What it does",feat_h:"Three places you can't miss it.",
+    f1_k:"Lock Screen",f1_h:"Glance, and you already know.",f1_p:"A Live Activity puts your next meeting and its live countdown right on the Lock Screen — no app to open, no notification to chase.",f1_s1:"Live Activities",f1_s2:"Auto-updating",f1_s3:"Tap to join",
+    f2_k:"Dynamic Island",f2_h:"Always counting down.",f2_p:"The countdown lives in the Dynamic Island while you work, message and scroll. The closer it gets, the harder it is to miss.",f2_s1:"Compact & expanded",f2_s2:"Green when close",f2_s3:"One-tap join",
+    f3_k:"AlarmKit",f3_h:"It rings, even on silent.",f3_p:"Set a real alarm for any meeting and it breaks through silent mode and Focus — the only reminder you genuinely cannot sleep through.",f3_s1:"Breaks through silent",f3_s2:"Up to 8h ahead",f3_s3:"Per-event",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"On every screen you own.",dev_p:"The same live countdown follows you from your wrist to your Lock Screen to the iPad on your desk — always in sync.",
+    how_kicker:"How it works",how_h:"Set it once. Forget the rest.",
+    s1_h:"Connect your calendar",s1_p:"Call to Meet reads the calendars you already keep — nothing to retype.",s2_h:"Every event counts down",s2_p:"Each meeting becomes a live countdown across your devices, automatically.",s3_h:"The alarm fires",s3_p:"When it matters, a real alarm rings — even on silent or in Focus.",s4_h:"Join in one tap",s4_p:"Zoom, Meet or Teams open straight from the alert. You're in.",
+    price_kicker:"Pricing",price_h:"Free to start. Pro when you're ready.",
+    free_name:"Free",free_tag:"Everything you need to never miss the meeting that matters.",free_1:"Live Activities & Dynamic Island",free_2:"2 active alarms",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    pro_tag:"For days packed wall-to-wall with meetings.",pro_1:"Everything in Free",pro_2:"Unlimited alarms",pro_3:"End-of-meeting alerts",pro_4:"Focus-mode filtering",
+    final_h:"Never miss a meeting again.",foot_privacy:"Privacy",foot_terms:"Terms",foot_support:"Support"},
+  es:{nav_features:"Funciones",nav_screens:"Dispositivos",nav_pricing:"Precios",nav_cta:"Descargar",
+    hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"La cuenta atrás de tu reunión, viva en tu pantalla de bloqueo.",
+    hero_sub:"Call to Meet convierte cada evento del calendario en una cuenta atrás en directo: en la pantalla de bloqueo, en la Dynamic Island y como una alarma que suena aunque tengas el silencio activado.",
+    hero_compat:"Compatible con",float1_t:"Alarma activada",float1_s:"Revisión de Producto · ahora",float2_t:"Entrando a Zoom…",float2_s:"Standup del equipo",
+    trust_lbl:"Se integra con las apps que ya usas",fb_h:"Tu tiempo, siempre a la vista.",
+    feat_kicker:"Qué hace",feat_h:"Tres sitios donde no se te escapa.",
+    f1_k:"Pantalla de bloqueo",f1_h:"Una mirada y ya lo sabes.",f1_p:"Una Live Activity coloca tu próxima reunión y su cuenta atrás en la pantalla de bloqueo: sin abrir la app, sin perseguir notificaciones.",f1_s1:"Live Activities",f1_s2:"Se actualiza sola",f1_s3:"Toca para unirte",
+    f2_k:"Dynamic Island",f2_h:"Siempre en cuenta atrás.",f2_p:"La cuenta atrás vive en la Dynamic Island mientras trabajas, escribes y navegas. Cuanto más cerca, más difícil de ignorar.",f2_s1:"Compacta y ampliada",f2_s2:"Verde al acercarse",f2_s3:"Unirte con un toque",
+    f3_k:"AlarmKit",f3_h:"Suena aunque esté en silencio.",f3_p:"Pon una alarma real para cualquier reunión y atraviesa el modo silencio y los modos de concentración: el único aviso que de verdad no se te escapa.",f3_s1:"Atraviesa el silencio",f3_s2:"Hasta 8 h antes",f3_s3:"Por evento",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"En cada pantalla que tienes.",dev_p:"La misma cuenta atrás en directo te acompaña desde la muñeca hasta la pantalla de bloqueo y el iPad de tu escritorio, siempre sincronizada.",
+    how_kicker:"Cómo funciona",how_h:"Configúralo una vez. Olvídate del resto.",
+    s1_h:"Conecta tu calendario",s1_p:"Call to Meet lee los calendarios que ya tienes: nada que volver a escribir.",s2_h:"Cada evento cuenta atrás",s2_p:"Cada reunión se convierte en una cuenta atrás en directo en tus dispositivos, de forma automática.",s3_h:"La alarma suena",s3_p:"Cuando importa, suena una alarma real, aunque estés en silencio o en modo concentración.",s4_h:"Únete con un toque",s4_p:"Zoom, Meet o Teams se abren directamente desde el aviso. Ya estás dentro.",
+    price_kicker:"Precios",price_h:"Gratis para empezar. Pro cuando quieras.",
+    free_name:"Gratis",free_tag:"Todo lo necesario para no perderte la reunión que importa.",free_1:"Live Activities y Dynamic Island",free_2:"2 alarmas activas",free_3:"Zoom, Meet y Teams",free_4:"Apple Watch e iPad",
+    pro_tag:"Para días llenos de reuniones de principio a fin.",pro_1:"Todo lo de Gratis",pro_2:"Alarmas ilimitadas",pro_3:"Avisos de fin de reunión",pro_4:"Filtrado por modo concentración",
+    final_h:"No te pierdas otra reunión.",foot_privacy:"Privacidad",foot_terms:"Términos",foot_support:"Soporte"},
+  de:{nav_features:"Funktionen",nav_screens:"Geräte",nav_pricing:"Preise",nav_cta:"App laden",
+    hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Der Countdown zu deinem Meeting, live auf dem Sperrbildschirm.",
+    hero_sub:"Call to Meet macht aus jedem Kalendertermin einen Live-Countdown – auf dem Sperrbildschirm, in der Dynamic Island und als Wecker, der selbst lautlos klingelt.",
+    hero_compat:"Kompatibel mit",float1_t:"Wecker ausgelöst",float1_s:"Produktbesprechung · jetzt",float2_t:"Zoom wird geöffnet…",float2_s:"Team-Standup",
+    trust_lbl:"Verbindet sich mit deinen Tools",fb_h:"Deine Zeit, immer im Blick.",
+    feat_kicker:"Was es kann",feat_h:"Drei Orte, an denen du es nicht verpasst.",
+    f1_k:"Sperrbildschirm",f1_h:"Ein Blick – und du weißt Bescheid.",f1_p:"Eine Live Activity zeigt dein nächstes Meeting samt Live-Countdown direkt auf dem Sperrbildschirm – keine App öffnen, keiner Benachrichtigung hinterherjagen.",f1_s1:"Live Activities",f1_s2:"Aktualisiert sich selbst",f1_s3:"Zum Beitreten tippen",
+    f2_k:"Dynamic Island",f2_h:"Immer im Countdown.",f2_p:"Der Countdown lebt in der Dynamic Island, während du arbeitest, schreibst und scrollst. Je näher, desto schwerer zu übersehen.",f2_s1:"Kompakt & erweitert",f2_s2:"Grün, wenn es naht",f2_s3:"Beitreten per Tipp",
+    f3_k:"AlarmKit",f3_h:"Klingelt, sogar lautlos.",f3_p:"Stell für jedes Meeting einen echten Wecker – er durchbricht Lautlos und Fokus. Die einzige Erinnerung, die du wirklich nicht verschläfst.",f3_s1:"Durchbricht Lautlos",f3_s2:"Bis zu 8 Std. vorher",f3_s3:"Pro Termin",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Auf jedem deiner Bildschirme.",dev_p:"Derselbe Live-Countdown begleitet dich vom Handgelenk über den Sperrbildschirm bis zum iPad auf dem Schreibtisch – immer synchron.",
+    how_kicker:"So funktioniert's",how_h:"Einmal einrichten. Den Rest vergessen.",
+    s1_h:"Kalender verbinden",s1_p:"Call to Meet liest die Kalender, die du schon nutzt – nichts neu eintippen.",s2_h:"Jeder Termin zählt herunter",s2_p:"Jedes Meeting wird automatisch zum Live-Countdown auf all deinen Geräten.",s3_h:"Der Wecker klingelt",s3_p:"Wenn es zählt, klingelt ein echter Wecker – selbst lautlos oder im Fokus.",s4_h:"Mit einem Tipp beitreten",s4_p:"Zoom, Meet oder Teams öffnen direkt aus der Meldung. Du bist drin.",
+    price_kicker:"Preise",price_h:"Kostenlos starten. Pro, wenn du bereit bist.",
+    free_name:"Kostenlos",free_tag:"Alles, um das Meeting, das zählt, nie zu verpassen.",free_1:"Live Activities & Dynamic Island",free_2:"2 aktive Wecker",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    pro_tag:"Für Tage randvoll mit Meetings.",pro_1:"Alles aus Kostenlos",pro_2:"Unbegrenzte Wecker",pro_3:"Meeting-Ende-Hinweise",pro_4:"Fokus-Filterung",
+    final_h:"Verpasse nie wieder ein Meeting.",foot_privacy:"Datenschutz",foot_terms:"AGB",foot_support:"Support"},
+  fr:{nav_features:"Fonctions",nav_screens:"Appareils",nav_pricing:"Tarifs",nav_cta:"Télécharger",
+    hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Le compte à rebours de votre réunion, vivant sur l'écran verrouillé.",
+    hero_sub:"Call to Meet transforme chaque événement de l'agenda en compte à rebours en direct : sur l'écran verrouillé, dans la Dynamic Island et sous forme d'alarme qui sonne même en silencieux.",
+    hero_compat:"Compatible avec",float1_t:"Alarme déclenchée",float1_s:"Revue de produit · maintenant",float2_t:"Connexion à Zoom…",float2_s:"Point d'équipe",
+    trust_lbl:"S'intègre aux outils que vous utilisez déjà",fb_h:"Votre temps, toujours sous les yeux.",
+    feat_kicker:"Ce qu'elle fait",feat_h:"Trois endroits où vous ne pouvez pas la rater.",
+    f1_k:"Écran verrouillé",f1_h:"Un coup d'œil, et vous savez.",f1_p:"Une Live Activity affiche votre prochaine réunion et son compte à rebours directement sur l'écran verrouillé — aucune app à ouvrir, aucune notification à traquer.",f1_s1:"Live Activities",f1_s2:"Mise à jour auto",f1_s3:"Toucher pour rejoindre",
+    f2_k:"Dynamic Island",f2_h:"Toujours en compte à rebours.",f2_p:"Le compte à rebours vit dans la Dynamic Island pendant que vous travaillez, écrivez et défilez. Plus l'heure approche, plus il est dur à ignorer.",f2_s1:"Compacte & étendue",f2_s2:"Vert à l'approche",f2_s3:"Rejoindre d'un geste",
+    f3_k:"AlarmKit",f3_h:"Elle sonne, même en silencieux.",f3_p:"Réglez une vraie alarme pour n'importe quelle réunion : elle perce le mode silencieux et les modes de concentration. Le seul rappel que vous ne pouvez vraiment pas manquer.",f3_s1:"Perce le silencieux",f3_s2:"Jusqu'à 8 h avant",f3_s3:"Par événement",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Sur chacun de vos écrans.",dev_p:"Le même compte à rebours en direct vous suit du poignet à l'écran verrouillé jusqu'à l'iPad sur votre bureau — toujours synchronisé.",
+    how_kicker:"Comment ça marche",how_h:"Réglez une fois. Oubliez le reste.",
+    s1_h:"Connectez votre agenda",s1_p:"Call to Meet lit les agendas que vous tenez déjà — rien à ressaisir.",s2_h:"Chaque événement décompte",s2_p:"Chaque réunion devient un compte à rebours en direct sur vos appareils, automatiquement.",s3_h:"L'alarme sonne",s3_p:"Quand ça compte, une vraie alarme sonne — même en silencieux ou en concentration.",s4_h:"Rejoignez d'un geste",s4_p:"Zoom, Meet ou Teams s'ouvrent directement depuis l'alerte. Vous y êtes.",
+    price_kicker:"Tarifs",price_h:"Gratuit pour commencer. Pro quand vous voulez.",
+    free_name:"Gratuit",free_tag:"Tout pour ne jamais rater la réunion qui compte.",free_1:"Live Activities & Dynamic Island",free_2:"2 alarmes actives",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    pro_tag:"Pour les journées remplies de réunions.",pro_1:"Tout le Gratuit",pro_2:"Alarmes illimitées",pro_3:"Alertes de fin de réunion",pro_4:"Filtrage par concentration",
+    final_h:"Ne ratez plus aucune réunion.",foot_privacy:"Confidentialité",foot_terms:"Conditions",foot_support:"Assistance"},
+  ja:{nav_features:"機能",nav_screens:"デバイス",nav_pricing:"料金",nav_cta:"入手する",
+    hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"会議までのカウントダウンを、ロック画面に。",
+    hero_sub:"Call to Meet はカレンダーの予定をライブのカウントダウンに変えます。ロック画面、Dynamic Island、そしてサイレントでも鳴るアラームで。",
+    hero_compat:"対応:",float1_t:"アラーム作動",float1_s:"製品レビュー · たった今",float2_t:"Zoom に参加中…",float2_s:"チームスタンドアップ",
+    trust_lbl:"いつものツールと連携",fb_h:"あなたの時間を、いつも目の前に。",
+    feat_kicker:"できること",feat_h:"見逃せない3つの場所。",
+    f1_k:"ロック画面",f1_h:"ひと目で、もう分かる。",f1_p:"Live Activity が次の会議とライブのカウントダウンをロック画面に表示。アプリを開く必要も、通知を探す必要もありません。",f1_s1:"Live Activities",f1_s2:"自動更新",f1_s3:"タップで参加",
+    f2_k:"Dynamic Island",f2_h:"いつもカウントダウン。",f2_p:"作業中も、メッセージ中も、スクロール中も、カウントダウンは Dynamic Island に常駐。近づくほど、見逃せなくなります。",f2_s1:"コンパクト & 拡張",f2_s2:"近づくと緑に",f2_s3:"ワンタップ参加",
+    f3_k:"AlarmKit",f3_h:"サイレントでも鳴る。",f3_p:"どの会議にも本物のアラームを設定。サイレントモードや集中モードを突き破る、本当に寝過ごせない唯一のリマインダーです。",f3_s1:"サイレントを貫通",f3_s2:"最大8時間前",f3_s3:"予定ごと",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"あなたのすべての画面で。",dev_p:"同じライブのカウントダウンが、手首からロック画面、机の上の iPad まで——常に同期して付いてきます。",
+    how_kicker:"使い方",how_h:"一度設定。あとはおまかせ。",
+    s1_h:"カレンダーを接続",s1_p:"Call to Meet は今あるカレンダーを読み込みます。入力し直す必要はありません。",s2_h:"すべての予定がカウントダウン",s2_p:"各会議が自動でデバイス全体のライブカウントダウンに。",s3_h:"アラームが鳴る",s3_p:"肝心なとき、本物のアラームが鳴ります——サイレントでも集中モードでも。",s4_h:"ワンタップで参加",s4_p:"Zoom・Meet・Teams が通知から直接開きます。すぐに参加。",
+    price_kicker:"料金",price_h:"無料で始めて、必要になったら Pro へ。",
+    free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。",free_1:"Live Activities と Dynamic Island",free_2:"アクティブなアラーム2件",free_3:"Zoom・Meet・Teams",free_4:"Apple Watch と iPad",
+    pro_tag:"会議で埋め尽くされた一日に。",pro_1:"無料のすべて",pro_2:"アラーム無制限",pro_3:"会議終了の通知",pro_4:"集中モードのフィルタリング",
+    final_h:"もう会議を逃さない。",foot_privacy:"プライバシー",foot_terms:"利用規約",foot_support:"サポート"}
+};
+const SUPPORTED=["en","es","de","fr","ja"];
+function applyLang(lang){
+  if(!SUPPORTED.includes(lang))lang="en";
+  const t=I18N[lang];
+  document.documentElement.setAttribute("lang",lang);
+  document.documentElement.setAttribute("data-lang",lang);
+  document.querySelectorAll("[data-k]").forEach(el=>{const v=t[el.getAttribute("data-k")];if(v!=null)el.innerHTML=v;});
+  document.querySelectorAll(".loc-img").forEach(img=>{img.src="screenshots/"+lang+"/"+img.getAttribute("data-shot");});
+  document.querySelectorAll("#langs button").forEach(b=>b.classList.toggle("active",b.getAttribute("data-l")===lang));
+  try{localStorage.setItem("ctm-lang",lang);}catch(e){}
+}
+document.getElementById("langs").addEventListener("click",e=>{const b=e.target.closest("button");if(b)applyLang(b.getAttribute("data-l"));});
+(function(){let l;try{l=localStorage.getItem("ctm-lang");}catch(e){}
+  if(!l){const n=(navigator.language||"en").slice(0,2);l=SUPPORTED.includes(n)?n:"en";}
+  applyLang(l);})();
+</script>
 </body>
 </html>
