@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Call to Meet — Never miss a meeting again</title>
-<meta name="description" content="Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent. Works with Zoom, Google Meet and Microsoft Teams.">
+<meta name="description" content="Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent. Dial into meetings by phone with one tap. Works with Zoom, Google Meet and Microsoft Teams.">
 <link rel="icon" type="image/png" href="app-icon.png">
 <meta property="og:title" content="Call to Meet — Never miss a meeting again">
 <meta property="og:description" content="The countdown to your meeting, living on your Lock Screen, Dynamic Island and Apple Watch.">
@@ -205,7 +205,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
     <h1 data-k="hero_h1">The countdown to your meeting, living on your Lock&nbsp;Screen.</h1>
     <p class="sub" data-k="hero_sub">Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent.</p>
     <div class="actions">
-      <a href="#get"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+      <a href="https://apps.apple.com/es/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
       <span class="compat"><span data-k="hero_compat">Works with</span> <b>Zoom</b> · <b>Meet</b> · <b>Teams</b></span>
     </div>
   </div>
@@ -237,7 +237,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
 <section id="features" class="sec"><div class="wrap">
   <div class="sec-head">
     <div class="kicker" data-k="feat_kicker">What it does</div>
-    <h2 data-k="feat_h">Three places you can't miss it.</h2>
+    <h2 data-k="feat_h">Four ways you can't miss it.</h2>
   </div>
 
   <div class="frow">
@@ -271,6 +271,16 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
     </div>
     <div class="fvis"><div class="phone"><img class="loc-img" data-shot="02_event_list.png" src="screenshots/en/02_event_list.png" alt="Per-event alarms"></div></div>
   </div>
+
+  <div class="frow">
+    <div class="ftext">
+      <div class="kicker" data-k="f4_k">Phone dial-in</div>
+      <h3 data-k="f4_h">Call in with one tap.</h3>
+      <p data-k="f4_p">When the meeting includes a phone dial-in number, Call to Meet puts a call button right there. Tap it and your phone dials in — PIN included. No switching apps, no copying numbers.</p>
+      <div class="spec"><span data-k="f4_s1">Detects dial-in numbers</span><span data-k="f4_s2">Auto-fills the PIN</span><span data-k="f4_s3">Works without WiFi</span></div>
+    </div>
+    <div class="fvis"><div class="phone"><img class="loc-img" data-shot="02_event_list.png" src="screenshots/en/02_event_list.png" alt="Phone dial-in"></div></div>
+  </div>
 </div></section>
 
 <!-- EVERY SCREEN -->
@@ -297,7 +307,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
     <div class="step"><div class="num">01</div><h4 data-k="s1_h">Connect your calendar</h4><p data-k="s1_p">Call to Meet reads the calendars you already keep — nothing to retype.</p></div>
     <div class="step"><div class="num">02</div><h4 data-k="s2_h">Every event counts down</h4><p data-k="s2_p">Each meeting becomes a live countdown across your devices, automatically.</p></div>
     <div class="step"><div class="num">03</div><h4 data-k="s3_h">The alarm fires</h4><p data-k="s3_p">When it matters, a real alarm rings — even on silent or in Focus.</p></div>
-    <div class="step"><div class="num">04</div><h4 data-k="s4_h">Join in one tap</h4><p data-k="s4_p">Zoom, Meet or Teams open straight from the alert. You're in.</p></div>
+    <div class="step"><div class="num">04</div><h4 data-k="s4_h">Join in one tap</h4><p data-k="s4_p">Open Zoom, Meet or Teams straight from the alert — or dial in by phone if the meeting has a number. You're in.</p></div>
   </div>
 </div></section>
 
@@ -334,7 +344,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
 <!-- FINAL CTA -->
 <section id="get" class="final"><div class="wrap">
   <h2 data-k="final_h">Never miss a meeting again.</h2>
-  <a href="https://apps.apple.com/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+  <a href="https://apps.apple.com/es/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
 </div></section>
 
 <footer><div class="wrap foot">
@@ -351,82 +361,87 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
 const I18N = {
   en:{nav_features:"Features",nav_screens:"Devices",nav_pricing:"Pricing",nav_cta:"Get the app",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"The countdown to your meeting, living on your Lock&nbsp;Screen.",
-    hero_sub:"Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent.",
+    hero_sub:"Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, as an alarm that fires even on silent, and a one-tap call button when the meeting has a phone number.",
     hero_compat:"Works with",float1_t:"Alarm fired",float1_s:"Product Review · now",float2_t:"Joining Zoom…",float2_s:"Team Standup",
     trust_lbl:"Joins the tools you already use",fb_h:"Your time, always in view.",
-    feat_kicker:"What it does",feat_h:"Three places you can't miss it.",
+    feat_kicker:"What it does",feat_h:"Four ways you can't miss it.",
     f1_k:"Lock Screen",f1_h:"Glance, and you already know.",f1_p:"A Live Activity puts your next meeting and its live countdown right on the Lock Screen — no app to open, no notification to chase.",f1_s1:"Live Activities",f1_s2:"Auto-updating",f1_s3:"Tap to join",
     f2_k:"Dynamic Island",f2_h:"Always counting down.",f2_p:"The countdown lives in the Dynamic Island while you work, message and scroll. The closer it gets, the harder it is to miss.",f2_s1:"Compact & expanded",f2_s2:"Green when close",f2_s3:"One-tap join",
     f3_k:"AlarmKit",f3_h:"It rings, even on silent.",f3_p:"Set a real alarm for any meeting and it breaks through silent mode and Focus — the only reminder you genuinely cannot sleep through.",f3_s1:"Breaks through silent",f3_s2:"Up to 8h ahead",f3_s3:"Per-event",
+    f4_k:"Phone dial-in",f4_h:"Call in with one tap.",f4_p:"When the meeting includes a phone dial-in number, Call to Meet puts a call button right there. Tap it and your phone dials in — PIN included. No switching apps, no copying numbers.",f4_s1:"Detects dial-in numbers",f4_s2:"Auto-fills the PIN",f4_s3:"Works without WiFi",
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"On every screen you own.",dev_p:"The same live countdown follows you from your wrist to your Lock Screen to the iPad on your desk — always in sync.",
     how_kicker:"How it works",how_h:"Set it once. Forget the rest.",
-    s1_h:"Connect your calendar",s1_p:"Call to Meet reads the calendars you already keep — nothing to retype.",s2_h:"Every event counts down",s2_p:"Each meeting becomes a live countdown across your devices, automatically.",s3_h:"The alarm fires",s3_p:"When it matters, a real alarm rings — even on silent or in Focus.",s4_h:"Join in one tap",s4_p:"Zoom, Meet or Teams open straight from the alert. You're in.",
+    s1_h:"Connect your calendar",s1_p:"Call to Meet reads the calendars you already keep — nothing to retype.",s2_h:"Every event counts down",s2_p:"Each meeting becomes a live countdown across your devices, automatically.",s3_h:"The alarm fires",s3_p:"When it matters, a real alarm rings — even on silent or in Focus.",s4_h:"Join in one tap",s4_p:"Open Zoom, Meet or Teams straight from the alert — or dial in by phone if the meeting has a number. You're in.",
     price_kicker:"Pricing",price_h:"Free to start. Pro when you're ready.",
-    free_name:"Free",free_tag:"Everything you need to never miss the meeting that matters.",free_1:"Live Activities & Dynamic Island",free_2:"2 active alarms",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    free_name:"Free",free_tag:"Everything you need to never miss the meeting that matters.",free_1:"Live Activities & Dynamic Island",free_2:"2 active alarms",free_3:"Zoom, Meet & Teams · phone dial-in",free_4:"Apple Watch & iPad",
     pro_tag:"For days packed wall-to-wall with meetings.",pro_1:"Everything in Free",pro_2:"Unlimited alarms",pro_3:"End-of-meeting alerts",pro_4:"Focus-mode filtering",
     final_h:"Never miss a meeting again.",foot_privacy:"Privacy",foot_terms:"Terms",foot_support:"Support"},
   es:{nav_features:"Funciones",nav_screens:"Dispositivos",nav_pricing:"Precios",nav_cta:"Descargar",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"La cuenta atrás de tu reunión, viva en tu pantalla de bloqueo.",
-    hero_sub:"Call to Meet convierte cada evento del calendario en una cuenta atrás en directo: en la pantalla de bloqueo, en la Dynamic Island y como una alarma que suena aunque tengas el silencio activado.",
+    hero_sub:"Call to Meet convierte cada evento del calendario en una cuenta atrás en directo: en la pantalla de bloqueo, en la Dynamic Island, como una alarma que suena aunque tengas el silencio activado y con un botón para llamar por teléfono cuando la reunión lo permite.",
     hero_compat:"Compatible con",float1_t:"Alarma activada",float1_s:"Revisión de Producto · ahora",float2_t:"Entrando a Zoom…",float2_s:"Standup del equipo",
     trust_lbl:"Se integra con las apps que ya usas",fb_h:"Tu tiempo, siempre a la vista.",
-    feat_kicker:"Qué hace",feat_h:"Tres sitios donde no se te escapa.",
+    feat_kicker:"Qué hace",feat_h:"Cuatro formas de no perdérsela.",
     f1_k:"Pantalla de bloqueo",f1_h:"Una mirada y ya lo sabes.",f1_p:"Una Live Activity coloca tu próxima reunión y su cuenta atrás en la pantalla de bloqueo: sin abrir la app, sin perseguir notificaciones.",f1_s1:"Live Activities",f1_s2:"Se actualiza sola",f1_s3:"Toca para unirte",
     f2_k:"Dynamic Island",f2_h:"Siempre en cuenta atrás.",f2_p:"La cuenta atrás vive en la Dynamic Island mientras trabajas, escribes y navegas. Cuanto más cerca, más difícil de ignorar.",f2_s1:"Compacta y ampliada",f2_s2:"Verde al acercarse",f2_s3:"Unirte con un toque",
     f3_k:"AlarmKit",f3_h:"Suena aunque esté en silencio.",f3_p:"Pon una alarma real para cualquier reunión y atraviesa el modo silencio y los modos de concentración: el único aviso que de verdad no se te escapa.",f3_s1:"Atraviesa el silencio",f3_s2:"Hasta 8 h antes",f3_s3:"Por evento",
+    f4_k:"Llamada por teléfono",f4_h:"Únete por teléfono con un toque.",f4_p:"Si la reunión incluye un número de marcación, Call to Meet muestra un botón de llamada. Tócalo y tu teléfono marca directamente, PIN incluido. Sin copiar números ni cambiar de app.",f4_s1:"Detecta números de marcación",f4_s2:"Rellena el PIN automáticamente",f4_s3:"Funciona sin WiFi",
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"En cada pantalla que tienes.",dev_p:"La misma cuenta atrás en directo te acompaña desde la muñeca hasta la pantalla de bloqueo y el iPad de tu escritorio, siempre sincronizada.",
     how_kicker:"Cómo funciona",how_h:"Configúralo una vez. Olvídate del resto.",
-    s1_h:"Conecta tu calendario",s1_p:"Call to Meet lee los calendarios que ya tienes: nada que volver a escribir.",s2_h:"Cada evento cuenta atrás",s2_p:"Cada reunión se convierte en una cuenta atrás en directo en tus dispositivos, de forma automática.",s3_h:"La alarma suena",s3_p:"Cuando importa, suena una alarma real, aunque estés en silencio o en modo concentración.",s4_h:"Únete con un toque",s4_p:"Zoom, Meet o Teams se abren directamente desde el aviso. Ya estás dentro.",
+    s1_h:"Conecta tu calendario",s1_p:"Call to Meet lee los calendarios que ya tienes: nada que volver a escribir.",s2_h:"Cada evento cuenta atrás",s2_p:"Cada reunión se convierte en una cuenta atrás en directo en tus dispositivos, de forma automática.",s3_h:"La alarma suena",s3_p:"Cuando importa, suena una alarma real, aunque estés en silencio o en modo concentración.",s4_h:"Únete con un toque",s4_p:"Abre Zoom, Meet o Teams desde el aviso, o llama por teléfono si la reunión tiene un número. Ya estás dentro.",
     price_kicker:"Precios",price_h:"Gratis para empezar. Pro cuando quieras.",
-    free_name:"Gratis",free_tag:"Todo lo necesario para no perderte la reunión que importa.",free_1:"Live Activities y Dynamic Island",free_2:"2 alarmas activas",free_3:"Zoom, Meet y Teams",free_4:"Apple Watch e iPad",
+    free_name:"Gratis",free_tag:"Todo lo necesario para no perderte la reunión que importa.",free_1:"Live Activities y Dynamic Island",free_2:"2 alarmas activas",free_3:"Zoom, Meet y Teams · llamada por teléfono",free_4:"Apple Watch e iPad",
     pro_tag:"Para días llenos de reuniones de principio a fin.",pro_1:"Todo lo de Gratis",pro_2:"Alarmas ilimitadas",pro_3:"Avisos de fin de reunión",pro_4:"Filtrado por modo concentración",
     final_h:"No te pierdas otra reunión.",foot_privacy:"Privacidad",foot_terms:"Términos",foot_support:"Soporte"},
   de:{nav_features:"Funktionen",nav_screens:"Geräte",nav_pricing:"Preise",nav_cta:"App laden",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Der Countdown zu deinem Meeting, live auf dem Sperrbildschirm.",
-    hero_sub:"Call to Meet macht aus jedem Kalendertermin einen Live-Countdown – auf dem Sperrbildschirm, in der Dynamic Island und als Wecker, der selbst lautlos klingelt.",
+    hero_sub:"Call to Meet macht aus jedem Kalendertermin einen Live-Countdown – auf dem Sperrbildschirm, in der Dynamic Island, als Wecker der selbst lautlos klingelt und mit einem Anruf-Button für Meetings mit Telefonnummer.",
     hero_compat:"Kompatibel mit",float1_t:"Wecker ausgelöst",float1_s:"Produktbesprechung · jetzt",float2_t:"Zoom wird geöffnet…",float2_s:"Team-Standup",
     trust_lbl:"Verbindet sich mit deinen Tools",fb_h:"Deine Zeit, immer im Blick.",
-    feat_kicker:"Was es kann",feat_h:"Drei Orte, an denen du es nicht verpasst.",
+    feat_kicker:"Was es kann",feat_h:"Vier Wege, wie du es nicht verpasst.",
     f1_k:"Sperrbildschirm",f1_h:"Ein Blick – und du weißt Bescheid.",f1_p:"Eine Live Activity zeigt dein nächstes Meeting samt Live-Countdown direkt auf dem Sperrbildschirm – keine App öffnen, keiner Benachrichtigung hinterherjagen.",f1_s1:"Live Activities",f1_s2:"Aktualisiert sich selbst",f1_s3:"Zum Beitreten tippen",
     f2_k:"Dynamic Island",f2_h:"Immer im Countdown.",f2_p:"Der Countdown lebt in der Dynamic Island, während du arbeitest, schreibst und scrollst. Je näher, desto schwerer zu übersehen.",f2_s1:"Kompakt & erweitert",f2_s2:"Grün, wenn es naht",f2_s3:"Beitreten per Tipp",
     f3_k:"AlarmKit",f3_h:"Klingelt, sogar lautlos.",f3_p:"Stell für jedes Meeting einen echten Wecker – er durchbricht Lautlos und Fokus. Die einzige Erinnerung, die du wirklich nicht verschläfst.",f3_s1:"Durchbricht Lautlos",f3_s2:"Bis zu 8 Std. vorher",f3_s3:"Pro Termin",
+    f4_k:"Telefoneinwahl",f4_h:"Mit einem Tipp anrufen.",f4_p:"Wenn das Meeting eine Einwahlnummer enthält, zeigt Call to Meet direkt einen Anruf-Button. Antippen und dein Telefon wählt ein – PIN inklusive. Kein App-Wechsel, kein Nummern kopieren.",f4_s1:"Erkennt Einwahlnummern",f4_s2:"PIN wird automatisch eingegeben",f4_s3:"Funktioniert ohne WLAN",
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Auf jedem deiner Bildschirme.",dev_p:"Derselbe Live-Countdown begleitet dich vom Handgelenk über den Sperrbildschirm bis zum iPad auf dem Schreibtisch – immer synchron.",
     how_kicker:"So funktioniert's",how_h:"Einmal einrichten. Den Rest vergessen.",
-    s1_h:"Kalender verbinden",s1_p:"Call to Meet liest die Kalender, die du schon nutzt – nichts neu eintippen.",s2_h:"Jeder Termin zählt herunter",s2_p:"Jedes Meeting wird automatisch zum Live-Countdown auf all deinen Geräten.",s3_h:"Der Wecker klingelt",s3_p:"Wenn es zählt, klingelt ein echter Wecker – selbst lautlos oder im Fokus.",s4_h:"Mit einem Tipp beitreten",s4_p:"Zoom, Meet oder Teams öffnen direkt aus der Meldung. Du bist drin.",
+    s1_h:"Kalender verbinden",s1_p:"Call to Meet liest die Kalender, die du schon nutzt – nichts neu eintippen.",s2_h:"Jeder Termin zählt herunter",s2_p:"Jedes Meeting wird automatisch zum Live-Countdown auf all deinen Geräten.",s3_h:"Der Wecker klingelt",s3_p:"Wenn es zählt, klingelt ein echter Wecker – selbst lautlos oder im Fokus.",s4_h:"Mit einem Tipp beitreten",s4_p:"Öffne Zoom, Meet oder Teams direkt aus der Meldung – oder wähle per Telefon ein, wenn das Meeting eine Nummer hat. Du bist drin.",
     price_kicker:"Preise",price_h:"Kostenlos starten. Pro, wenn du bereit bist.",
-    free_name:"Kostenlos",free_tag:"Alles, um das Meeting, das zählt, nie zu verpassen.",free_1:"Live Activities & Dynamic Island",free_2:"2 aktive Wecker",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    free_name:"Kostenlos",free_tag:"Alles, um das Meeting, das zählt, nie zu verpassen.",free_1:"Live Activities & Dynamic Island",free_2:"2 aktive Wecker",free_3:"Zoom, Meet & Teams · Telefoneinwahl",free_4:"Apple Watch & iPad",
     pro_tag:"Für Tage randvoll mit Meetings.",pro_1:"Alles aus Kostenlos",pro_2:"Unbegrenzte Wecker",pro_3:"Meeting-Ende-Hinweise",pro_4:"Fokus-Filterung",
     final_h:"Verpasse nie wieder ein Meeting.",foot_privacy:"Datenschutz",foot_terms:"AGB",foot_support:"Support"},
   fr:{nav_features:"Fonctions",nav_screens:"Appareils",nav_pricing:"Tarifs",nav_cta:"Télécharger",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Le compte à rebours de votre réunion, vivant sur l'écran verrouillé.",
-    hero_sub:"Call to Meet transforme chaque événement de l'agenda en compte à rebours en direct : sur l'écran verrouillé, dans la Dynamic Island et sous forme d'alarme qui sonne même en silencieux.",
+    hero_sub:"Call to Meet transforme chaque événement de l'agenda en compte à rebours en direct : sur l'écran verrouillé, dans la Dynamic Island, sous forme d'alarme qui sonne même en silencieux et avec un bouton d'appel pour les réunions qui ont un numéro de téléphone.",
     hero_compat:"Compatible avec",float1_t:"Alarme déclenchée",float1_s:"Revue de produit · maintenant",float2_t:"Connexion à Zoom…",float2_s:"Point d'équipe",
     trust_lbl:"S'intègre aux outils que vous utilisez déjà",fb_h:"Votre temps, toujours sous les yeux.",
-    feat_kicker:"Ce qu'elle fait",feat_h:"Trois endroits où vous ne pouvez pas la rater.",
+    feat_kicker:"Ce qu'elle fait",feat_h:"Quatre façons de ne pas la rater.",
     f1_k:"Écran verrouillé",f1_h:"Un coup d'œil, et vous savez.",f1_p:"Une Live Activity affiche votre prochaine réunion et son compte à rebours directement sur l'écran verrouillé — aucune app à ouvrir, aucune notification à traquer.",f1_s1:"Live Activities",f1_s2:"Mise à jour auto",f1_s3:"Toucher pour rejoindre",
     f2_k:"Dynamic Island",f2_h:"Toujours en compte à rebours.",f2_p:"Le compte à rebours vit dans la Dynamic Island pendant que vous travaillez, écrivez et défilez. Plus l'heure approche, plus il est dur à ignorer.",f2_s1:"Compacte & étendue",f2_s2:"Vert à l'approche",f2_s3:"Rejoindre d'un geste",
     f3_k:"AlarmKit",f3_h:"Elle sonne, même en silencieux.",f3_p:"Réglez une vraie alarme pour n'importe quelle réunion : elle perce le mode silencieux et les modes de concentration. Le seul rappel que vous ne pouvez vraiment pas manquer.",f3_s1:"Perce le silencieux",f3_s2:"Jusqu'à 8 h avant",f3_s3:"Par événement",
+    f4_k:"Appel téléphonique",f4_h:"Rejoignez par téléphone en un geste.",f4_p:"Quand la réunion inclut un numéro de téléphone, Call to Meet affiche un bouton d'appel. Touchez-le et votre téléphone compose directement — code PIN compris. Sans changer d'application ni copier de numéro.",f4_s1:"Détecte les numéros de réunion",f4_s2:"Saisit le code PIN automatiquement",f4_s3:"Fonctionne sans Wi-Fi",
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Sur chacun de vos écrans.",dev_p:"Le même compte à rebours en direct vous suit du poignet à l'écran verrouillé jusqu'à l'iPad sur votre bureau — toujours synchronisé.",
     how_kicker:"Comment ça marche",how_h:"Réglez une fois. Oubliez le reste.",
-    s1_h:"Connectez votre agenda",s1_p:"Call to Meet lit les agendas que vous tenez déjà — rien à ressaisir.",s2_h:"Chaque événement décompte",s2_p:"Chaque réunion devient un compte à rebours en direct sur vos appareils, automatiquement.",s3_h:"L'alarme sonne",s3_p:"Quand ça compte, une vraie alarme sonne — même en silencieux ou en concentration.",s4_h:"Rejoignez d'un geste",s4_p:"Zoom, Meet ou Teams s'ouvrent directement depuis l'alerte. Vous y êtes.",
+    s1_h:"Connectez votre agenda",s1_p:"Call to Meet lit les agendas que vous tenez déjà — rien à ressaisir.",s2_h:"Chaque événement décompte",s2_p:"Chaque réunion devient un compte à rebours en direct sur vos appareils, automatiquement.",s3_h:"L'alarme sonne",s3_p:"Quand ça compte, une vraie alarme sonne — même en silencieux ou en concentration.",s4_h:"Rejoignez d'un geste",s4_p:"Ouvrez Zoom, Meet ou Teams depuis l'alerte — ou composez par téléphone si la réunion a un numéro. Vous y êtes.",
     price_kicker:"Tarifs",price_h:"Gratuit pour commencer. Pro quand vous voulez.",
-    free_name:"Gratuit",free_tag:"Tout pour ne jamais rater la réunion qui compte.",free_1:"Live Activities & Dynamic Island",free_2:"2 alarmes actives",free_3:"Zoom, Meet & Teams",free_4:"Apple Watch & iPad",
+    free_name:"Gratuit",free_tag:"Tout pour ne jamais rater la réunion qui compte.",free_1:"Live Activities & Dynamic Island",free_2:"2 alarmes actives",free_3:"Zoom, Meet & Teams · appel téléphonique",free_4:"Apple Watch & iPad",
     pro_tag:"Pour les journées remplies de réunions.",pro_1:"Tout le Gratuit",pro_2:"Alarmes illimitées",pro_3:"Alertes de fin de réunion",pro_4:"Filtrage par concentration",
     final_h:"Ne ratez plus aucune réunion.",foot_privacy:"Confidentialité",foot_terms:"Conditions",foot_support:"Assistance"},
   ja:{nav_features:"機能",nav_screens:"デバイス",nav_pricing:"料金",nav_cta:"入手する",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"会議までのカウントダウンを、ロック画面に。",
-    hero_sub:"Call to Meet はカレンダーの予定をライブのカウントダウンに変えます。ロック画面、Dynamic Island、そしてサイレントでも鳴るアラームで。",
+    hero_sub:"Call to Meet はカレンダーの予定をライブのカウントダウンに変えます。ロック画面、Dynamic Island、サイレントでも鳴るアラーム、そして電話番号がある会議にはワンタップの通話ボタンで。",
     hero_compat:"対応:",float1_t:"アラーム作動",float1_s:"製品レビュー · たった今",float2_t:"Zoom に参加中…",float2_s:"チームスタンドアップ",
     trust_lbl:"いつものツールと連携",fb_h:"あなたの時間を、いつも目の前に。",
-    feat_kicker:"できること",feat_h:"見逃せない3つの場所。",
+    feat_kicker:"できること",feat_h:"見逃せない4つの方法。",
     f1_k:"ロック画面",f1_h:"ひと目で、もう分かる。",f1_p:"Live Activity が次の会議とライブのカウントダウンをロック画面に表示。アプリを開く必要も、通知を探す必要もありません。",f1_s1:"Live Activities",f1_s2:"自動更新",f1_s3:"タップで参加",
     f2_k:"Dynamic Island",f2_h:"いつもカウントダウン。",f2_p:"作業中も、メッセージ中も、スクロール中も、カウントダウンは Dynamic Island に常駐。近づくほど、見逃せなくなります。",f2_s1:"コンパクト & 拡張",f2_s2:"近づくと緑に",f2_s3:"ワンタップ参加",
     f3_k:"AlarmKit",f3_h:"サイレントでも鳴る。",f3_p:"どの会議にも本物のアラームを設定。サイレントモードや集中モードを突き破る、本当に寝過ごせない唯一のリマインダーです。",f3_s1:"サイレントを貫通",f3_s2:"最大8時間前",f3_s3:"予定ごと",
+    f4_k:"電話で参加",f4_h:"ワンタップで電話参加。",f4_p:"会議にダイヤルイン番号が含まれている場合、Call to Meet に通話ボタンが表示されます。タップするだけで電話がかかり、PINも自動入力。アプリの切り替えも番号のコピーも不要です。",f4_s1:"ダイヤルイン番号を検出",f4_s2:"PINを自動入力",f4_s3:"Wi-Fi不要",
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"あなたのすべての画面で。",dev_p:"同じライブのカウントダウンが、手首からロック画面、机の上の iPad まで——常に同期して付いてきます。",
     how_kicker:"使い方",how_h:"一度設定。あとはおまかせ。",
-    s1_h:"カレンダーを接続",s1_p:"Call to Meet は今あるカレンダーを読み込みます。入力し直す必要はありません。",s2_h:"すべての予定がカウントダウン",s2_p:"各会議が自動でデバイス全体のライブカウントダウンに。",s3_h:"アラームが鳴る",s3_p:"肝心なとき、本物のアラームが鳴ります——サイレントでも集中モードでも。",s4_h:"ワンタップで参加",s4_p:"Zoom・Meet・Teams が通知から直接開きます。すぐに参加。",
+    s1_h:"カレンダーを接続",s1_p:"Call to Meet は今あるカレンダーを読み込みます。入力し直す必要はありません。",s2_h:"すべての予定がカウントダウン",s2_p:"各会議が自動でデバイス全体のライブカウントダウンに。",s3_h:"アラームが鳴る",s3_p:"肝心なとき、本物のアラームが鳴ります——サイレントでも集中モードでも。",s4_h:"ワンタップで参加",s4_p:"Zoom・Meet・Teams を通知から直接開く、または電話番号があれば電話で参加。すぐに入れます。",
     price_kicker:"料金",price_h:"無料で始めて、必要になったら Pro へ。",
-    free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。",free_1:"Live Activities と Dynamic Island",free_2:"アクティブなアラーム2件",free_3:"Zoom・Meet・Teams",free_4:"Apple Watch と iPad",
+    free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。",free_1:"Live Activities と Dynamic Island",free_2:"アクティブなアラーム2件",free_3:"Zoom・Meet・Teams · 電話参加",free_4:"Apple Watch と iPad",
     pro_tag:"会議で埋め尽くされた一日に。",pro_1:"無料のすべて",pro_2:"アラーム無制限",pro_3:"会議終了の通知",pro_4:"集中モードのフィルタリング",
     final_h:"もう会議を逃さない。",foot_privacy:"プライバシー",foot_terms:"利用規約",foot_support:"サポート"}
 };
