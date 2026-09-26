@@ -11,6 +11,7 @@
 <meta property="og:image" content="https://iflorit.github.io/app-icon.png">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary_large_image">
+<meta name="apple-itunes-app" content="app-id=6738656243">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&family=Noto+Sans+JP:wght@500;700;800&display=swap" rel="stylesheet">
@@ -194,7 +195,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
     <div class="langs" id="langs">
       <button data-l="en">EN</button><button data-l="es">ES</button><button data-l="de">DE</button><button data-l="fr">FR</button><button data-l="ja">JA</button>
     </div>
-    <a class="btn-cta" href="https://apps.apple.com/es/app/call-to-meet/id6738656243" data-k="nav_cta">Get the app</a>
+    <a class="btn-cta" href="https://apps.apple.com/app/id6738656243?ct=nav&mt=8" data-k="nav_cta">Get the app</a>
   </div>
 </div></header>
 
@@ -205,7 +206,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
     <h1 data-k="hero_h1">The countdown to your meeting, living on your Lock&nbsp;Screen.</h1>
     <p class="sub" data-k="hero_sub">Call to Meet turns every calendar event into a live countdown — on the Lock Screen, in the Dynamic Island, and as an alarm that fires even on silent.</p>
     <div class="actions">
-      <a href="https://apps.apple.com/es/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+      <a href="https://apps.apple.com/app/id6738656243?ct=hero&mt=8"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
       <span class="compat"><span data-k="hero_compat">Works with</span> <b>Zoom</b> · <b>Meet</b> · <b>Teams</b></span>
     </div>
   </div>
@@ -344,7 +345,10 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
 <!-- FINAL CTA -->
 <section id="get" class="final"><div class="wrap">
   <h2 data-k="final_h">Never miss a meeting again.</h2>
-  <a href="https://apps.apple.com/es/app/call-to-meet/id6738656243"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+  <a href="https://apps.apple.com/app/id6738656243?ct=footer&mt=8"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" alt="Download on the App Store"></a>
+  <!-- TODO(cmo): pt= (numeric ASC campaign provider token, App Analytics → Campaigns) pending owner —
+       without it attribution won't split by campaign, only ct= section works today.
+       Also append &ppid=<cpp-id> once the "Reuniones" Custom Product Page exists (DEC-046). -->
 </div></section>
 
 <footer><div class="wrap foot">
