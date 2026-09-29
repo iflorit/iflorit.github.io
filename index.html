@@ -189,9 +189,9 @@ h2{font-size:clamp(30px,3.6vw,46px);line-height:1.07;font-weight:800;letter-spac
 /* ---------- PRICING ---------- */
 .price{display:grid;grid-template-columns:1fr 1fr;gap:20px;max-width:880px;margin:0 auto}
 .plan{background:var(--card);border:1px solid var(--line);border-radius:22px;padding:34px 30px;position:relative}
-.plan.pro{border-color:rgba(48,209,88,.4);box-shadow:0 0 0 1px rgba(48,209,88,.18),0 30px 80px -40px rgba(48,209,88,.25)}
+.plan.featured{border-color:rgba(48,209,88,.4);box-shadow:0 0 0 1px rgba(48,209,88,.18),0 30px 80px -40px rgba(48,209,88,.25)}
 .plan .pname{font-size:14px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--mut)}
-.plan.pro .pname{color:var(--green)}
+.plan.featured .pname{color:var(--green)}
 .plan .ptag{font-size:15px;color:var(--mut);margin-top:14px;min-height:44px}
 .plist{margin-top:22px;display:flex;flex-direction:column;gap:13px}
 .plist li{list-style:none;display:flex;gap:11px;align-items:flex-start;font-size:15px;color:#dcdce2}
@@ -347,27 +347,18 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
 <section id="pricing" class="sec" style="background:var(--bg2);border-top:1px solid var(--line)"><div class="wrap">
   <div class="sec-head center">
     <div class="kicker" data-k="price_kicker">Pricing</div>
-    <h2 data-k="price_h">Free to start. Pro when you're ready.</h2>
+    <h2 data-k="price_h">Free. Everything included.</h2>
   </div>
-  <div class="price">
-    <div class="plan">
+  <div class="price" style="grid-template-columns:1fr;max-width:440px">
+    <div class="plan featured">
       <div class="pname" data-k="free_name">Free</div>
-      <div class="ptag" data-k="free_tag">Everything you need to never miss the meeting that matters.</div>
+      <div class="ptag" data-k="free_tag">Everything you need to never miss the meeting that matters. No paid tier, no ads.</div>
       <ul class="plist">
         <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_1">Live Activities &amp; Dynamic Island</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_2">2 active alarms</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_2">Unlimited alarms</span></li>
         <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_3">Zoom, Meet &amp; Teams</span></li>
         <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_4">Apple Watch &amp; iPad</span></li>
-      </ul>
-    </div>
-    <div class="plan pro">
-      <div class="pname">Pro</div>
-      <div class="ptag" data-k="pro_tag">For days packed wall-to-wall with meetings.</div>
-      <ul class="plist">
-        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_1">Everything in Free</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_2">Unlimited alarms</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_3">End-of-meeting alerts</span></li>
-        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="pro_4">Focus-mode filtering</span></li>
+        <li><svg viewBox="0 0 24 24"><path d="M9 16.2l-3.5-3.5L4 14.2 9 19l11-11-1.5-1.4z"/></svg><span data-k="free_5">End-of-meeting alerts &amp; Focus-mode filtering</span></li>
       </ul>
     </div>
   </div>
@@ -408,9 +399,8 @@ const I18N = {
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"On every screen you own.",dev_p:"The same live countdown follows you from your wrist to your Lock Screen to the iPad on your desk — always in sync.",
     how_kicker:"How it works",how_h:"Set it once. Forget the rest.",
     s1_h:"Connect your calendar",s1_p:"Call to Meet reads the calendars you already keep — nothing to retype.",s2_h:"Every event counts down",s2_p:"Each meeting becomes a live countdown across your devices, automatically.",s3_h:"The alarm fires",s3_p:"When it matters, a real alarm rings — even on silent or in Focus.",s4_h:"Join in one tap",s4_p:"Open Zoom, Meet or Teams straight from the alert — or dial in by phone if the meeting has a number. You're in.",
-    price_kicker:"Pricing",price_h:"Free to start. Pro when you're ready.",
-    free_name:"Free",free_tag:"Everything you need to never miss the meeting that matters.",free_1:"Live Activities & Dynamic Island",free_2:"2 active alarms",free_3:"Zoom, Meet & Teams · phone dial-in",free_4:"Apple Watch & iPad",
-    pro_tag:"For days packed wall-to-wall with meetings.",pro_1:"Everything in Free",pro_2:"Unlimited alarms",pro_3:"End-of-meeting alerts",pro_4:"Focus-mode filtering",
+    price_kicker:"Pricing",price_h:"Free. Everything included.",
+    free_name:"Free",free_tag:"Everything you need to never miss the meeting that matters. No paid tier, no ads.",free_1:"Live Activities & Dynamic Island",free_2:"Unlimited alarms",free_3:"Zoom, Meet & Teams · phone dial-in",free_4:"Apple Watch & iPad",free_5:"End-of-meeting alerts & Focus-mode filtering",
     final_h:"Never miss a meeting again.",foot_privacy:"Privacy",foot_terms:"Terms",foot_support:"Support"},
   es:{nav_features:"Funciones",nav_screens:"Dispositivos",nav_pricing:"Precios",nav_cta:"Descargar",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"¿Móvil en silencio? Tus reuniones te avisan igual.",
@@ -425,9 +415,8 @@ const I18N = {
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"En cada pantalla que tienes.",dev_p:"La misma cuenta atrás en directo te acompaña desde la muñeca hasta la pantalla de bloqueo y el iPad de tu escritorio, siempre sincronizada.",
     how_kicker:"Cómo funciona",how_h:"Configúralo una vez. Olvídate del resto.",
     s1_h:"Conecta tu calendario",s1_p:"Call to Meet lee los calendarios que ya tienes: nada que volver a escribir.",s2_h:"Cada evento cuenta atrás",s2_p:"Cada reunión se convierte en una cuenta atrás en directo en tus dispositivos, de forma automática.",s3_h:"La alarma suena",s3_p:"Cuando importa, suena una alarma real, aunque estés en silencio o en modo concentración.",s4_h:"Únete con un toque",s4_p:"Abre Zoom, Meet o Teams desde el aviso, o llama por teléfono si la reunión tiene un número. Ya estás dentro.",
-    price_kicker:"Precios",price_h:"Gratis para empezar. Pro cuando quieras.",
-    free_name:"Gratis",free_tag:"Todo lo necesario para no perderte la reunión que importa.",free_1:"Live Activities y Dynamic Island",free_2:"2 alarmas activas",free_3:"Zoom, Meet y Teams · llamada por teléfono",free_4:"Apple Watch e iPad",
-    pro_tag:"Para días llenos de reuniones de principio a fin.",pro_1:"Todo lo de Gratis",pro_2:"Alarmas ilimitadas",pro_3:"Avisos de fin de reunión",pro_4:"Filtrado por modo concentración",
+    price_kicker:"Precios",price_h:"Gratis. Todo incluido.",
+    free_name:"Gratis",free_tag:"Todo lo necesario para no perderte la reunión que importa. Sin nivel de pago, sin anuncios.",free_1:"Live Activities y Dynamic Island",free_2:"Alarmas ilimitadas",free_3:"Zoom, Meet y Teams · llamada por teléfono",free_4:"Apple Watch e iPad",free_5:"Avisos de fin de reunión y filtrado por modo concentración",
     final_h:"No te pierdas otra reunión.",foot_privacy:"Privacidad",foot_terms:"Términos",foot_support:"Soporte"},
   de:{nav_features:"Funktionen",nav_screens:"Geräte",nav_pricing:"Preise",nav_cta:"App laden",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Handy auf lautlos? Deine Termine kommen trotzdem durch.",
@@ -442,9 +431,8 @@ const I18N = {
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Auf jedem deiner Bildschirme.",dev_p:"Derselbe Live-Countdown begleitet dich vom Handgelenk über den Sperrbildschirm bis zum iPad auf dem Schreibtisch – immer synchron.",
     how_kicker:"So funktioniert's",how_h:"Einmal einrichten. Den Rest vergessen.",
     s1_h:"Kalender verbinden",s1_p:"Call to Meet liest die Kalender, die du schon nutzt – nichts neu eintippen.",s2_h:"Jeder Termin zählt herunter",s2_p:"Jedes Meeting wird automatisch zum Live-Countdown auf all deinen Geräten.",s3_h:"Der Wecker klingelt",s3_p:"Wenn es zählt, klingelt ein echter Wecker – selbst lautlos oder im Fokus.",s4_h:"Mit einem Tipp beitreten",s4_p:"Öffne Zoom, Meet oder Teams direkt aus der Meldung – oder wähle per Telefon ein, wenn das Meeting eine Nummer hat. Du bist drin.",
-    price_kicker:"Preise",price_h:"Kostenlos starten. Pro, wenn du bereit bist.",
-    free_name:"Kostenlos",free_tag:"Alles, um das Meeting, das zählt, nie zu verpassen.",free_1:"Live Activities & Dynamic Island",free_2:"2 aktive Wecker",free_3:"Zoom, Meet & Teams · Telefoneinwahl",free_4:"Apple Watch & iPad",
-    pro_tag:"Für Tage randvoll mit Meetings.",pro_1:"Alles aus Kostenlos",pro_2:"Unbegrenzte Wecker",pro_3:"Meeting-Ende-Hinweise",pro_4:"Fokus-Filterung",
+    price_kicker:"Preise",price_h:"Kostenlos. Alles inklusive.",
+    free_name:"Kostenlos",free_tag:"Alles, um das Meeting, das zählt, nie zu verpassen. Keine Bezahlstufe, keine Werbung.",free_1:"Live Activities & Dynamic Island",free_2:"Unbegrenzte Wecker",free_3:"Zoom, Meet & Teams · Telefoneinwahl",free_4:"Apple Watch & iPad",free_5:"Meeting-Ende-Hinweise & Fokus-Filterung",
     final_h:"Verpasse nie wieder ein Meeting.",foot_privacy:"Datenschutz",foot_terms:"AGB",foot_support:"Support"},
   fr:{nav_features:"Fonctions",nav_screens:"Appareils",nav_pricing:"Tarifs",nav_cta:"Télécharger",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"Téléphone en silencieux ? Tes réunions passent quand même.",
@@ -459,9 +447,8 @@ const I18N = {
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Sur chacun de vos écrans.",dev_p:"Le même compte à rebours en direct vous suit du poignet à l'écran verrouillé jusqu'à l'iPad sur votre bureau — toujours synchronisé.",
     how_kicker:"Comment ça marche",how_h:"Réglez une fois. Oubliez le reste.",
     s1_h:"Connectez votre agenda",s1_p:"Call to Meet lit les agendas que vous tenez déjà — rien à ressaisir.",s2_h:"Chaque événement décompte",s2_p:"Chaque réunion devient un compte à rebours en direct sur vos appareils, automatiquement.",s3_h:"L'alarme sonne",s3_p:"Quand ça compte, une vraie alarme sonne — même en silencieux ou en concentration.",s4_h:"Rejoignez d'un geste",s4_p:"Ouvrez Zoom, Meet ou Teams depuis l'alerte — ou composez par téléphone si la réunion a un numéro. Vous y êtes.",
-    price_kicker:"Tarifs",price_h:"Gratuit pour commencer. Pro quand vous voulez.",
-    free_name:"Gratuit",free_tag:"Tout pour ne jamais rater la réunion qui compte.",free_1:"Live Activities & Dynamic Island",free_2:"2 alarmes actives",free_3:"Zoom, Meet & Teams · appel téléphonique",free_4:"Apple Watch & iPad",
-    pro_tag:"Pour les journées remplies de réunions.",pro_1:"Tout le Gratuit",pro_2:"Alarmes illimitées",pro_3:"Alertes de fin de réunion",pro_4:"Filtrage par concentration",
+    price_kicker:"Tarifs",price_h:"Gratuit. Tout inclus.",
+    free_name:"Gratuit",free_tag:"Tout pour ne jamais rater la réunion qui compte. Sans palier payant, sans publicité.",free_1:"Live Activities & Dynamic Island",free_2:"Alarmes illimitées",free_3:"Zoom, Meet & Teams · appel téléphonique",free_4:"Apple Watch & iPad",free_5:"Alertes de fin de réunion & filtrage par concentration",
     final_h:"Ne ratez plus aucune réunion.",foot_privacy:"Confidentialité",foot_terms:"Conditions",foot_support:"Assistance"},
   ja:{nav_features:"機能",nav_screens:"デバイス",nav_pricing:"料金",nav_cta:"入手する",
     hero_eyebrow:"Live Activity · Dynamic Island",hero_h1:"マナーモードでも、会議の時間はしっかり知らせます。",
@@ -476,9 +463,8 @@ const I18N = {
     dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"あなたのすべての画面で。",dev_p:"同じライブのカウントダウンが、手首からロック画面、机の上の iPad まで——常に同期して付いてきます。",
     how_kicker:"使い方",how_h:"一度設定。あとはおまかせ。",
     s1_h:"カレンダーを接続",s1_p:"Call to Meet は今あるカレンダーを読み込みます。入力し直す必要はありません。",s2_h:"すべての予定がカウントダウン",s2_p:"各会議が自動でデバイス全体のライブカウントダウンに。",s3_h:"アラームが鳴る",s3_p:"肝心なとき、本物のアラームが鳴ります——サイレントでも集中モードでも。",s4_h:"ワンタップで参加",s4_p:"Zoom・Meet・Teams を通知から直接開く、または電話番号があれば電話で参加。すぐに入れます。",
-    price_kicker:"料金",price_h:"無料で始めて、必要になったら Pro へ。",
-    free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。",free_1:"Live Activities と Dynamic Island",free_2:"アクティブなアラーム2件",free_3:"Zoom・Meet・Teams · 電話参加",free_4:"Apple Watch と iPad",
-    pro_tag:"会議で埋め尽くされた一日に。",pro_1:"無料のすべて",pro_2:"アラーム無制限",pro_3:"会議終了の通知",pro_4:"集中モードのフィルタリング",
+    price_kicker:"料金",price_h:"無料。すべての機能が使えます。",
+    free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。有料プランも広告もありません。",free_1:"Live Activities と Dynamic Island",free_2:"アラーム無制限",free_3:"Zoom・Meet・Teams · 電話参加",free_4:"Apple Watch と iPad",free_5:"会議終了の通知と集中モードのフィルタリング",
     final_h:"もう会議を逃さない。",foot_privacy:"プライバシー",foot_terms:"利用規約",foot_support:"サポート"}
 };
 const SUPPORTED=["en","es","de","fr","ja"];
