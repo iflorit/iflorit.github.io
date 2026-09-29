@@ -223,7 +223,7 @@ footer{border-top:1px solid var(--line);background:var(--bg2)}
       <a href="#pricing" data-k="nav_pricing">Pricing</a>
     </nav>
     <div class="langs" id="langs">
-      <button data-l="en">EN</button><button data-l="es">ES</button><button data-l="de">DE</button><button data-l="fr">FR</button><button data-l="ja">JA</button>
+      <button data-l="en">EN</button><button data-l="es">ES</button><button data-l="de">DE</button><button data-l="fr">FR</button><button data-l="ja">JA</button><button data-l="it">IT</button><button data-l="zh">中文</button>
     </div>
     <a class="btn-cta" href="https://apps.apple.com/app/id6738656243?ct=nav&mt=8" data-k="nav_cta">Get the app</a>
   </div>
@@ -479,22 +479,69 @@ const I18N = {
     price_kicker:"料金",price_h:"無料で始めて、必要になったら Pro へ。",
     free_name:"無料",free_tag:"大事な会議を逃さないために必要なすべて。",free_1:"Live Activities と Dynamic Island",free_2:"アクティブなアラーム2件",free_3:"Zoom・Meet・Teams · 電話参加",free_4:"Apple Watch と iPad",
     pro_tag:"会議で埋め尽くされた一日に。",pro_1:"無料のすべて",pro_2:"アラーム無制限",pro_3:"会議終了の通知",pro_4:"集中モードのフィルタリング",
-    final_h:"もう会議を逃さない。",foot_privacy:"プライバシー",foot_terms:"利用規約",foot_support:"サポート"}
+    final_h:"もう会議を逃さない。",foot_privacy:"プライバシー",foot_terms:"利用規約",foot_support:"サポート"},
+  it:{nav_features:"Funzioni",nav_screens:"Dispositivi",nav_pricing:"Prezzi",nav_cta:"Scarica l'app",
+    hero_eyebrow:"Attività in tempo reale · Dynamic Island",hero_h1:"Telefono in silenzioso? Le tue riunioni arrivano lo stesso.",
+    hero_sub:"Call to Meet imposta sveglie vere che suonano anche in Silenzioso e Non disturbare, con un conto alla rovescia in tempo reale sulla schermata di blocco, nella Dynamic Island, e un pulsante per chiamare quando la riunione ha un numero di telefono.",
+    hero_compat:"Compatibile con",float1_t:"Sveglia attivata",float1_s:"Revisione prodotto · ora",float2_t:"Accesso a Zoom…",float2_s:"Standup del team",
+    trust_lbl:"Si integra con gli strumenti che usi già",fb_h:"Il tuo tempo, sempre sott'occhio.",
+    feat_kicker:"Cosa fa",feat_h:"Quattro modi per non perdertela.",
+    f1_k:"Schermata di blocco",f1_h:"Un'occhiata, e lo sai già.",f1_p:"Un'Attività in tempo reale mostra la tua prossima riunione e il conto alla rovescia direttamente sulla schermata di blocco: nessuna app da aprire, nessuna notifica da rincorrere.",f1_s1:"Attività in tempo reale",f1_s2:"Si aggiorna da sola",f1_s3:"Tocca per partecipare",
+    f2_k:"Dynamic Island",f2_h:"Sempre in conto alla rovescia.",f2_p:"Il conto alla rovescia resta nella Dynamic Island mentre lavori, scrivi e scorri. Più si avvicina, più è difficile ignorarlo.",f2_s1:"Compatta ed estesa",f2_s2:"Verde quando è vicina",f2_s3:"Partecipa con un tocco",
+    f3_k:"AlarmKit",f3_h:"Suona, anche in silenzioso.",f3_p:"Imposta una sveglia vera per qualsiasi riunione: supera la modalità silenziosa e Non disturbare. L'unico promemoria che davvero non ti puoi perdere.",f3_s1:"Supera il silenzioso",f3_s2:"Fino a 8 h prima",f3_s3:"Per ogni evento",
+    f4_k:"Chiamata telefonica",f4_h:"Partecipa per telefono con un tocco.",f4_p:"Quando la riunione include un numero per chiamare, Call to Meet mostra subito un pulsante di chiamata. Toccalo e il telefono compone il numero, PIN incluso. Nessun cambio di app, nessun numero da copiare.",f4_s1:"Rileva i numeri di accesso",f4_s2:"Inserisce il PIN automaticamente",f4_s3:"Funziona senza Wi-Fi",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"Su ogni schermo che possiedi.",dev_p:"Lo stesso conto alla rovescia in tempo reale ti segue dal polso alla schermata di blocco fino all'iPad sulla scrivania — sempre sincronizzato.",
+    how_kicker:"Come funziona",how_h:"Configura una volta. Dimentica il resto.",
+    s1_h:"Collega il calendario",s1_p:"Call to Meet legge i calendari che usi già: niente da reinserire.",s2_h:"Ogni evento ha il suo conto alla rovescia",s2_p:"Ogni riunione diventa un conto alla rovescia in tempo reale su tutti i tuoi dispositivi, in automatico.",s3_h:"La sveglia suona",s3_p:"Quando conta davvero, suona una sveglia vera — anche in silenzioso o con Non disturbare attivo.",s4_h:"Partecipa con un tocco",s4_p:"Apri Zoom, Meet o Teams direttamente dall'avviso, oppure chiama se la riunione ha un numero. Sei dentro.",
+    price_kicker:"Prezzi",price_h:"Gratis per iniziare. Pro quando vuoi.",
+    free_name:"Gratis",free_tag:"Tutto il necessario per non perdere mai la riunione che conta.",free_1:"Attività in tempo reale e Dynamic Island",free_2:"2 sveglie attive",free_3:"Zoom, Meet e Teams · chiamata telefonica",free_4:"Apple Watch e iPad",
+    pro_tag:"Per le giornate piene di riunioni dall'inizio alla fine.",pro_1:"Tutto Gratis",pro_2:"Sveglie illimitate",pro_3:"Avvisi di fine riunione",pro_4:"Filtro per modalità Non disturbare",
+    final_h:"Non perdere più una riunione.",foot_privacy:"Privacy",foot_terms:"Termini",foot_support:"Assistenza"},
+  zh:{nav_features:"功能",nav_screens:"设备",nav_pricing:"价格",nav_cta:"获取App",
+    hero_eyebrow:"实时活动 · 灵动岛",hero_h1:"手机静音？会议提醒照样送达。",
+    hero_sub:"Call to Meet 设置的闹钟能在静音和勿扰模式下照常响铃，锁定屏幕和灵动岛上显示实时倒计时，会议提供电话号码时还能一键拨打。",
+    hero_compat:"兼容",float1_t:"闹钟已触发",float1_s:"产品评审 · 刚刚",float2_t:"正在加入 Zoom…",float2_s:"团队站会",
+    trust_lbl:"与你常用的工具集成",fb_h:"你的时间，始终一目了然。",
+    feat_kicker:"功能一览",feat_h:"四种方式，绝不错过。",
+    f1_k:"锁定屏幕",f1_h:"一眼就知道。",f1_p:"实时活动把下一个会议和实时倒计时直接放在锁定屏幕上——无需打开App，无需寻找通知。",f1_s1:"实时活动",f1_s2:"自动更新",f1_s3:"轻触加入",
+    f2_k:"灵动岛",f2_h:"倒计时始终在线。",f2_p:"工作、打字、滑动时，倒计时始终显示在灵动岛。越接近开始时间，越难忽视。",f2_s1:"紧凑与展开",f2_s2:"临近时变绿",f2_s3:"一键加入",
+    f3_k:"AlarmKit",f3_h:"静音也能响。",f3_p:"为任何会议设置真正的闹钟，穿透静音模式和专注模式——唯一真正不会被你错过的提醒。",f3_s1:"穿透静音",f3_s2:"最多提前8小时",f3_s3:"逐个事件设置",
+    f4_k:"电话拨入",f4_h:"一键电话加入。",f4_p:"当会议包含拨入号码时，Call to Meet 会直接显示拨打按钮。轻触即可拨号，PIN码自动填入。无需切换App，无需复制号码。",f4_s1:"自动识别拨入号码",f4_s2:"自动填入PIN码",f4_s3:"无需Wi-Fi",
+    dev_kicker:"iPhone · Apple Watch · iPad",dev_h:"你的每一块屏幕都同步。",dev_p:"同一个实时倒计时，从手腕到锁定屏幕，再到桌上的iPad——始终保持同步。",
+    how_kicker:"使用方法",how_h:"设置一次，之后无需操心。",
+    s1_h:"连接日历",s1_p:"Call to Meet 读取你已有的日历，无需重新输入。",s2_h:"每个事件都会倒计时",s2_p:"每个会议都会自动在你的所有设备上变成实时倒计时。",s3_h:"闹钟响起",s3_p:"关键时刻，真正的闹钟会响起——即使在静音或专注模式下。",s4_h:"一键加入",s4_p:"直接从提醒中打开 Zoom、Meet 或 Teams，或在有电话号码时直接拨号加入。轻松加入会议。",
+    price_kicker:"价格",price_h:"免费开始，需要时再升级 Pro。",
+    free_name:"免费版",free_tag:"不错过重要会议所需的一切。",free_1:"实时活动与灵动岛",free_2:"2个活跃闹钟",free_3:"Zoom、Meet 与 Teams · 电话拨入",free_4:"Apple Watch 与 iPad",
+    pro_tag:"专为排满会议的一天设计。",pro_1:"包含免费版全部功能",pro_2:"闹钟数量不限",pro_3:"会议结束提醒",pro_4:"专注模式过滤",
+    final_h:"再也不错过会议。",foot_privacy:"隐私",foot_terms:"条款",foot_support:"支持"}
 };
-const SUPPORTED=["en","es","de","fr","ja"];
+const SUPPORTED=["en","es","de","fr","ja","it","zh"];
+const SHOT_LANGS=["en","es","de","fr","ja"];
+const CT_LANG={it:"web-it",zh:"web-zh"};
+const HTML_LANG={en:"en",es:"es",de:"de",fr:"fr",ja:"ja",it:"it",zh:"zh-Hans"};
 function applyLang(lang){
   if(!SUPPORTED.includes(lang))lang="en";
   const t=I18N[lang];
-  document.documentElement.setAttribute("lang",lang);
+  document.documentElement.setAttribute("lang",HTML_LANG[lang]||lang);
   document.documentElement.setAttribute("data-lang",lang);
   document.querySelectorAll("[data-k]").forEach(el=>{const v=t[el.getAttribute("data-k")];if(v!=null)el.innerHTML=v;});
-  document.querySelectorAll(".loc-img").forEach(img=>{img.src="screenshots/"+lang+"/"+img.getAttribute("data-shot");});
+  const shotLang=SHOT_LANGS.includes(lang)?lang:"en";
+  document.querySelectorAll(".loc-img").forEach(img=>{img.src="screenshots/"+shotLang+"/"+img.getAttribute("data-shot");});
   document.querySelectorAll("#langs button").forEach(b=>b.classList.toggle("active",b.getAttribute("data-l")===lang));
+  document.querySelectorAll('a[href*="apps.apple.com"]').forEach(a=>{
+    if(!a.dataset.ct){const u0=new URL(a.href);a.dataset.ct=u0.searchParams.get("ct")||"";}
+    const u=new URL(a.href);u.searchParams.set("ct",CT_LANG[lang]||a.dataset.ct);a.href=u.toString();
+  });
   try{localStorage.setItem("ctm-lang",lang);}catch(e){}
 }
 document.getElementById("langs").addEventListener("click",e=>{const b=e.target.closest("button");if(b)applyLang(b.getAttribute("data-l"));});
 (function(){let l;try{l=localStorage.getItem("ctm-lang");}catch(e){}
-  if(!l){const n=(navigator.language||"en").slice(0,2);l=SUPPORTED.includes(n)?n:"en";}
+  if(!l){
+    const raw=(navigator.language||"en").toLowerCase();
+    if(/^zh(-hans|-cn|-sg)?($|-)/.test(raw))l="zh";
+    else if(raw.startsWith("zh"))l="en";
+    else{const n=raw.slice(0,2);l=SUPPORTED.includes(n)?n:"en";}
+  }
   applyLang(l);})();
 </script>
 </body>
