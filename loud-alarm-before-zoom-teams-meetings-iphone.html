@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How to Get a Loud Alarm Before Zoom or Teams Meetings on iPhone (Even on Silent) | Call to Meet</title>
+<meta name="description" content="Calendar notifications stay quiet on silent iPhone. Here's how alarms work differently, native ways to fix it, and when an app-set AlarmKit alarm is worth it.">
+<link rel="canonical" href="https://iflorit.github.io/loud-alarm-before-zoom-teams-meetings-iphone.html">
+<link rel="icon" type="image/png" href="app-icon.png">
+<meta property="og:title" content="How to Get a Loud Alarm Before Zoom or Teams Meetings on iPhone (Even on Silent) | Call to Meet">
+<meta property="og:description" content="Calendar notifications stay quiet on silent iPhone. Here's how alarms work differently, native ways to fix it, and when an app-set AlarmKit alarm is worth it.">
+<meta property="og:image" content="https://iflorit.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://iflorit.github.io/loud-alarm-before-zoom-teams-meetings-iphone.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="How to Get a Loud Alarm Before Zoom or Teams Meetings on iPhone (Even on Silent) | Call to Meet">
+<meta name="twitter:description" content="Calendar notifications stay quiet on silent iPhone. Here's how alarms work differently, native ways to fix it, and when an app-set AlarmKit alarm is worth it.">
+<meta name="twitter:image" content="https://iflorit.github.io/og-image.png">
+<meta name="apple-itunes-app" content="app-id=6738656243">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Will a Calendar notification wake me up if my iPhone is on silent?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No. Standard Calendar and Reminders notifications respect Silent mode and most Focus modes by default — they show up on screen but make no sound and don't vibrate unless you've changed your settings. If you need an audible alert on silent, you need something that uses the Clock app's alarm system, which is built to bypass the silent switch."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Does Do Not Disturb block meeting alerts too?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "By default, yes. Do Not Disturb silences calls, texts, and notifications, including calendar alerts, unless you've added specific contacts or apps to an allow list. A few apps request permission to break through Focus for Time Sensitive notifications, but that still isn't the same as a real alarm."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the actual difference between a notification and an alarm on iPhone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A notification is a banner and optional sound managed by Notification Center; it obeys Silent mode and Focus. An alarm, set through the Clock app or an app built on Apple's AlarmKit, rings at full ringer volume and bypasses both the silent switch and Do Not Disturb — the same behavior as your morning wake-up alarm."
+      }
+    }
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08090c; --bg2:#0b0d12; --card:#101218; --line:rgba(255,255,255,.08);
+  --green:#30D158; --blue:#0A84FF; --ink:#f5f5f7; --mut:#8b8b94; --mut2:#6a6a72;
+  --max:760px;
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+a:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:var(--green);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);
+  background:rgba(8,9,12,.72);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:var(--max);margin:0 auto;padding:0 24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+.brand img{width:28px;height:28px;border-radius:7px}
+.btn-cta{color:var(--ink);border:1px solid rgba(255,255,255,.18);padding:8px 16px;border-radius:980px;
+  font-size:13px;font-weight:600}
+.btn-cta:hover{background:rgba(255,255,255,.08);text-decoration:none}
+main{padding:56px 0 80px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
+h1{font-size:clamp(28px,4.4vw,42px);line-height:1.12;font-weight:800;letter-spacing:-.03em;max-width:680px}
+.dek{margin-top:18px;font-size:18px;color:var(--mut);line-height:1.55}
+article h2{font-size:clamp(22px,2.6vw,28px);font-weight:800;letter-spacing:-.02em;margin:44px 0 14px}
+article h3{font-size:18px;font-weight:700;margin:26px 0 10px}
+article p{font-size:16.5px;color:#d6d6dc;margin:14px 0}
+article ul,article ol{margin:14px 0 14px 22px;color:#d6d6dc}
+article li{margin:8px 0;font-size:16.5px;line-height:1.55}
+article strong{color:var(--ink)}
+.callout{margin:32px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.callout p{margin:0;font-size:15.5px;color:var(--mut)}
+.cta-box{margin:48px 0 8px;background:var(--card);border:1px solid rgba(48,209,88,.3);border-radius:18px;padding:28px 26px;text-align:center}
+.cta-box h3{margin-top:0;font-size:20px}
+.cta-box p{color:var(--mut);font-size:15px;margin:8px 0 18px}
+.badge{height:50px}
+.faq dt{font-weight:700;font-size:16.5px;margin-top:22px;color:var(--ink)}
+.faq dd{margin:8px 0 0;color:var(--mut);font-size:15.5px;line-height:1.55}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--line)}
+.related h2{margin-top:0}
+.related ul{list-style:none;margin:0;padding:0}
+.related li{margin:10px 0}
+footer{border-top:1px solid var(--line);background:var(--bg2)}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:28px 24px;flex-wrap:wrap;gap:14px;max-width:var(--max);margin:0 auto}
+.foot-links{display:flex;gap:22px;color:var(--mut);font-size:14px}
+.foot-links a{color:var(--mut)}
+.foot-links a:hover{color:var(--ink)}
+.copy{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <a class="brand" href="index.html"><img src="app-icon-128.png" width="28" height="28" alt="Call to Meet">Call to Meet</a>
+  <a class="btn-cta" href="index.html">Home</a>
+</div></header>
+<main><div class="wrap">
+<article>
+<div class="kicker">iPhone · Meeting alerts</div>
+<h1>How to get a loud alarm before Zoom or Teams meetings on iPhone (even on silent)</h1>
+<p class="dek">Calendar notifications go quiet the moment your iPhone is silenced. Alarms don't. Here's the difference, and three ways to fix it.</p>
+
+<p>If a Zoom or Teams call has ever started without you because your phone was face-down and silenced, the fix isn't a louder notification — it's a real alarm.</p>
+
+<h2>Why calendar notifications don't wake you up</h2>
+<p>iOS treats calendar reminders as regular notifications. Regular notifications check the state of the silent switch and your active Focus mode before making a sound. If either one says "quiet," the notification stays quiet — you'll see it when you pick up your phone, which is often too late.</p>
+<p>Alarms work differently. They're a separate subsystem tied to the Clock app, and they're allowed to ring at full volume no matter what the silent switch or Focus is set to. That's the mechanism you actually want for a meeting you can't afford to miss.</p>
+
+<h2>Option 1: Set a manual alarm for each meeting</h2>
+<p>The most reliable native option is also the most tedious: open the Clock app, add an alarm for the exact time your call starts, and label it. It will ring through silent and Do Not Disturb every time, because that's what alarms are designed to do.</p>
+<ul>
+<li>Open <strong>Clock → Alarm → +</strong>.</li>
+<li>Set the time your meeting starts (or a few minutes before, to give yourself a buffer).</li>
+<li>Give it a label so you know which meeting it's for.</li>
+</ul>
+<p>The catch: you have to do this manually for every single meeting, remember to delete it afterward, and re-create it if the meeting moves. For a calendar with more than a couple of calls a day, that adds up fast.</p>
+
+<h2>Option 2: Turn up notification sounds and check your Focus allow list</h2>
+<p>If a full alarm feels like overkill, you can at least make sure your calendar app is allowed to make noise:</p>
+<ul>
+<li>Go to <strong>Settings → Focus</strong> and check whether Do Not Disturb or Work is active during your meeting hours — if so, add your calendar app to the allowed apps/people list, or allow Time Sensitive notifications.</li>
+<li>In <strong>Settings → Sounds & Haptics</strong>, confirm your ringer volume isn't turned all the way down, since notification sounds share that volume.</li>
+<li>Check that the silent switch (or Action Button on iPhone 15 and later) isn't set to silent during meeting hours.</li>
+</ul>
+<p>This helps, but it's still a notification, not an alarm — it can be dismissed by mistake or missed under a stack of other banners, and it still won't sound if the phone is physically in silent mode.</p>
+
+<h2>Option 3: Use an app built on AlarmKit for per-meeting alarms</h2>
+<p>Apple's AlarmKit framework, introduced for third-party apps, lets an app schedule real alarms — the kind that ring through silent and Focus — tied to specific events, without you setting each one by hand in the Clock app.</p>
+<p><strong>Call to Meet</strong> reads the calendars you already use and sets one of these real alarms automatically before each meeting, up to 8 hours ahead. It also shows a live countdown on your Lock Screen and in the Dynamic Island so you can see at a glance how much time is left, and a one-tap Join button for Zoom, Google Meet, and Microsoft Teams once the alarm fires. It runs on iOS 26 or later, since that's the OS version AlarmKit ships in.</p>
+<div class="cta-box">
+<h3>Get Call to Meet</h3>
+<p>Free on the App Store. Real alarms for your meetings, even on silent.</p>
+<a href="https://apps.apple.com/app/id6738656243?ct=seo-loud-alarm-before-zoom-teams-meetings-iphone&mt=8"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="150" height="50" alt="Download on the App Store"></a>
+</div>
+<h2>Frequently asked questions</h2>
+<dl class="faq">
+<dt>Will a Calendar notification wake me up if my iPhone is on silent?</dt><dd>No. Standard Calendar and Reminders notifications respect Silent mode and most Focus modes by default — they show up on screen but make no sound and don't vibrate unless you've changed your settings. If you need an audible alert on silent, you need something that uses the Clock app's alarm system, which is built to bypass the silent switch.</dd>
+<dt>Does Do Not Disturb block meeting alerts too?</dt><dd>By default, yes. Do Not Disturb silences calls, texts, and notifications, including calendar alerts, unless you've added specific contacts or apps to an allow list. A few apps request permission to break through Focus for Time Sensitive notifications, but that still isn't the same as a real alarm.</dd>
+<dt>What's the actual difference between a notification and an alarm on iPhone?</dt><dd>A notification is a banner and optional sound managed by Notification Center; it obeys Silent mode and Focus. An alarm, set through the Clock app or an app built on Apple's AlarmKit, rings at full ringer volume and bypasses both the silent switch and Do Not Disturb — the same behavior as your morning wake-up alarm.</dd>
+</dl>
+
+</article>
+<div class="related"><h2>Related reading</h2><ul><li><a href="iphone-calendar-alerts-too-quiet-fixes.html">iPhone Calendar Alerts Too Quiet? Fixes for Meeting Reminders</a></li><li><a href="never-miss-meeting-live-activities-dynamic-island.html">Never Miss a Meeting: Live Activities and Dynamic Island Countdowns</a></li></ul></div>
+</div></main>
+<footer><div class="wrap foot">
+  <a class="brand" href="index.html"><img src="app-icon-128.png" width="26" height="26" alt="" loading="lazy">Call to Meet</a>
+  <div class="foot-links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="support.html">Support</a>
+  </div>
+  <div class="copy">© 2026 Call to Meet</div>
+</div></footer>
+</body>
+</html>
