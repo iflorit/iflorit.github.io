@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Never Miss a Meeting on iPhone: Live Activities & Dynamic Island Countdowns | Call to Meet</title>
+<meta name="description" content="How Live Activities and the Dynamic Island keep a live meeting countdown on your iPhone's Lock Screen and status bar, without opening an app.">
+<link rel="canonical" href="https://iflorit.github.io/never-miss-meeting-live-activities-dynamic-island.html">
+<link rel="icon" type="image/png" href="app-icon.png">
+<meta property="og:title" content="Never Miss a Meeting on iPhone: Live Activities & Dynamic Island Countdowns | Call to Meet">
+<meta property="og:description" content="How Live Activities and the Dynamic Island keep a live meeting countdown on your iPhone's Lock Screen and status bar, without opening an app.">
+<meta property="og:image" content="https://iflorit.github.io/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://iflorit.github.io/never-miss-meeting-live-activities-dynamic-island.html">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Never Miss a Meeting on iPhone: Live Activities & Dynamic Island Countdowns | Call to Meet">
+<meta name="twitter:description" content="How Live Activities and the Dynamic Island keep a live meeting countdown on your iPhone's Lock Screen and status bar, without opening an app.">
+<meta name="twitter:image" content="https://iflorit.github.io/og-image.png">
+<meta name="apple-itunes-app" content="app-id=6738656243">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "What is a Live Activity on iPhone?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "A Live Activity is a small, glanceable card that appears on your Lock Screen and updates in real time, without you unlocking the phone or opening the app. Apple introduced them for things like sports scores and delivery tracking; apps like Call to Meet use them to show a live countdown to your next meeting."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's the difference between the Dynamic Island and the Lock Screen for this?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "They're two surfaces for the same Live Activity. The Lock Screen version shows when your phone is locked. The Dynamic Island version shows at the top of the screen while you're actively using the phone — in Messages, Safari, or any other app — so the countdown follows you without switching apps."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do Live Activities and Dynamic Island countdowns work without an alarm?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes, they're separate features. A Live Activity is a visual, glanceable countdown; an alarm is an audible alert. Call to Meet uses both together — the countdown so you always see what's next, and a real alarm (via AlarmKit) so you don't have to be looking at the screen to be alerted."
+      }
+    }
+  ]
+}
+</script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#08090c; --bg2:#0b0d12; --card:#101218; --line:rgba(255,255,255,.08);
+  --green:#30D158; --blue:#0A84FF; --ink:#f5f5f7; --mut:#8b8b94; --mut2:#6a6a72;
+  --max:760px;
+}
+html{scroll-behavior:smooth;background:var(--bg)}
+a:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:6px}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+body{background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,system-ui,sans-serif;
+  -webkit-font-smoothing:antialiased;line-height:1.6}
+a{color:var(--green);text-decoration:none}
+a:hover{text-decoration:underline}
+.wrap{max-width:var(--max);margin:0 auto;padding:0 24px}
+header{position:sticky;top:0;z-index:50;backdrop-filter:blur(18px);
+  background:rgba(8,9,12,.72);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px;max-width:var(--max);margin:0 auto;padding:0 24px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;letter-spacing:-.01em;color:var(--ink)}
+.brand img{width:28px;height:28px;border-radius:7px}
+.btn-cta{color:var(--ink);border:1px solid rgba(255,255,255,.18);padding:8px 16px;border-radius:980px;
+  font-size:13px;font-weight:600}
+.btn-cta:hover{background:rgba(255,255,255,.08);text-decoration:none}
+main{padding:56px 0 80px}
+.kicker{font-size:13px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--green);margin-bottom:16px}
+h1{font-size:clamp(28px,4.4vw,42px);line-height:1.12;font-weight:800;letter-spacing:-.03em;max-width:680px}
+.dek{margin-top:18px;font-size:18px;color:var(--mut);line-height:1.55}
+article h2{font-size:clamp(22px,2.6vw,28px);font-weight:800;letter-spacing:-.02em;margin:44px 0 14px}
+article h3{font-size:18px;font-weight:700;margin:26px 0 10px}
+article p{font-size:16.5px;color:#d6d6dc;margin:14px 0}
+article ul,article ol{margin:14px 0 14px 22px;color:#d6d6dc}
+article li{margin:8px 0;font-size:16.5px;line-height:1.55}
+article strong{color:var(--ink)}
+.callout{margin:32px 0;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px 24px}
+.callout p{margin:0;font-size:15.5px;color:var(--mut)}
+.cta-box{margin:48px 0 8px;background:var(--card);border:1px solid rgba(48,209,88,.3);border-radius:18px;padding:28px 26px;text-align:center}
+.cta-box h3{margin-top:0;font-size:20px}
+.cta-box p{color:var(--mut);font-size:15px;margin:8px 0 18px}
+.badge{height:50px}
+.faq dt{font-weight:700;font-size:16.5px;margin-top:22px;color:var(--ink)}
+.faq dd{margin:8px 0 0;color:var(--mut);font-size:15.5px;line-height:1.55}
+.related{margin-top:56px;padding-top:32px;border-top:1px solid var(--line)}
+.related h2{margin-top:0}
+.related ul{list-style:none;margin:0;padding:0}
+.related li{margin:10px 0}
+footer{border-top:1px solid var(--line);background:var(--bg2)}
+.foot{display:flex;align-items:center;justify-content:space-between;padding:28px 24px;flex-wrap:wrap;gap:14px;max-width:var(--max);margin:0 auto}
+.foot-links{display:flex;gap:22px;color:var(--mut);font-size:14px}
+.foot-links a{color:var(--mut)}
+.foot-links a:hover{color:var(--ink)}
+.copy{color:var(--mut);font-size:13px}
+</style>
+</head>
+<body>
+<header><div class="nav">
+  <a class="brand" href="index.html"><img src="app-icon-128.png" width="28" height="28" alt="Call to Meet">Call to Meet</a>
+  <a class="btn-cta" href="index.html">Home</a>
+</div></header>
+<main><div class="wrap">
+<article>
+<div class="kicker">iPhone · Live Activities</div>
+<h1>Never miss a meeting on iPhone: Live Activities and Dynamic Island countdowns</h1>
+<p class="dek">A notification disappears the moment you dismiss it. A Live Activity stays on screen and keeps counting down. Here's how that changes meeting reminders.</p>
+
+<p>Even with alerts turned on, it's easy to lose track of exactly how much time is left before a call. Live Activities and the Dynamic Island solve a different problem than alarms: they keep the countdown visible, continuously, without you having to open an app.</p>
+
+<h2>What a Live Activity actually shows you</h2>
+<p>A Live Activity is a compact, auto-updating card that Apple's system displays on your Lock Screen. Instead of a static notification you dismiss once, it stays there and refreshes itself — showing a countdown, a progress bar, or both — for as long as the activity is running. You don't need to unlock your phone to see how much time is left before your next meeting.</p>
+
+<h2>The Dynamic Island: the same countdown, while you're using your phone</h2>
+<p>On iPhones with a Dynamic Island, the same Live Activity also surfaces at the top of the screen whenever your phone is unlocked and you're in another app — checking Slack, replying to a text, browsing. Tap it and it expands to show more detail; tap again and you can jump straight into the meeting. It's the closest thing iOS has to an always-on status bar for "what's next."</p>
+
+<h2>Why this matters more than a single notification</h2>
+<ul>
+<li><strong>Notifications disappear.</strong> Once you swipe one away, the information is gone. A Live Activity stays put and keeps updating.</li>
+<li><strong>You don't have to remember to check the calendar.</strong> The countdown is already on the screen you're looking at.</li>
+<li><strong>It scales down anxiety about "did I miss it."</strong> A visible, ticking countdown removes the need to keep unlocking your phone to check the time.</li>
+</ul>
+
+<h2>How Call to Meet uses both</h2>
+<p>Call to Meet reads your existing calendars and turns each upcoming meeting into a live countdown — on the Lock Screen as a Live Activity, and in the Dynamic Island while you're using your phone. When it's time to join, tap through to Zoom, Google Meet, or Microsoft Teams in one step, or dial in by phone if the meeting has a number. Paired with a real AlarmKit alarm that rings even on silent, you get both the visual countdown and the audible alert that make it very hard to miss the meeting — without opening the calendar app to check.</p>
+<div class="cta-box">
+<h3>Get Call to Meet</h3>
+<p>Free on the App Store. Real alarms for your meetings, even on silent.</p>
+<a href="https://apps.apple.com/app/id6738656243?ct=seo-never-miss-meeting-live-activities-dynamic-island&mt=8"><img class="badge" src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg" width="150" height="50" alt="Download on the App Store"></a>
+</div>
+<h2>Frequently asked questions</h2>
+<dl class="faq">
+<dt>What is a Live Activity on iPhone?</dt><dd>A Live Activity is a small, glanceable card that appears on your Lock Screen and updates in real time, without you unlocking the phone or opening the app. Apple introduced them for things like sports scores and delivery tracking; apps like Call to Meet use them to show a live countdown to your next meeting.</dd>
+<dt>What's the difference between the Dynamic Island and the Lock Screen for this?</dt><dd>They're two surfaces for the same Live Activity. The Lock Screen version shows when your phone is locked. The Dynamic Island version shows at the top of the screen while you're actively using the phone — in Messages, Safari, or any other app — so the countdown follows you without switching apps.</dd>
+<dt>Do Live Activities and Dynamic Island countdowns work without an alarm?</dt><dd>Yes, they're separate features. A Live Activity is a visual, glanceable countdown; an alarm is an audible alert. Call to Meet uses both together — the countdown so you always see what's next, and a real alarm (via AlarmKit) so you don't have to be looking at the screen to be alerted.</dd>
+</dl>
+
+</article>
+<div class="related"><h2>Related reading</h2><ul><li><a href="loud-alarm-before-zoom-teams-meetings-iphone.html">How to Get a Loud Alarm Before Zoom or Teams Meetings on iPhone</a></li><li><a href="iphone-calendar-alerts-too-quiet-fixes.html">iPhone Calendar Alerts Too Quiet? Fixes for Meeting Reminders</a></li></ul></div>
+</div></main>
+<footer><div class="wrap foot">
+  <a class="brand" href="index.html"><img src="app-icon-128.png" width="26" height="26" alt="" loading="lazy">Call to Meet</a>
+  <div class="foot-links">
+    <a href="privacy.html">Privacy</a>
+    <a href="terms.html">Terms</a>
+    <a href="support.html">Support</a>
+  </div>
+  <div class="copy">© 2026 Call to Meet</div>
+</div></footer>
+</body>
+</html>
